@@ -3,13 +3,21 @@ import { AppState } from "./App.types";
 import { Task } from "./Task/Task.types.ts";
 import SideBar from "./SideBar/SideBar";
 import TaskList from "./TaskList/TaskList";
-import { Grid, MantineProvider } from "@mantine/core";
+import {
+  Button,
+  Collapse,
+  Divider,
+  Grid,
+  MantineProvider,
+} from "@mantine/core";
 import { uuid } from "@supabase/supabase-js/dist/main/lib/helpers";
+import { IconLayoutSidebar } from "@tabler/icons-react";
 
 class App extends Component<{}, AppState> {
   state: AppState = {
     projects: [],
     tasks: [],
+    isSideBarOpened: true,
   };
 
   handleAddTask = (task: Omit<Task, "id">) => {
@@ -54,8 +62,15 @@ class App extends Component<{}, AppState> {
     }));
   };
 
+  toggleSideBar = () => {
+    this.setState((prevState) => ({
+      ...prevState,
+      isSideBarOpened: !prevState.isSideBarOpened,
+    }));
+  };
+
   render() {
-    const { Tasks, projects } = this.state;
+    const { tasks, projects } = this.state;
 
     return (
       <MantineProvider
@@ -64,19 +79,34 @@ class App extends Component<{}, AppState> {
         withNormalizeCSS
       >
         <Grid>
-          <Grid.Col span={3}>
-            <SideBar
-              userName="John Doe"
-              userProfileImg="https://avatars.githubusercontent.com/u/56477764?v=4"
-              projects={projects}
-              onAddProject={this.handleAddProject}
-              onHideSidebar={() => console.log("Sidebar hidden")}
-              onSearch={(query) => console.log(`Search: ${query}`)}
-            />
+          <Grid.Col span={this.state.isSideBarOpened ? 3 : 0}>
+            <Button
+              size="xs"
+              mt="md"
+              variant="subtle"
+              onClick={this.toggleSideBar}
+              className={this.state.isSideBarOpened ? "!hidden" : "block"}
+            >
+              <IconLayoutSidebar />
+            </Button>
+            <Collapse transitionDuration={0} in={this.state.isSideBarOpened}>
+              <SideBar
+                userName="John Doe"
+                userProfileImg="https://avatars.githubusercontent.com/u/56477764?v=4"
+                projects={projects}
+                onAddProject={this.handleAddProject}
+                onHideSidebar={this.toggleSideBar}
+                onSearch={(query) => console.log(`Search: ${query}`)}
+              />
+            </Collapse>
           </Grid.Col>
-          <Grid.Col span={9}>
+          <Divider
+            orientation="vertical"
+            className={this.state.isSideBarOpened ? "block" : "!hidden"}
+          />
+          <Grid.Col span={this.state.isSideBarOpened ? 8 : 12}>
             <TaskList
-              tasks={this.state.tasks}
+              tasks={tasks}
               onAddTask={this.handleAddTask}
               onEditTask={this.handleEditTask}
               onDeleteTask={this.handleDeleteTask}

@@ -98,7 +98,6 @@ class TaskList extends Component<TaskListProps, {}> {
             min={1}
             max={4}
           />
-
           <NumberInput
             label="Progress"
             suffix="%"
