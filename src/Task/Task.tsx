@@ -1,5 +1,4 @@
 import { Component } from "react";
-import { TodoItemProps } from "./TodoItem.types";
 import { Badge, Button, Group, List, MantineColor, Text } from "@mantine/core";
 import formatDate from "../../lib/formatDate";
 
@@ -11,7 +10,7 @@ const getBadge = (progress: number): { color: string; text: string } => {
   return { color: "green", text: "Completed" };
 };
 
-class TodoItem extends Component<TodoItemProps, {}> {
+class Task extends Component<Task, {}> {
   render() {
     const { id, title, deadline, progress, onEdit, onDelete } = this.props;
     const { color, text } = getBadge(progress);
@@ -24,10 +23,10 @@ class TodoItem extends Component<TodoItemProps, {}> {
           <Badge color={color as MantineColor}>{text}</Badge>
         </Group>
         <Group position="right" mt="md">
-          <Button size="xs" onClick={() => onEdit(id)}>
+          <Button size="xs" onClick={onEdit}>
             Edit
           </Button>
-          <Button size="xs" color="red" onClick={() => onDelete(id)}>
+          <Button size="xs" color="red" onClick={onDelete}>
             Delete
           </Button>
         </Group>
@@ -36,4 +35,4 @@ class TodoItem extends Component<TodoItemProps, {}> {
   }
 }
 
-export default TodoItem;
+export default Task;

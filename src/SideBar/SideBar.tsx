@@ -12,7 +12,6 @@ import {
   Title,
 } from "@mantine/core";
 import {
-  IconChevronDown,
   IconChevronRight,
   IconGauge,
   IconHome2,
@@ -95,7 +94,8 @@ class SideBar extends Component<SideBarProps, SideBarState> {
         <Flex
           position="apart"
           mb="md"
-          className="mt-4 w-full"
+          mt="sm"
+          className="w-full"
           justify="space-between"
           align="center"
         >
@@ -153,45 +153,54 @@ class SideBar extends Component<SideBarProps, SideBarState> {
 
         <Divider mt="sm" />
 
+        <Button
+          size="sm"
+          justify="center"
+          variant="light"
+          fullWidth
+          mt="xs"
+          onClick={this.handleOpenModal}
+          rightSection={
+            <IconPlus
+              size="0.8rem"
+              stroke={1.5}
+              onClick={this.handleOpenModal}
+            />
+          }
+        >
+          Add project
+        </Button>
+
         <NavLink
           label="Projects"
           order={6}
           mt="sm"
           mb="sm"
           rightSection={
-            <>
-              <Button size="xs" variant="subtle">
-                <IconPlus
-                  size="0.8rem"
-                  stroke={1.5}
-                  onClick={this.handleOpenModal}
-                  className="mantine-rotate-rtl"
-                />
-              </Button>
-              <Button size="xs" variant="subtle">
-                <IconChevronDown
-                  size="0.8rem"
-                  stroke={1.5}
-                  className="mantine-rotate-rtl"
-                />
-              </Button>
-            </>
+            <Button size="xs" variant="subtle">
+              <IconChevronRight
+                size="0.8rem"
+                stroke={1.5}
+                className="mantine-rotate-rtl"
+              />
+            </Button>
           }
-        />
-
-        {projects.map((project) => (
-          <NavLink
-            key={project.id}
-            href="#"
-            label={project.name}
-            leftSection="#"
-            rightSection={
-              <Badge size="lg" color="blue" variant="filled">
-                {project.emoji || ""}
-              </Badge>
-            }
-          />
-        ))}
+          defaultOpened
+        >
+          {projects.map((project) => (
+            <NavLink
+              key={project.id}
+              href="#"
+              label={project.name}
+              leftSection="#"
+              rightSection={
+                <Badge size="lg" color="blue" variant="filled">
+                  {project.emoji || ""}
+                </Badge>
+              }
+            />
+          ))}
+        </NavLink>
 
         <Modal
           opened={isModalOpen}

@@ -1,14 +1,22 @@
-import * as React from "react";
-import { Component } from "react";
-import TodoList from "./TodoList/TodoList";
-import { Container, Grid, MantineProvider } from "@mantine/core";
+import React, { Component } from "react";
 import { AppState } from "./App.types";
-import SideBar from "./SideBar/SideBar.tsx";
+import { Task } from "./Task/Task.types.ts";
+import SideBar from "./SideBar/SideBar";
+import TaskList from "./TaskList/TaskList";
+import { Grid, MantineProvider } from "@mantine/core";
+import { uuid } from "@supabase/supabase-js/dist/main/lib/helpers";
 
-class App extends Component<object, AppState> {
+class App extends Component<{}, AppState> {
   state: AppState = {
-    todos: [],
     projects: [],
+    tasks: [],
+  };
+
+  handleAddTask = (task: Omit<Task, "id">) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      tasks: [...prevState.tasks, { ...task, id: uuid() }],
+    }));
   };
 
   handleAddProject = (name: string, emoji: string) => {
@@ -16,13 +24,38 @@ class App extends Component<object, AppState> {
       ...prevState,
       projects: [
         ...prevState.projects,
-        { id: String(Date.now()), name, emoji },
+        { id: Date.now().toString(), name, emoji },
       ],
     }));
   };
 
+  handleEditTask = (updatedTask: Task) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      tasks: prevState.tasks.map((task) =>
+        task.id === updatedTask.id ? updatedTask : task,
+      ),
+    }));
+  };
+
+  handleDeleteTask = (id: string) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      Tasks: prevState.Tasks.filter((Task) => Task.id !== id),
+    }));
+  };
+
+  handleDeleteProject = (projectId: string) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      projects: prevState.projects.filter(
+        (project) => project.id !== projectId,
+      ),
+    }));
+  };
+
   render() {
-    const { todos, projects } = this.state;
+    const { Tasks, projects } = this.state;
 
     return (
       <MantineProvider
@@ -36,16 +69,18 @@ class App extends Component<object, AppState> {
               userName="John Doe"
               userProfileImg="https://avatars.githubusercontent.com/u/56477764?v=4"
               projects={projects}
-              onAddTask={() => console.log("Add Task")}
-              onHideSidebar={() => console.log("Hide Sidebar")}
-              onSearch={(query) => console.log("Search:", query)}
               onAddProject={this.handleAddProject}
+              onHideSidebar={() => console.log("Sidebar hidden")}
+              onSearch={(query) => console.log(`Search: ${query}`)}
             />
           </Grid.Col>
-          <Grid.Col span={5}>
-            <Container>
-              <TodoList todos={todos} />
-            </Container>
+          <Grid.Col span={9}>
+            <TaskList
+              tasks={this.state.tasks}
+              onAddTask={this.handleAddTask}
+              onEditTask={this.handleEditTask}
+              onDeleteTask={this.handleDeleteTask}
+            />
           </Grid.Col>
         </Grid>
       </MantineProvider>
