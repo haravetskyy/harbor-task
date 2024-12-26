@@ -49,7 +49,7 @@ class App extends Component<{}, AppState> {
   handleDeleteTask = (id: string) => {
     this.setState((prevState) => ({
       ...prevState,
-      Tasks: prevState.Tasks.filter((Task) => Task.id !== id),
+      tasks: prevState.Tasks.filter((Task) => Task.id !== id),
     }));
   };
 
@@ -106,7 +106,8 @@ class App extends Component<{}, AppState> {
           />
           <Grid.Col span={this.state.isSideBarOpened ? 8 : 12}>
             <TaskList
-              tasks={tasks}
+              tasks={this.state.tasks}
+              projects={this.state.projects}
               onAddTask={this.handleAddTask}
               onEditTask={this.handleEditTask}
               onDeleteTask={this.handleDeleteTask}

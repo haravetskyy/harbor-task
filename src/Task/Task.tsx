@@ -2,12 +2,16 @@ import { Component } from "react";
 import { Badge, Button, Group, List, MantineColor, Text } from "@mantine/core";
 import formatDate from "../../lib/formatDate";
 
-const getBadge = (progress: number): { color: string; text: string } => {
-  if (progress === 0) return { color: "gray", text: "Not started" };
-  if (progress <= 25) return { color: "yellow", text: "In progress" };
-  if (progress <= 50) return { color: "orange", text: "Halfway" };
-  if (progress <= 75) return { color: "blue", text: "Almost done" };
-  return { color: "green", text: "Completed" };
+const progressConfig = [
+  { limit: 0, color: "gray", text: "Not started" },
+  { limit: 25, color: "yellow", text: "In progress" },
+  { limit: 50, color: "orange", text: "Halfway" },
+  { limit: 75, color: "blue", text: "Almost done" },
+  { limit: 100, color: "green", text: "Completed" },
+];
+
+const getBadge = (progress) => {
+  return progressConfig.find((cfg) => progress <= cfg.limit);
 };
 
 class Task extends Component<Task, {}> {

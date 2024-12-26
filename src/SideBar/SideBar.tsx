@@ -7,7 +7,6 @@ import {
   Group,
   Modal,
   NavLink,
-  Select,
   TextInput,
   Title,
 } from "@mantine/core";
@@ -21,7 +20,8 @@ import {
 } from "@tabler/icons-react";
 import React, { Component } from "react";
 import { SideBarProps, SideBarState } from "./SideBar.types.ts";
-import { emojiOptions } from "./emojiOptions.ts";
+import ProjectForm from "../ProjectForm/ProjectForm.tsx";
+import { uuid } from "@supabase/supabase-js/dist/main/lib/helpers";
 
 class SideBar extends Component<SideBarProps, SideBarState> {
   state = {
@@ -44,14 +44,14 @@ class SideBar extends Component<SideBarProps, SideBarState> {
     }
   };
 
-  handleOpenModal = () => {
+  handleOpenProjectModal = () => {
     this.setState((prevState) => ({
       ...prevState,
       isModalOpen: true,
     }));
   };
 
-  handleCloseModal = () => {
+  handleCloseProjectModal = () => {
     this.setState((prevState) => ({
       ...prevState,
       isModalOpen: false,
@@ -60,13 +60,13 @@ class SideBar extends Component<SideBarProps, SideBarState> {
     }));
   };
 
-  handleSaveProject = () => {
-    const { newProjectName, selectedEmoji } = this.state;
-
-    if (newProjectName && selectedEmoji) {
-      this.props.onAddProject(newProjectName, selectedEmoji);
-      this.handleCloseModal();
-    }
+  handleSaveProject = (project: {
+    id: string;
+    name: string;
+    emoji: string;
+  }) => {
+    this.props.onAddProject(project.name, project.emoji);
+    this.handleCloseProjectModal();
   };
 
   handleProjectNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,6 +74,13 @@ class SideBar extends Component<SideBarProps, SideBarState> {
     this.setState((prevState) => ({
       ...prevState,
       newProjectName: value || "",
+    }));
+  };
+
+  handleAddProject = (name: string, emoji: string) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      projects: [...prevState.projects, { id: uuid(), name, emoji }],
     }));
   };
 
@@ -159,12 +166,12 @@ class SideBar extends Component<SideBarProps, SideBarState> {
           variant="light"
           fullWidth
           mt="xs"
-          onClick={this.handleOpenModal}
+          onClick={this.handleOpenProjectModal}
           rightSection={
             <IconPlus
               size="0.8rem"
               stroke={1.5}
-              onClick={this.handleOpenModal}
+              onClick={this.handleOpenProjectModal}
             />
           }
         >
@@ -204,26 +211,13 @@ class SideBar extends Component<SideBarProps, SideBarState> {
 
         <Modal
           opened={isModalOpen}
-          onClose={this.handleCloseModal}
+          onClose={this.handleCloseProjectModal}
           title="Add New Project"
         >
-          <TextInput
-            label="Project Name"
-            placeholder="Enter project name"
-            value={newProjectName}
-            onChange={this.handleProjectNameChange}
-            mb="md"
+          <ProjectForm
+            onClose={this.handleCloseProjectModal}
+            onSave={this.handleSaveProject}
           />
-          <Select
-            label="Select Emoji"
-            placeholder="Choose an emoji"
-            data={emojiOptions}
-            value={selectedEmoji}
-            onChange={this.handleEmojiChange}
-          />
-          <Button fullWidth mt="md" onClick={this.handleSaveProject}>
-            Save Project
-          </Button>
         </Modal>
       </Container>
     );
