@@ -1,21 +1,22 @@
-export type Project = {
-  id: string;
-  name: string;
-  emoji?: string;
-};
+import { Project } from "../ProjectForm/ProjectForm.types.ts";
 
 export type SideBarProps = {
   userName: string;
   userProfileImg: string;
   projects: Project[];
   onHideSidebar: () => void;
-  onSearch: (query: string) => void;
   onAddProject: (name: string, emoji: string) => void;
+  onEditProject: (project: Project) => void;
+  onDeleteProject: (projectId: string) => void;
+  onSectionChange: (section: Section) => void;
 };
 
 export type SideBarState = {
-  searchQuery: string;
   isModalOpen: boolean;
-  newProjectName: string;
-  selectedEmoji: string;
+  projectToEdit: Project | null;
 };
+
+export interface Section {
+  type: "section" | "project";
+  value: string | Project;
+}

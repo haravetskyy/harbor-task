@@ -1,5 +1,13 @@
 import { Component } from "react";
-import { Badge, Button, Group, List, MantineColor, Text } from "@mantine/core";
+import {
+  Badge,
+  Button,
+  Checkbox,
+  Group,
+  List,
+  MantineColor,
+  Text,
+} from "@mantine/core";
 import formatDate from "../../lib/formatDate";
 
 const progressConfig = [
@@ -20,7 +28,7 @@ class Task extends Component<Task, {}> {
     const { color, text } = getBadge(progress);
 
     return (
-      <List.Item>
+      <List.Item icon={<Checkbox />}>
         <Group position="apart" mt="md" mb="xs">
           <Text weight={500}>{title}</Text>
           <Text size="sm">Deadline: {formatDate(deadline)}</Text>

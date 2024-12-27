@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, List, Modal } from "@mantine/core";
+import { Button, List, Modal, Title } from "@mantine/core";
 import Task from "../Task/Task";
 import TaskForm from "../TaskForm/TaskForm";
 import { TaskListProps, TaskListState } from "./TaskList.types";
@@ -19,11 +19,26 @@ class TaskList extends Component<TaskListProps, TaskListState> {
   };
 
   render() {
-    const { tasks, onAddTask, onEditTask, onDeleteTask } = this.props;
+    const {
+      tasks,
+      projects,
+      onAddTask,
+      onEditTask,
+      onDeleteTask,
+      selectedSection,
+    } = this.props;
     const { isModalOpen, currentTask } = this.state;
+
+    const sectionTitle =
+      selectedSection?.type === "section"
+        ? selectedSection.value
+        : selectedSection?.value?.name || "Unknown Section";
 
     return (
       <>
+        <Title order={3} size="h2">
+          {sectionTitle}
+        </Title>
         <Button onClick={() => this.handleOpenModal()}>Add Task</Button>
         <List>
           {tasks.map((task) => (
@@ -44,7 +59,7 @@ class TaskList extends Component<TaskListProps, TaskListState> {
             initialTask={currentTask}
             onSave={currentTask ? onEditTask : onAddTask}
             onClose={this.handleCloseModal}
-            projects={this.props.projects}
+            projects={projects}
           />
         </Modal>
       </>

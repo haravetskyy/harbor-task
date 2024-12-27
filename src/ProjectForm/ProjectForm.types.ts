@@ -5,8 +5,9 @@ export interface Project {
 }
 
 export interface ProjectFormProps {
+  initialProject?: { id: string; name: string; emoji: string };
   onClose: () => void;
-  onSave: (project: Project) => void;
+  onSave: (project: { id: string; name: string; emoji: string }) => void;
 }
 
 export interface ProjectFormState {

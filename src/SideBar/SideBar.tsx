@@ -10,91 +10,62 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
+import React, { Component } from "react";
+import { SideBarProps, SideBarState } from "./SideBar.types.ts";
+import ProjectForm from "../ProjectForm/ProjectForm.tsx";
 import {
+  IconBackspace,
+  IconCalendarClock,
   IconChevronRight,
   IconGauge,
   IconHome2,
   IconLayoutSidebar,
+  IconPencilBolt,
   IconPlus,
   IconSearch,
 } from "@tabler/icons-react";
-import React, { Component } from "react";
-import { SideBarProps, SideBarState } from "./SideBar.types.ts";
-import ProjectForm from "../ProjectForm/ProjectForm.tsx";
-import { uuid } from "@supabase/supabase-js/dist/main/lib/helpers";
+import { Project } from "../ProjectForm/ProjectForm.types.ts";
 
 class SideBar extends Component<SideBarProps, SideBarState> {
   state = {
-    searchQuery: "",
     isModalOpen: false,
-    newProjectName: "",
-    selectedEmoji: "",
+    projectToEdit: null,
   };
 
-  handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  toggleModal = (isOpen: boolean) => {
     this.setState((prevState) => ({
       ...prevState,
-      searchQuery: event.currentTarget.value,
+      isModalOpen: isOpen,
     }));
   };
 
-  handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      this.props.onSearch(this.state.searchQuery);
-    }
+  handleSectionClick = (sectionName: string) => {
+    this.props.onSectionChange({ type: "section", value: sectionName });
   };
 
-  handleOpenProjectModal = () => {
-    this.setState((prevState) => ({
-      ...prevState,
+  handleProjectClick = (project: Project) => {
+    this.props.onSectionChange({ type: "project", value: project });
+  };
+
+  handleEditProject = (project) => {
+    this.setState({
       isModalOpen: true,
-    }));
+      projectToEdit: project,
+    });
   };
 
-  handleCloseProjectModal = () => {
-    this.setState((prevState) => ({
-      ...prevState,
-      isModalOpen: false,
-      newProjectName: "",
-      selectedEmoji: "",
-    }));
-  };
-
-  handleSaveProject = (project: {
-    id: string;
-    name: string;
-    emoji: string;
-  }) => {
-    this.props.onAddProject(project.name, project.emoji);
-    this.handleCloseProjectModal();
-  };
-
-  handleProjectNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    this.setState((prevState) => ({
-      ...prevState,
-      newProjectName: value || "",
-    }));
-  };
-
-  handleAddProject = (name: string, emoji: string) => {
-    this.setState((prevState) => ({
-      ...prevState,
-      projects: [...prevState.projects, { id: uuid(), name, emoji }],
-    }));
-  };
-
-  handleEmojiChange = (value: string | null) => {
-    this.setState((prevState) => ({
-      ...prevState,
-      selectedEmoji: value || "",
-    }));
+  handleSaveProject = (project) => {
+    if (this.state.projectToEdit) {
+      this.props.onEditProject(project);
+    } else {
+      this.props.onAddProject(project.name, project.emoji);
+    }
+    this.setState((prevState) => ({ ...prevState, projectToEdit: null }));
   };
 
   render() {
     const { userName, userProfileImg, projects, onHideSidebar } = this.props;
-    const { searchQuery, isModalOpen, newProjectName, selectedEmoji } =
-      this.state;
+    const { searchQuery, isModalOpen, projectToEdit } = this.state;
 
     return (
       <Container>
@@ -127,15 +98,14 @@ class SideBar extends Component<SideBarProps, SideBarState> {
         <TextInput
           placeholder="Search"
           value={searchQuery}
-          onChange={this.handleSearchChange}
-          onKeyDown={this.handleSearchKeyDown}
-          icon={<IconSearch />}
+          leftSection={<IconSearch size="0.8rem" stroke={1.5} />}
           mb="md"
         />
 
         <NavLink
           href="#"
-          label="Today"
+          label="All"
+          onClick={() => this.handleSectionClick("All")}
           leftSection={<IconHome2 size="1rem" stroke={1.5} />}
           rightSection={
             <IconChevronRight
@@ -147,7 +117,22 @@ class SideBar extends Component<SideBarProps, SideBarState> {
         />
         <NavLink
           href="#"
+          label="Today"
+          onClick={() => this.handleSectionClick("Today")}
+          leftSection={<IconCalendarClock size="1rem" stroke={1.5} />}
+          rightSection={
+            <IconChevronRight
+              size="0.8rem"
+              stroke={1.5}
+              className="mantine-rotate-rtl"
+            />
+          }
+        />
+
+        <NavLink
+          href="#"
           label="Upcoming"
+          onClick={() => this.handleSectionClick("Upcoming")}
           leftSection={<IconGauge size="1rem" stroke={1.5} />}
           rightSection={
             <IconChevronRight
@@ -166,44 +151,47 @@ class SideBar extends Component<SideBarProps, SideBarState> {
           variant="light"
           fullWidth
           mt="xs"
-          onClick={this.handleOpenProjectModal}
+          onClick={() => this.toggleModal(true)}
           rightSection={
             <IconPlus
               size="0.8rem"
               stroke={1.5}
-              onClick={this.handleOpenProjectModal}
+              onClick={() => this.toggleModal(true)}
             />
           }
         >
           Add project
         </Button>
-
-        <NavLink
-          label="Projects"
-          order={6}
-          mt="sm"
-          mb="sm"
-          rightSection={
-            <Button size="xs" variant="subtle">
-              <IconChevronRight
-                size="0.8rem"
-                stroke={1.5}
-                className="mantine-rotate-rtl"
-              />
-            </Button>
-          }
-          defaultOpened
-        >
+        <NavLink label="Projects" defaultOpened>
           {projects.map((project) => (
             <NavLink
               key={project.id}
-              href="#"
               label={project.name}
-              leftSection="#"
+              onClick={() => this.handleProjectClick(project)}
               rightSection={
-                <Badge size="lg" color="blue" variant="filled">
-                  {project.emoji || ""}
-                </Badge>
+                <Flex align="center" gap="sm">
+                  <Badge size="lg" color="blue">
+                    {project.emoji}
+                  </Badge>
+                  <Button
+                    size="xs"
+                    variant="subtle"
+                    onClick={() => this.handleEditProject(project)}
+                  >
+                    <IconPencilBolt size="0.8rem" stroke={1.5} />
+                  </Button>
+                  <Button
+                    size="xs"
+                    color="red"
+                    variant="subtle"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      this.props.onDeleteProject(project.id);
+                    }}
+                  >
+                    <IconBackspace size="0.8rem" stroke={1.5} />
+                  </Button>
+                </Flex>
               }
             />
           ))}
@@ -211,12 +199,13 @@ class SideBar extends Component<SideBarProps, SideBarState> {
 
         <Modal
           opened={isModalOpen}
-          onClose={this.handleCloseProjectModal}
-          title="Add New Project"
+          onClose={() => this.toggleModal(false)}
+          title={projectToEdit ? "Edit Project" : "Add New Project"}
         >
           <ProjectForm
-            onClose={this.handleCloseProjectModal}
+            onClose={() => this.toggleModal(false)}
             onSave={this.handleSaveProject}
+            initialProject={projectToEdit}
           />
         </Modal>
       </Container>

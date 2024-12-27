@@ -12,29 +12,74 @@ import {
 } from "@mantine/core";
 import { uuid } from "@supabase/supabase-js/dist/main/lib/helpers";
 import { IconLayoutSidebar } from "@tabler/icons-react";
+import { Project } from "./ProjectForm/ProjectForm.types.ts";
+import { createProject } from "../lib/createProject.ts";
 
 class App extends Component<{}, AppState> {
   state: AppState = {
     projects: [],
     tasks: [],
     isSideBarOpened: true,
+    selectedSection: { type: "section", value: "All" },
   };
 
-  handleAddTask = (task: Omit<Task, "id">) => {
+  toggleSideBar = () => {
     this.setState((prevState) => ({
       ...prevState,
-      tasks: [...prevState.tasks, { ...task, id: uuid() }],
+      isSideBarOpened: !prevState.isSideBarOpened,
+    }));
+  };
+
+  handleSectionChange = (section: string) => {
+    this.setState((prevState) => ({ ...prevState, selectedSection: section }));
+  };
+
+  updateList = (key: "projects" | "tasks", newItem: Project | Task) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      [key]: [...prevState[key], newItem],
     }));
   };
 
   handleAddProject = (name: string, emoji: string) => {
+    const project = createProject(name, emoji);
+    this.updateList("projects", project as Project);
+  };
+
+  handleEditProject = (updatedProject) => {
     this.setState((prevState) => ({
       ...prevState,
-      projects: [
-        ...prevState.projects,
-        { id: Date.now().toString(), name, emoji },
-      ],
+      projects: prevState.projects.map((project) =>
+        project.id === updatedProject.id ? updatedProject : project,
+      ),
     }));
+  };
+
+  handleDeleteProject = (projectId) => {
+    this.setState((prevState) => {
+      const isDeletedProjectSelected =
+        prevState.selectedSection.type === "project" &&
+        prevState.selectedSection.value.id === projectId;
+
+      const updatedProjects = prevState.projects.filter(
+        (project) => project.id !== projectId,
+      );
+
+      const updatedSection = isDeletedProjectSelected
+        ? { type: "section", value: "All" }
+        : prevState.selectedSection;
+
+      return {
+        ...prevState,
+        projects: updatedProjects,
+        selectedSection: updatedSection,
+      };
+    });
+  };
+
+  handleAddTask = (task: Omit<Task, "id">) => {
+    const newTask = { ...task, id: uuid() };
+    this.updateList("tasks", newTask);
   };
 
   handleEditTask = (updatedTask: Task) => {
@@ -49,28 +94,12 @@ class App extends Component<{}, AppState> {
   handleDeleteTask = (id: string) => {
     this.setState((prevState) => ({
       ...prevState,
-      tasks: prevState.Tasks.filter((Task) => Task.id !== id),
-    }));
-  };
-
-  handleDeleteProject = (projectId: string) => {
-    this.setState((prevState) => ({
-      ...prevState,
-      projects: prevState.projects.filter(
-        (project) => project.id !== projectId,
-      ),
-    }));
-  };
-
-  toggleSideBar = () => {
-    this.setState((prevState) => ({
-      ...prevState,
-      isSideBarOpened: !prevState.isSideBarOpened,
+      tasks: prevState.tasks.filter((Task) => Task.id !== id),
     }));
   };
 
   render() {
-    const { tasks, projects } = this.state;
+    const { tasks, projects, selectedSection } = this.state;
 
     return (
       <MantineProvider
@@ -95,8 +124,10 @@ class App extends Component<{}, AppState> {
                 userProfileImg="https://avatars.githubusercontent.com/u/56477764?v=4"
                 projects={projects}
                 onAddProject={this.handleAddProject}
+                onEditProject={this.handleEditProject}
+                onDeleteProject={this.handleDeleteProject}
                 onHideSidebar={this.toggleSideBar}
-                onSearch={(query) => console.log(`Search: ${query}`)}
+                onSectionChange={this.handleSectionChange}
               />
             </Collapse>
           </Grid.Col>
@@ -106,11 +137,12 @@ class App extends Component<{}, AppState> {
           />
           <Grid.Col span={this.state.isSideBarOpened ? 8 : 12}>
             <TaskList
-              tasks={this.state.tasks}
-              projects={this.state.projects}
+              tasks={tasks}
+              projects={projects}
               onAddTask={this.handleAddTask}
               onEditTask={this.handleEditTask}
               onDeleteTask={this.handleDeleteTask}
+              selectedSection={selectedSection}
             />
           </Grid.Col>
         </Grid>

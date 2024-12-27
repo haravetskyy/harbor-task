@@ -32,7 +32,7 @@ class TaskForm extends Component<TaskFormProps, TaskFormState> {
       deadline,
       priority,
       progress,
-      projectId: projectId || null, // Якщо не вибрано проект, зберігаємо null
+      projectId: projectId || null,
     };
 
     onSave(newTask);
@@ -71,6 +71,7 @@ class TaskForm extends Component<TaskFormProps, TaskFormState> {
         />
         <NumberInput
           label="Progress"
+          suffix="%"
           value={progress}
           onChange={(value) => this.handleChange("progress", value)}
           min={0}

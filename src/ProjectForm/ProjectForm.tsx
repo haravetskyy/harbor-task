@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import { Button, Select, TextInput } from "@mantine/core";
 import { ProjectFormProps, ProjectFormState } from "./ProjectForm.types";
 import { emojiOptions } from "../SideBar/emojiOptions.ts";
+import { uuid } from "@supabase/supabase-js/dist/main/lib/helpers";
 
 class ProjectForm extends Component<ProjectFormProps, ProjectFormState> {
   state: ProjectFormState = {
-    name: "",
-    emoji: "",
+    name: this.props.initialProject?.name || "",
+    emoji: this.props.initialProject?.emoji || "",
   };
 
   handleChange = (field: keyof ProjectFormState, value: string) => {
@@ -17,21 +18,21 @@ class ProjectForm extends Component<ProjectFormProps, ProjectFormState> {
   };
 
   handleSave = () => {
-    const { onSave, onClose } = this.props;
+    const { onSave, onClose, initialProject } = this.props;
     const { name, emoji } = this.state;
 
-    if (!name) {
-      alert("Project name is required!");
-      return;
-    }
+    const project = {
+      id: initialProject?.id || uuid(),
+      name,
+      emoji,
+    };
 
-    onSave({ id: Date.now().toString(), name, emoji: emoji || "📁" });
+    onSave(project);
     onClose();
   };
 
   render() {
     const { name, emoji } = this.state;
-    const { onClose } = this.props;
 
     return (
       <div>
