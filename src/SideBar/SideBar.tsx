@@ -1,10 +1,12 @@
 import {
+  Avatar,
   Badge,
   Button,
   Container,
   Divider,
   Flex,
   Group,
+  MantineColor,
   Modal,
   NavLink,
   TextInput,
@@ -15,11 +17,10 @@ import { SideBarProps, SideBarState } from "./SideBar.types.ts";
 import ProjectForm from "../ProjectForm/ProjectForm.tsx";
 import {
   IconBackspace,
-  IconCalendarClock,
+  IconCalendarDot,
   IconChevronRight,
   IconGauge,
   IconHome2,
-  IconLayoutSidebar,
   IconPencilBolt,
   IconPlus,
   IconSearch,
@@ -55,17 +56,19 @@ class SideBar extends Component<SideBarProps, SideBarState> {
   };
 
   handleSaveProject = (project) => {
+    console.log("Project to save:", project); // Debugging
+
     if (this.state.projectToEdit) {
       this.props.onEditProject(project);
     } else {
-      this.props.onAddProject(project.name, project.emoji);
+      this.props.onAddProject(project.name, project.emoji, project.color);
     }
     this.setState((prevState) => ({ ...prevState, projectToEdit: null }));
   };
 
   render() {
-    const { userName, userProfileImg, projects, onHideSidebar } = this.props;
-    const { searchQuery, isModalOpen, projectToEdit } = this.state;
+    const { userName, userProfileImg, projects } = this.props;
+    const { isModalOpen, projectToEdit } = this.state;
 
     return (
       <Container>
@@ -78,26 +81,14 @@ class SideBar extends Component<SideBarProps, SideBarState> {
           align="center"
         >
           <Group>
-            <img
-              src={userProfileImg}
-              alt="User Profile"
-              style={{ width: "40px", height: "40px", borderRadius: "50%" }}
-            />
+            <Avatar src={userProfileImg} alt="User Profile" />
             <Title order={6}>{userName}</Title>
           </Group>
-          <Button
-            size="xs"
-            variant="subtle"
-            onClick={onHideSidebar}
-            className="justify-self-end"
-          >
-            <IconLayoutSidebar />
-          </Button>
         </Flex>
 
         <TextInput
           placeholder="Search"
-          value={searchQuery}
+          value=""
           leftSection={<IconSearch size="0.8rem" stroke={1.5} />}
           mb="md"
         />
@@ -119,7 +110,7 @@ class SideBar extends Component<SideBarProps, SideBarState> {
           href="#"
           label="Today"
           onClick={() => this.handleSectionClick("Today")}
-          leftSection={<IconCalendarClock size="1rem" stroke={1.5} />}
+          leftSection={<IconCalendarDot size="1rem" stroke={1.5} />}
           rightSection={
             <IconChevronRight
               size="0.8rem"
@@ -167,12 +158,18 @@ class SideBar extends Component<SideBarProps, SideBarState> {
             <NavLink
               key={project.id}
               label={project.name}
+              leftSection={
+                <Badge
+                  size="lg"
+                  variant="light"
+                  color={project?.color as MantineColor}
+                >
+                  {project.emoji}
+                </Badge>
+              }
               onClick={() => this.handleProjectClick(project)}
               rightSection={
                 <Flex align="center" gap="sm">
-                  <Badge size="lg" color="blue">
-                    {project.emoji}
-                  </Badge>
                   <Button
                     size="xs"
                     variant="subtle"

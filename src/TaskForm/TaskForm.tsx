@@ -51,6 +51,7 @@ class TaskForm extends Component<TaskFormProps, TaskFormState> {
           label="Title"
           value={title}
           onChange={(e) => this.handleChange("title", e.target.value)}
+          required
         />
         <TextInput
           label="Description"
@@ -78,17 +79,20 @@ class TaskForm extends Component<TaskFormProps, TaskFormState> {
           max={100}
           step={25}
         />
-        <Select
-          label="Project (optional)"
-          placeholder="Select a project"
-          value={projectId || null}
-          onChange={(value) => this.handleChange("projectId", value)}
-          data={projects.map((project) => ({
-            value: project.id,
-            label: project.name,
-          }))}
-          clearable
-        />
+        {projects && projects.length > 0 && (
+          <Select
+            label="Project"
+            placeholder="Select a project"
+            value={projectId || null}
+            onChange={(value) => this.handleChange("projectId", value)}
+            data={projects.map((project) => ({
+              value: project.id,
+              label: `${project.name}  ${project.emoji || ""}`,
+            }))}
+            clearable
+          />
+        )}
+
         <Button mt="sm" onClick={this.handleSave}>
           Save
         </Button>

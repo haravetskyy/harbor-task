@@ -4,8 +4,7 @@ export type SideBarProps = {
   userName: string;
   userProfileImg: string;
   projects: Project[];
-  onHideSidebar: () => void;
-  onAddProject: (name: string, emoji: string) => void;
+  onAddProject: (name: string, emoji: string, color: string) => void;
   onEditProject: (project: Project) => void;
   onDeleteProject: (projectId: string) => void;
   onSectionChange: (section: Section) => void;

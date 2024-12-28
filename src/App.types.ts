@@ -5,6 +5,5 @@ import { Section } from "./SideBar/SideBar.types.ts";
 export interface AppState {
   projects: Project[];
   tasks: Task[];
-  isSideBarOpened: boolean;
   selectedSection: Section;
 }

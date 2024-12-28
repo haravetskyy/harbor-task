@@ -1,8 +1,17 @@
 import React, { Component } from "react";
-import { Button, List, Modal, Title } from "@mantine/core";
+import {
+  Button,
+  Container,
+  Group,
+  List,
+  Modal,
+  Space,
+  Title,
+} from "@mantine/core";
 import Task from "../Task/Task";
 import TaskForm from "../TaskForm/TaskForm";
 import { TaskListProps, TaskListState } from "./TaskList.types";
+import { IconPlus } from "@tabler/icons-react";
 
 class TaskList extends Component<TaskListProps, TaskListState> {
   state: TaskListState = {
@@ -32,15 +41,27 @@ class TaskList extends Component<TaskListProps, TaskListState> {
     const sectionTitle =
       selectedSection?.type === "section"
         ? selectedSection.value
-        : selectedSection?.value?.name || "Unknown Section";
+        : selectedSection?.value?.name;
 
     return (
-      <>
-        <Title order={3} size="h2">
-          {sectionTitle}
-        </Title>
-        <Button onClick={() => this.handleOpenModal()}>Add Task</Button>
-        <List>
+      <Container size="full">
+        <Space h={64} />
+        <Group>
+          <Title order={3} size="h2">
+            {sectionTitle}
+          </Title>
+          <Space w={24} />
+          <Button
+            onClick={() => this.handleOpenModal()}
+            variant="light"
+            rightSection={<IconPlus size="0.8rem" stroke={1.5} />}
+          >
+            Add task
+          </Button>
+        </Group>
+        <Space h={24} />
+
+        <List icon={<></>}>
           {tasks.map((task) => (
             <Task
               key={task.id}
@@ -62,7 +83,7 @@ class TaskList extends Component<TaskListProps, TaskListState> {
             projects={projects}
           />
         </Modal>
-      </>
+      </Container>
     );
   }
 }

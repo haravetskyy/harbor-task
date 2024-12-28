@@ -1,26 +1,28 @@
 const formatDate = (date: string): string => {
   const userDate = new Date(date);
-  const year: number = userDate.getFullYear();
-  const currentDate: Date = new Date();
-  const currentYear: number = currentDate.getFullYear();
-  let options;
+  const today = new Date();
 
-  if (year !== currentYear) {
-    options = {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    };
-  } else {
-    options = {
-      month: "long",
-      day: "numeric",
-    };
+  today.setHours(0, 0, 0, 0);
+  userDate.setHours(0, 0, 0, 0);
+
+  const diffTime = userDate.getTime() - today.getTime();
+  const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+  const formatWithOptions = (options: Intl.DateTimeFormatOptions) =>
+    userDate.toLocaleDateString("en-US", options);
+
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "Tomorrow";
+  if (diffDays === -1) return "Yesterday";
+
+  if (diffDays < 7) {
+    return formatWithOptions({ weekday: "long" });
   }
 
-  const formattedDate: string = userDate.toLocaleDateString("en-US", options);
-
-  return formattedDate;
+  const isSameYear = userDate.getFullYear() === today.getFullYear();
+  return isSameYear
+    ? formatWithOptions({ month: "short", day: "numeric" })
+    : formatWithOptions({ month: "short", day: "numeric", year: "numeric" });
 };
 
 export default formatDate;

@@ -3,34 +3,32 @@ import { AppState } from "./App.types";
 import { Task } from "./Task/Task.types.ts";
 import SideBar from "./SideBar/SideBar";
 import TaskList from "./TaskList/TaskList";
-import {
-  Button,
-  Collapse,
-  Divider,
-  Grid,
-  MantineProvider,
-} from "@mantine/core";
+import { Divider, Grid, MantineProvider } from "@mantine/core";
 import { uuid } from "@supabase/supabase-js/dist/main/lib/helpers";
-import { IconLayoutSidebar } from "@tabler/icons-react";
 import { Project } from "./ProjectForm/ProjectForm.types.ts";
 import { createProject } from "../lib/createProject.ts";
+import { Section } from "./SideBar/SideBar.types.ts";
 
 class App extends Component<{}, AppState> {
   state: AppState = {
-    projects: [],
-    tasks: [],
-    isSideBarOpened: true,
+    projects: [
+      {
+        id: uuid(),
+        name: "Data Analytics",
+      },
+    ],
+    tasks: [
+      {
+        id: uuid(),
+        title: "Finish IBM Course",
+        deadline: new Date(),
+        progress: 75,
+      },
+    ],
     selectedSection: { type: "section", value: "All" },
   };
 
-  toggleSideBar = () => {
-    this.setState((prevState) => ({
-      ...prevState,
-      isSideBarOpened: !prevState.isSideBarOpened,
-    }));
-  };
-
-  handleSectionChange = (section: string) => {
+  handleSectionChange = (section: Section) => {
     this.setState((prevState) => ({ ...prevState, selectedSection: section }));
   };
 
@@ -41,8 +39,8 @@ class App extends Component<{}, AppState> {
     }));
   };
 
-  handleAddProject = (name: string, emoji: string) => {
-    const project = createProject(name, emoji);
+  handleAddProject = (name: string, emoji: string, color: string) => {
+    const project = createProject(name, emoji, color);
     this.updateList("projects", project as Project);
   };
 
@@ -108,34 +106,19 @@ class App extends Component<{}, AppState> {
         withNormalizeCSS
       >
         <Grid>
-          <Grid.Col span={this.state.isSideBarOpened ? 3 : 0}>
-            <Button
-              size="xs"
-              mt="md"
-              variant="subtle"
-              onClick={this.toggleSideBar}
-              className={this.state.isSideBarOpened ? "!hidden" : "block"}
-            >
-              <IconLayoutSidebar />
-            </Button>
-            <Collapse transitionDuration={0} in={this.state.isSideBarOpened}>
-              <SideBar
-                userName="John Doe"
-                userProfileImg="https://avatars.githubusercontent.com/u/56477764?v=4"
-                projects={projects}
-                onAddProject={this.handleAddProject}
-                onEditProject={this.handleEditProject}
-                onDeleteProject={this.handleDeleteProject}
-                onHideSidebar={this.toggleSideBar}
-                onSectionChange={this.handleSectionChange}
-              />
-            </Collapse>
+          <Grid.Col span={3}>
+            <SideBar
+              userName="John Doe"
+              userProfileImg="https://avatars.githubusercontent.com/u/56477764?v=4"
+              projects={projects}
+              onAddProject={this.handleAddProject}
+              onEditProject={this.handleEditProject}
+              onDeleteProject={this.handleDeleteProject}
+              onSectionChange={this.handleSectionChange}
+            />
           </Grid.Col>
-          <Divider
-            orientation="vertical"
-            className={this.state.isSideBarOpened ? "block" : "!hidden"}
-          />
-          <Grid.Col span={this.state.isSideBarOpened ? 8 : 12}>
+          <Divider orientation="vertical" />
+          <Grid.Col span={8}>
             <TaskList
               tasks={tasks}
               projects={projects}
