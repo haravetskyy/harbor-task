@@ -11,7 +11,7 @@ export interface TaskFormProps {
 export interface TaskFormState {
   title: string;
   description: string;
-  deadline: string;
+  deadline: Date;
   priority: number;
   progress: number;
   projectId: string;

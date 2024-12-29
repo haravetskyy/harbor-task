@@ -21,7 +21,7 @@ class App extends Component<{}, AppState> {
       {
         id: uuid(),
         title: "Finish IBM Course",
-        deadline: "2025-01-01",
+        deadline: new Date("2025-01-01"),
         description:
           "Finishing a course is a journey filled with determination and growth, marked by overcoming challenges and celebrating small victories along the way. It's a process of acquiring knowledge, adapting to new ideas, and staying committed despite moments of struggle or doubt. Ultimately, it’s a transformative experience that leaves you with a sense of accomplishment and readiness to tackle the next challenge.",
         progress: 75,

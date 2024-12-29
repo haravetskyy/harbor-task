@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, NumberInput, Select, TextInput } from "@mantine/core";
-import { DateInput } from "@mantine/dates";
+import { DateTimePicker } from "@mantine/dates";
 import { TaskFormProps, TaskFormState } from "./TaskForm.types";
 
 class TaskForm extends Component<TaskFormProps, TaskFormState> {
@@ -13,7 +13,7 @@ class TaskForm extends Component<TaskFormProps, TaskFormState> {
     projectId: this.props.initialTask?.projectId || "",
   };
 
-  handleChange = (field: keyof TaskFormState, value: any) => {
+  handleChange = (field: keyof TaskFormState, value: string | number) => {
     this.setState({ [field]: value } as Pick<
       TaskFormState,
       keyof TaskFormState
@@ -58,7 +58,7 @@ class TaskForm extends Component<TaskFormProps, TaskFormState> {
           value={description}
           onChange={(e) => this.handleChange("description", e.target.value)}
         />
-        <DateInput
+        <DateTimePicker
           label="Deadline"
           value={deadline}
           onChange={(value) => this.handleChange("deadline", value)}

@@ -18,21 +18,7 @@ import {
   IconFlagFilled,
   IconPencilBolt,
 } from "@tabler/icons-react";
-
-interface TaskProps {
-  id: string;
-  title: string;
-  description?: string;
-  deadline?: string;
-  progress?: number;
-  priority?: number;
-  onEdit: () => void;
-  onDelete: (id: string) => void;
-}
-
-interface TaskState {
-  mounted: boolean;
-}
+import { progressBadge, TaskProps, TaskState } from "./Task.types.ts";
 
 const progressConfig = [
   { limit: 0, badgeColor: "gray" },
@@ -41,11 +27,6 @@ const progressConfig = [
   { limit: 75, badgeColor: "blue" },
   { limit: 100, badgeColor: "green" },
 ];
-
-type progressBadge = {
-  badgeColor: string;
-  badgeText: string;
-};
 
 const getBadge = (progress: number | undefined): progressBadge => {
   const config = progressConfig.find(

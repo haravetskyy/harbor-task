@@ -2,7 +2,7 @@ export interface Task {
   id: string;
   title: string;
   description?: string;
-  deadline?: string;
+  deadline?: Date;
   progress?: number;
   priority?: number;
 }
@@ -15,3 +15,8 @@ export interface TaskProps extends Task {
 export interface TaskState {
   mounted: boolean;
 }
+
+export type progressBadge = {
+  badgeColor: string;
+  badgeText: string;
+};
