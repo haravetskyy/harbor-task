@@ -1,13 +1,10 @@
 import {
-  ActionIcon,
   Avatar,
-  Badge,
   Button,
   Container,
   Divider,
   Flex,
   Group,
-  MantineColor,
   Modal,
   NavLink,
   TextInput,
@@ -17,16 +14,15 @@ import React, { Component } from "react";
 import { SideBarProps, SideBarState } from "./SideBar.types.ts";
 import ProjectForm from "../ProjectForm/ProjectForm.tsx";
 import {
-  IconBackspace,
   IconCalendarDot,
   IconChevronRight,
   IconGauge,
   IconHome2,
-  IconPencilBolt,
   IconPlus,
   IconSearch,
 } from "@tabler/icons-react";
-import { Project } from "../ProjectForm/ProjectForm.types.ts";
+import ProjectInstance from "../Project/ProjectInstance.tsx";
+import { Project } from "../Project/Project.types.ts";
 
 class SideBar extends Component<SideBarProps, SideBarState> {
   state = {
@@ -57,8 +53,6 @@ class SideBar extends Component<SideBarProps, SideBarState> {
   };
 
   handleSaveProject = (project) => {
-    console.log("Project to save:", project); // Debugging
-
     if (this.state.projectToEdit) {
       this.props.onEditProject(project);
     } else {
@@ -154,43 +148,15 @@ class SideBar extends Component<SideBarProps, SideBarState> {
         >
           Add project
         </Button>
+
         <NavLink label="Projects" defaultOpened>
           {projects.map((project) => (
-            <NavLink
+            <ProjectInstance
               key={project.id}
-              label={project.name}
-              leftSection={
-                <Badge
-                  size="lg"
-                  variant="light"
-                  color={project?.color as MantineColor}
-                >
-                  {project.emoji}
-                </Badge>
-              }
+              project={project}
+              onEdit={this.handleEditProject}
+              onDelete={this.props.onDeleteProject}
               onClick={() => this.handleProjectClick(project)}
-              rightSection={
-                <Flex align="center" gap="sm">
-                  <ActionIcon
-                    size="xs"
-                    variant="subtle"
-                    onClick={() => this.handleEditProject(project)}
-                  >
-                    <IconPencilBolt size="1rem" stroke={1.5} />
-                  </ActionIcon>
-                  <ActionIcon
-                    size="xs"
-                    color="red"
-                    variant="subtle"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      this.props.onDeleteProject(project.id);
-                    }}
-                  >
-                    <IconBackspace size="1rem" stroke={1.5} />
-                  </ActionIcon>
-                </Flex>
-              }
             />
           ))}
         </NavLink>

@@ -1,5 +1,5 @@
-import { Task } from "../Task/Task.types";
-import { Project } from "../ProjectForm/ProjectForm.types.ts";
+import { Task } from "../Task/Task.types.ts";
+import { Project } from "../Project/Project.types.ts";
 import { Section } from "../SideBar/SideBar.types.ts";
 
 export interface TaskListProps {

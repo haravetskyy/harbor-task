@@ -1,9 +1,4 @@
-export interface Project {
-  id: string;
-  name: string;
-  emoji?: string;
-  color?: string;
-}
+import Project from "../Project/ProjectInstance.tsx";
 
 export interface ProjectFormProps {
   initialProject?: Project;

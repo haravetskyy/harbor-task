@@ -85,7 +85,7 @@ class Task extends Component<TaskProps, TaskState> {
       <Transition
         mounted={mounted}
         transition="slide-right"
-        duration={3000}
+        duration={5000}
         timingFunction="ease"
       >
         {(styles) => (

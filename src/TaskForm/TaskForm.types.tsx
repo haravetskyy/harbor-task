@@ -1,5 +1,5 @@
 import { Task } from "../Task/Task.types";
-import { Project } from "../ProjectForm/ProjectForm.types.ts";
+import { Project } from "../Project/Project.types.ts";
 
 export interface TaskFormProps {
   initialTask?: Task | null;
