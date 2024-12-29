@@ -3,7 +3,7 @@ import { AppState } from "./App.types";
 import { Task } from "./Task/Task.types.ts";
 import SideBar from "./SideBar/SideBar";
 import TaskList from "./TaskList/TaskList";
-import { Divider, Grid, MantineProvider } from "@mantine/core";
+import { AppShell, Container, MantineProvider } from "@mantine/core";
 import { uuid } from "@supabase/supabase-js/dist/main/lib/helpers";
 import { Project } from "./ProjectForm/ProjectForm.types.ts";
 import { createProject } from "../lib/createProject.ts";
@@ -21,7 +21,7 @@ class App extends Component<{}, AppState> {
       {
         id: uuid(),
         title: "Finish IBM Course",
-        deadline: new Date(),
+        deadline: "2025-01-01",
         progress: 75,
       },
     ],
@@ -105,8 +105,13 @@ class App extends Component<{}, AppState> {
         withGlobalStyles
         withNormalizeCSS
       >
-        <Grid>
-          <Grid.Col span={3}>
+        <AppShell
+          navbar={{
+            width: "22rem",
+            breakpoint: "sm",
+          }}
+        >
+          <AppShell.Navbar>
             <SideBar
               userName="John Doe"
               userProfileImg="https://avatars.githubusercontent.com/u/56477764?v=4"
@@ -116,19 +121,20 @@ class App extends Component<{}, AppState> {
               onDeleteProject={this.handleDeleteProject}
               onSectionChange={this.handleSectionChange}
             />
-          </Grid.Col>
-          <Divider orientation="vertical" />
-          <Grid.Col span={8}>
-            <TaskList
-              tasks={tasks}
-              projects={projects}
-              onAddTask={this.handleAddTask}
-              onEditTask={this.handleEditTask}
-              onDeleteTask={this.handleDeleteTask}
-              selectedSection={selectedSection}
-            />
-          </Grid.Col>
-        </Grid>
+          </AppShell.Navbar>
+          <AppShell.Main>
+            <Container className="w-3/4">
+              <TaskList
+                tasks={tasks}
+                projects={projects}
+                onAddTask={this.handleAddTask}
+                onEditTask={this.handleEditTask}
+                onDeleteTask={this.handleDeleteTask}
+                selectedSection={selectedSection}
+              />
+            </Container>
+          </AppShell.Main>
+        </AppShell>
       </MantineProvider>
     );
   }

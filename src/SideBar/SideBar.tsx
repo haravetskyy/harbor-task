@@ -71,7 +71,7 @@ class SideBar extends Component<SideBarProps, SideBarState> {
     const { isModalOpen, projectToEdit } = this.state;
 
     return (
-      <Container>
+      <Container className="w-full">
         <Flex
           position="apart"
           mb="md"
