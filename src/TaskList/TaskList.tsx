@@ -66,6 +66,10 @@ class TaskList extends Component<TaskListProps, TaskListState> {
             <Task
               key={task.id}
               {...task}
+              project={
+                projects.find((project) => project.id === task.projectId) ||
+                null
+              }
               onEdit={() => this.handleOpenModal(task)}
               onDelete={() => onDeleteTask(task.id)}
             />

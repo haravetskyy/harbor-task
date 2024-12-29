@@ -13,8 +13,10 @@ class App extends Component<{}, AppState> {
   state: AppState = {
     projects: [
       {
-        id: uuid(),
+        id: "1",
         name: "Data Analytics",
+        emoji: "📚",
+        color: "#55e6ba",
       },
     ],
     tasks: [
@@ -25,6 +27,7 @@ class App extends Component<{}, AppState> {
         description:
           "Finishing a course is a journey filled with determination and growth, marked by overcoming challenges and celebrating small victories along the way. It's a process of acquiring knowledge, adapting to new ideas, and staying committed despite moments of struggle or doubt. Ultimately, it’s a transformative experience that leaves you with a sense of accomplishment and readiness to tackle the next challenge.",
         progress: 75,
+        projectId: "1",
       },
     ],
     selectedSection: { type: "section", value: "All" },

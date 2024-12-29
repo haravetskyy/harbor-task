@@ -1,3 +1,5 @@
+import { Project } from "../ProjectForm/ProjectForm.types.ts";
+
 export interface Task {
   id: string;
   title: string;
@@ -5,9 +7,11 @@ export interface Task {
   deadline?: Date;
   progress?: number;
   priority?: number;
+  projectId?: string;
 }
 
 export interface TaskProps extends Task {
+  project: Project | null;
   onEdit: () => void;
   onDelete: (id: string) => void;
 }

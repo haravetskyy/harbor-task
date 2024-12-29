@@ -68,8 +68,15 @@ class Task extends Component<TaskProps, TaskState> {
   };
 
   render() {
-    const { title, deadline, progress, description, onEdit, priority } =
-      this.props;
+    const {
+      project,
+      title,
+      deadline,
+      progress,
+      description,
+      onEdit,
+      priority,
+    } = this.props;
     const { mounted } = this.state;
     const { badgeColor, badgeText } = getBadge(progress);
     const flagColor = getFlagColor(priority);
@@ -97,6 +104,14 @@ class Task extends Component<TaskProps, TaskState> {
                   <Badge variant="light" color={badgeColor as MantineColor}>
                     {badgeText}
                   </Badge>
+                  {project && (
+                    <Badge
+                      color={project.color as MantineColor}
+                      variant="light"
+                    >
+                      {project.emoji} {project.name}
+                    </Badge>
+                  )}
                   {priority && (
                     <ActionIcon
                       color={flagColor as MantineColor}
