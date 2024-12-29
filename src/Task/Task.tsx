@@ -83,9 +83,9 @@ class Task extends Component<TaskProps, TaskState> {
         timingFunction="ease"
       >
         {(styles) => (
-          <Container mb={24} size="full" style={styles}>
+          <Container mb={24} size="full" style={styles} className="group">
             <Flex direction="column" mb={12}>
-              <Group align="center" position="apart">
+              <Group align="center" justify="space-between">
                 <Group>
                   <Checkbox
                     radius="50%"
@@ -120,13 +120,24 @@ class Task extends Component<TaskProps, TaskState> {
                   )}
                 </Group>
                 <Tooltip label="Edit task">
-                  <ActionIcon variant="light" onClick={onEdit}>
+                  <ActionIcon
+                    variant="light"
+                    onClick={onEdit}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  >
                     <IconPencilBolt stroke={1.5} size="1.2rem" />
                   </ActionIcon>
                 </Tooltip>
               </Group>
               <Flex direction="column" ml="2.5rem">
-                <Text mt={2} mb={2} size="sm" weight={100} c="dimmed">
+                <Text
+                  mt={2}
+                  mb={2}
+                  size="sm"
+                  weight={100}
+                  c="dimmed"
+                  className="w-11/12"
+                >
                   {description}
                 </Text>
                 {deadline && (

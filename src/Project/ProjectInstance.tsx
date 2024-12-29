@@ -34,6 +34,7 @@ class ProjectInstance extends Component<ProjectProps, {}> {
     return (
       <NavLink
         label={project.name}
+        className="group"
         leftSection={
           <Badge
             color={project.color as MantineColor}
@@ -44,7 +45,11 @@ class ProjectInstance extends Component<ProjectProps, {}> {
           </Badge>
         }
         rightSection={
-          <Flex align="center" gap="sm">
+          <Flex
+            align="center"
+            gap="sm"
+            className="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          >
             <Tooltip label="Edit Project">
               <ActionIcon variant="light" onClick={this.handleEdit}>
                 <IconPencil size="1rem" />
