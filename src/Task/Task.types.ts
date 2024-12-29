@@ -6,3 +6,12 @@ export interface Task {
   progress?: number;
   priority?: number;
 }
+
+export interface TaskProps extends Task {
+  onEdit: () => void;
+  onDelete: (id: string) => void;
+}
+
+export interface TaskState {
+  mounted: boolean;
+}

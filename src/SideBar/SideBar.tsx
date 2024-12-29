@@ -1,4 +1,5 @@
 import {
+  ActionIcon,
   Avatar,
   Badge,
   Button,
@@ -170,14 +171,14 @@ class SideBar extends Component<SideBarProps, SideBarState> {
               onClick={() => this.handleProjectClick(project)}
               rightSection={
                 <Flex align="center" gap="sm">
-                  <Button
+                  <ActionIcon
                     size="xs"
                     variant="subtle"
                     onClick={() => this.handleEditProject(project)}
                   >
-                    <IconPencilBolt size="0.8rem" stroke={1.5} />
-                  </Button>
-                  <Button
+                    <IconPencilBolt size="1rem" stroke={1.5} />
+                  </ActionIcon>
+                  <ActionIcon
                     size="xs"
                     color="red"
                     variant="subtle"
@@ -186,8 +187,8 @@ class SideBar extends Component<SideBarProps, SideBarState> {
                       this.props.onDeleteProject(project.id);
                     }}
                   >
-                    <IconBackspace size="0.8rem" stroke={1.5} />
-                  </Button>
+                    <IconBackspace size="1rem" stroke={1.5} />
+                  </ActionIcon>
                 </Flex>
               }
             />
