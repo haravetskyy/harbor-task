@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import { Button, ColorInput, Select, TextInput } from "@mantine/core";
-import {
-  Project,
-  ProjectFormProps,
-  ProjectFormState,
-} from "./ProjectForm.types";
+import { ProjectFormProps, ProjectFormState } from "./ProjectForm.types";
 import { emojiOptions } from "../SideBar/emojiOptions.ts";
 import { uuid } from "@supabase/supabase-js/dist/main/lib/helpers";
+import { Project } from "../Project/Project.types.ts";
 
 class ProjectForm extends Component<ProjectFormProps, ProjectFormState> {
   state: ProjectFormState = {
@@ -33,15 +30,12 @@ class ProjectForm extends Component<ProjectFormProps, ProjectFormState> {
       color,
     };
 
-    console.log("Saving project:", project); // Debugging
-
     onSave(project);
     onClose();
   };
 
   render() {
     const { name, emoji, color } = this.state;
-
     return (
       <div>
         <TextInput
@@ -58,6 +52,10 @@ class ProjectForm extends Component<ProjectFormProps, ProjectFormState> {
           data={emojiOptions}
           value={emoji}
           onChange={(value) => this.handleChange("emoji", value)}
+          checkIconPosition="right"
+          allowDeselect
+          clearable
+          searchable
         />
         <ColorInput
           placeholder="Choose a color"

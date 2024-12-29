@@ -10,6 +10,7 @@ import {
   MantineColor,
   Space,
   Text,
+  Tooltip,
   Transition,
 } from "@mantine/core";
 import formatDate from "../../lib/formatDate";
@@ -63,23 +64,16 @@ class Task extends Component<TaskProps, TaskState> {
   handleDelete = () => {
     this.setState({ mounted: false });
     setTimeout(() => {
-      this.props.onDelete(this.props.id);
+      this.props.onDelete(this.props.task.id);
     }, 300);
   };
 
   render() {
-    const {
-      project,
-      title,
-      deadline,
-      progress,
-      description,
-      onEdit,
-      priority,
-    } = this.props;
+    const { task, project, onEdit } = this.props;
+    const { title, deadline, progress, description, priority } = task; // Access properties from task
     const { mounted } = this.state;
     const { badgeColor, badgeText } = getBadge(progress);
-    const flagColor = getFlagColor(priority);
+    const flagColor = getFlagColor(task.priority);
 
     return (
       <Transition
@@ -125,12 +119,14 @@ class Task extends Component<TaskProps, TaskState> {
                     </ActionIcon>
                   )}
                 </Group>
-                <ActionIcon variant="transparent" onClick={onEdit}>
-                  <IconPencilBolt stroke={1.5} size="1.2rem" />
-                </ActionIcon>
+                <Tooltip label="Edit task">
+                  <ActionIcon variant="light" onClick={onEdit}>
+                    <IconPencilBolt stroke={1.5} size="1.2rem" />
+                  </ActionIcon>
+                </Tooltip>
               </Group>
               <Flex direction="column" ml="2.5rem">
-                <Text mt={2} mb={2} size="sm" weight={100} color="dimmed">
+                <Text mt={2} mb={2} size="sm" weight={100} c="dimmed">
                   {description}
                 </Text>
                 {deadline && (

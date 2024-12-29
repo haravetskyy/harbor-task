@@ -65,7 +65,7 @@ class TaskList extends Component<TaskListProps, TaskListState> {
           {tasks.map((task) => (
             <Task
               key={task.id}
-              {...task}
+              task={task}
               project={
                 projects.find((project) => project.id === task.projectId) ||
                 null

@@ -5,7 +5,6 @@ import {
   Flex,
   MantineColor,
   NavLink,
-  Text,
   Tooltip,
 } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
@@ -63,14 +62,7 @@ class ProjectInstance extends Component<ProjectProps, {}> {
           </Flex>
         }
         onClick={this.handleClick}
-      >
-        <Badge color={project.color as MantineColor} size="lg" variant="light">
-          {project.emoji}
-        </Badge>
-        <Text size="sm" weight={500}>
-          {project.name}
-        </Text>
-      </NavLink>
+      ></NavLink>
     );
   }
 }

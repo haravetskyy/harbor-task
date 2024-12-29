@@ -10,8 +10,9 @@ export interface Task {
   projectId?: string;
 }
 
-export interface TaskProps extends Task {
-  project: Project | null;
+export interface TaskProps {
+  task: Task;
+  project?: Project;
   onEdit: () => void;
   onDelete: (id: string) => void;
 }

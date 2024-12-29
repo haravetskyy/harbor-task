@@ -28,6 +28,7 @@ class App extends Component<{}, AppState> {
           "Finishing a course is a journey filled with determination and growth, marked by overcoming challenges and celebrating small victories along the way. It's a process of acquiring knowledge, adapting to new ideas, and staying committed despite moments of struggle or doubt. Ultimately, it’s a transformative experience that leaves you with a sense of accomplishment and readiness to tackle the next challenge.",
         progress: 75,
         projectId: "1",
+        priority: 4,
       },
     ],
     selectedSection: { type: "section", value: "All" },

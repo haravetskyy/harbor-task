@@ -7,7 +7,7 @@ class TaskForm extends Component<TaskFormProps, TaskFormState> {
   state: TaskFormState = {
     title: this.props.initialTask?.title || "",
     description: this.props.initialTask?.description || "",
-    deadline: this.props.initialTask?.deadline || "",
+    deadline: this.props.initialTask?.deadline || new Date(),
     priority: this.props.initialTask?.priority || 1,
     progress: this.props.initialTask?.progress || 0,
     projectId: this.props.initialTask?.projectId || "",
@@ -89,7 +89,10 @@ class TaskForm extends Component<TaskFormProps, TaskFormState> {
               value: project.id,
               label: `${project.name}  ${project.emoji || ""}`,
             }))}
+            checkIconPosition="right"
             clearable
+            allowDeselect
+            searchable
           />
         )}
 
