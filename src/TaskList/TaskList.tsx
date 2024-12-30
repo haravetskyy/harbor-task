@@ -47,10 +47,9 @@ class TaskList extends Component<TaskListProps, TaskListState> {
       <Container size="full">
         <Space h={64} />
         <Group>
-          <Title order={3} size="h2">
+          <Title order={3} size="h2" mr={24}>
             {sectionTitle}
           </Title>
-          <Space w={24} />
           <Button
             onClick={() => this.handleOpenModal()}
             variant="light"
@@ -68,7 +67,7 @@ class TaskList extends Component<TaskListProps, TaskListState> {
               task={task}
               project={
                 projects.find((project) => project.id === task.projectId) ||
-                null
+                undefined
               }
               onEdit={() => this.handleOpenModal(task)}
               onDelete={() => onDeleteTask(task.id)}
