@@ -86,13 +86,18 @@ class Task extends Component<TaskProps, TaskState> {
           <Container mb={24} size="full" style={styles} className="group">
             <Flex direction="column" mb={12}>
               <Group align="center" justify="space-between">
-                <Group>
+                <Group className="flex-1 min-w-0">
                   <Checkbox
                     radius="50%"
                     size="md"
                     onChange={this.handleDelete}
                   />
-                  <Text size="md" weight={500}>
+                  <Text
+                    size="md"
+                    weight={500}
+                    lineClamp={1}
+                    className="flex-1 min-w-0 "
+                  >
                     {title}
                   </Text>
                   <Badge variant="light" color={badgeColor as MantineColor}>
@@ -102,21 +107,25 @@ class Task extends Component<TaskProps, TaskState> {
                     <Badge
                       color={project.color as MantineColor}
                       variant="light"
+                      lineClamp={1}
+                      className="max-w-36"
                     >
                       {project.emoji} {project.name}
                     </Badge>
                   )}
                   {priority && (
-                    <ActionIcon
-                      color={flagColor as MantineColor}
-                      variant="transparent"
-                      size="sm"
-                    >
-                      <IconFlagFilled
-                        style={{ width: "100%", height: "100%" }}
-                        stroke={1}
-                      />
-                    </ActionIcon>
+                    <Tooltip label={`Priority level: ${priority}/4`}>
+                      <ActionIcon
+                        color={flagColor as MantineColor}
+                        variant="transparent"
+                        size="sm"
+                      >
+                        <IconFlagFilled
+                          style={{ width: "100%", height: "100%" }}
+                          stroke={1}
+                        />
+                      </ActionIcon>
+                    </Tooltip>
                   )}
                 </Group>
                 <Tooltip label="Edit task">
@@ -137,6 +146,7 @@ class Task extends Component<TaskProps, TaskState> {
                   weight={100}
                   c="dimmed"
                   className="w-11/12"
+                  lineClamp={3}
                 >
                   {description}
                 </Text>

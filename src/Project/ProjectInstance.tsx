@@ -5,6 +5,7 @@ import {
   Flex,
   MantineColor,
   NavLink,
+  Text,
   Tooltip,
 } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
@@ -33,7 +34,11 @@ class ProjectInstance extends Component<ProjectProps, {}> {
 
     return (
       <NavLink
-        label={project.name}
+        label={
+          <Text size="sm" lineClamp={1}>
+            {project.name}
+          </Text>
+        }
         className="group"
         leftSection={
           <Badge
