@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import {
   ActionIcon,
   Badge,
@@ -9,9 +9,36 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
-import { ProjectProps } from "./Project.types.ts";
+import { ProjectProps, ProjectState } from "./Project.types.ts";
 
-class ProjectInstance extends Component<ProjectProps, {}> {
+class ProjectInstance extends Component<ProjectProps, ProjectState> {
+  textRef = createRef<HTMLDivElement>();
+
+  constructor(props: ProjectProps) {
+    super(props);
+    this.state = {
+      isTruncated: false,
+    };
+  }
+
+  componentDidMount() {
+    this.checkIfTruncated();
+  }
+
+  componentDidUpdate(prevProps: ProjectProps) {
+    if (prevProps.project.name !== this.props.project.name) {
+      this.checkIfTruncated();
+    }
+  }
+
+  checkIfTruncated = () => {
+    const textElement = this.textRef.current;
+    if (textElement) {
+      const isOverflowing = textElement.scrollWidth > textElement.clientWidth;
+      this.setState({ isTruncated: isOverflowing });
+    }
+  };
+
   handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
     const { onEdit, project } = this.props;
@@ -35,9 +62,19 @@ class ProjectInstance extends Component<ProjectProps, {}> {
     return (
       <NavLink
         label={
-          <Text size="sm" lineClamp={1}>
-            {project.name}
-          </Text>
+          <Tooltip
+            label={project.name}
+            disabled={!this.state.isTruncated}
+            position="right"
+          >
+            <Text
+              size="sm"
+              ref={this.textRef}
+              className="overflow-hidden whitespace-nowrap text-ellipsis"
+            >
+              {project.name}
+            </Text>
+          </Tooltip>
         }
         className="group"
         leftSection={

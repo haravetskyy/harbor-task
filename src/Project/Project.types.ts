@@ -11,3 +11,7 @@ export interface ProjectProps {
   onDelete?: (projectId: string) => void;
   onClick?: (project: Project) => void;
 }
+
+export interface ProjectState {
+  isTruncated: boolean;
+}
