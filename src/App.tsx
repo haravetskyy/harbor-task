@@ -3,14 +3,22 @@ import { AppState } from "./App.types";
 import { Task } from "./Task/Task.types.ts";
 import SideBar from "./SideBar/SideBar";
 import TaskList from "./TaskList/TaskList";
-import { AppShell, Container, MantineProvider } from "@mantine/core";
+import {
+  AppShell,
+  Container,
+  MantineProvider,
+  rem,
+  Switch,
+} from "@mantine/core";
 import { uuid } from "@supabase/supabase-js/dist/main/lib/helpers";
 import { Project } from "./ProjectForm/ProjectForm.types.ts";
 import { createProject } from "../lib/createProject.ts";
 import { Section } from "./SideBar/SideBar.types.ts";
+import { IconMoonStars, IconSun } from "@tabler/icons-react";
 
 class App extends Component<{}, AppState> {
   state: AppState = {
+    theme: "dark",
     projects: [
       {
         id: "1",
@@ -32,6 +40,13 @@ class App extends Component<{}, AppState> {
       },
     ],
     selectedSection: { type: "section", value: "All" },
+  };
+
+  toggleTheme = () => {
+    this.setState((prevState) => ({
+      ...prevState,
+      theme: prevState.theme === "dark" ? "light" : "dark",
+    }));
   };
 
   handleSectionChange = (section: Section) => {
@@ -103,11 +118,11 @@ class App extends Component<{}, AppState> {
   };
 
   render() {
-    const { tasks, projects, selectedSection } = this.state;
+    const { tasks, projects, selectedSection, theme } = this.state;
 
     return (
       <MantineProvider
-        forceColorScheme="dark"
+        forceColorScheme={theme}
         withGlobalStyles
         withNormalizeCSS
       >
@@ -137,6 +152,29 @@ class App extends Component<{}, AppState> {
                 onEditTask={this.handleEditTask}
                 onDeleteTask={this.handleDeleteTask}
                 selectedSection={selectedSection}
+              />
+            </Container>
+            <Container className="absolute top-4 right-4">
+              <Switch
+                className="absolute "
+                checked={theme === "dark"}
+                size="md"
+                color="dark.4"
+                onChange={this.toggleTheme}
+                onLabel={
+                  <IconSun
+                    style={{ width: rem(16), height: rem(16) }}
+                    stroke={2.5}
+                    color="#ffd43b"
+                  />
+                }
+                offLabel={
+                  <IconMoonStars
+                    style={{ width: rem(16), height: rem(16) }}
+                    stroke={2.5}
+                    color="#228be6"
+                  />
+                }
               />
             </Container>
           </AppShell.Main>
