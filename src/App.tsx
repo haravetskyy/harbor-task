@@ -18,7 +18,7 @@ import { IconMoonStars, IconSun } from "@tabler/icons-react";
 
 class App extends Component<{}, AppState> {
   state: AppState = {
-    theme: "dark",
+    theme: "light",
     projects: [
       {
         id: "1",

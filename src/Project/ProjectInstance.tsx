@@ -7,6 +7,7 @@ import {
   NavLink,
   Text,
   Tooltip,
+  Transition,
 } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { ProjectProps, ProjectState } from "./Project.types.ts";
@@ -17,6 +18,7 @@ class ProjectInstance extends Component<ProjectProps, ProjectState> {
   constructor(props: ProjectProps) {
     super(props);
     this.state = {
+      mounted: true,
       isTruncated: false,
     };
   }
@@ -35,7 +37,10 @@ class ProjectInstance extends Component<ProjectProps, ProjectState> {
     const textElement = this.textRef.current;
     if (textElement) {
       const isOverflowing = textElement.scrollWidth > textElement.clientWidth;
-      this.setState({ isTruncated: isOverflowing });
+      this.setState((prevState) => ({
+        ...prevState,
+        isTruncated: isOverflowing,
+      }));
     }
   };
 
@@ -47,8 +52,11 @@ class ProjectInstance extends Component<ProjectProps, ProjectState> {
 
   handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const { onDelete, project } = this.props;
-    if (onDelete) onDelete(project.id);
+    this.setState((prevState) => ({ ...prevState, mounted: false }));
+    setTimeout(() => {
+      const { onDelete, project } = this.props;
+      if (onDelete) onDelete(project.id);
+    }, 300);
   };
 
   handleClick = () => {
@@ -58,58 +66,69 @@ class ProjectInstance extends Component<ProjectProps, ProjectState> {
 
   render() {
     const { project } = this.props;
+    const { mounted, isTruncated } = this.state;
 
     return (
-      <NavLink
-        label={
-          <Tooltip
-            label={project.name}
-            disabled={!this.state.isTruncated}
-            position="right"
-          >
-            <Text
-              size="sm"
-              ref={this.textRef}
-              className="overflow-hidden whitespace-nowrap text-ellipsis"
-            >
-              {project.name}
-            </Text>
-          </Tooltip>
-        }
-        className="group"
-        leftSection={
-          <Badge
-            color={project.color as MantineColor}
-            size="lg"
-            variant="light"
-          >
-            {project.emoji}
-          </Badge>
-        }
-        rightSection={
-          <Flex
-            align="center"
-            gap="sm"
-            className="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-          >
-            <Tooltip label="Edit Project">
-              <ActionIcon variant="light" onClick={this.handleEdit}>
-                <IconPencil size="1rem" />
-              </ActionIcon>
-            </Tooltip>
-            <Tooltip label="Delete Project">
-              <ActionIcon
-                variant="light"
-                color="red"
-                onClick={this.handleDelete}
+      <Transition
+        mounted={mounted}
+        transition="slide-right"
+        duration={5000}
+        timingFunction="ease"
+      >
+        {(styles) => (
+          <NavLink
+            style={styles}
+            label={
+              <Tooltip
+                label={project.name}
+                disabled={!isTruncated}
+                position="right"
               >
-                <IconTrash size="1rem" />
-              </ActionIcon>
-            </Tooltip>
-          </Flex>
-        }
-        onClick={this.handleClick}
-      ></NavLink>
+                <Text
+                  size="sm"
+                  ref={this.textRef}
+                  className="overflow-hidden whitespace-nowrap text-ellipsis"
+                >
+                  {project.name}
+                </Text>
+              </Tooltip>
+            }
+            className="group"
+            leftSection={
+              <Badge
+                color={project.color as MantineColor}
+                size="lg"
+                variant="light"
+              >
+                {project.emoji}
+              </Badge>
+            }
+            rightSection={
+              <Flex
+                align="center"
+                gap="sm"
+                className="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              >
+                <Tooltip label="Edit Project">
+                  <ActionIcon variant="light" onClick={this.handleEdit}>
+                    <IconPencil size="1rem" />
+                  </ActionIcon>
+                </Tooltip>
+                <Tooltip label="Delete Project">
+                  <ActionIcon
+                    variant="light"
+                    color="red"
+                    onClick={this.handleDelete}
+                  >
+                    <IconTrash size="1rem" />
+                  </ActionIcon>
+                </Tooltip>
+              </Flex>
+            }
+            onClick={this.handleClick}
+          ></NavLink>
+        )}
+      </Transition>
     );
   }
 }
