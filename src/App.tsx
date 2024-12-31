@@ -20,7 +20,7 @@ import { Project } from "./Project/Project.types.ts";
 import { createProject } from "../lib/createProject.ts";
 import { Section } from "./SideBar/SideBar.types.ts";
 import { IconMoonStars, IconSun } from "@tabler/icons-react";
-import "@fontsource/lexend-exa";
+import "@fontsource/lexend-exa/300.css";
 
 class App extends Component<{}, AppState> {
   state: AppState = {
@@ -182,7 +182,11 @@ class App extends Component<{}, AppState> {
               ) : (
                 <Group gap={12}>
                   <Image src="harbor-task.svg" h={40} w="auto" />
-                  <Text tt="uppercase" className="font-lexend" fw={400}>
+                  <Text
+                    tt="uppercase"
+                    className="font-lexend tracking-tight"
+                    fw={300}
+                  >
                     Harbor Task
                   </Text>
                 </Group>
