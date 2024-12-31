@@ -5,20 +5,28 @@ import SideBar from "./SideBar/SideBar";
 import TaskList from "./TaskList/TaskList";
 import {
   AppShell,
+  Burger,
+  Collapse,
   Container,
+  Group,
+  Image,
   MantineProvider,
   rem,
   Switch,
+  Text,
 } from "@mantine/core";
 import { uuid } from "@supabase/supabase-js/dist/main/lib/helpers";
-import { Project } from "./ProjectForm/ProjectForm.types.ts";
+import { Project } from "./Project/Project.types.ts";
 import { createProject } from "../lib/createProject.ts";
 import { Section } from "./SideBar/SideBar.types.ts";
 import { IconMoonStars, IconSun } from "@tabler/icons-react";
+import "@fontsource/lexend-exa";
 
 class App extends Component<{}, AppState> {
   state: AppState = {
-    theme: "light",
+    theme: "dark",
+    sidebarOpened: false,
+    isMobile: window.innerWidth <= 768,
     projects: [
       {
         id: "1",
@@ -42,10 +50,32 @@ class App extends Component<{}, AppState> {
     selectedSection: { type: "section", value: "All" },
   };
 
+  componentDidMount() {
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
+
+  handleResize = () => {
+    this.setState((prevState) => ({
+      ...prevState,
+      isMobile: window.innerWidth <= 768,
+    }));
+  };
+
   toggleTheme = () => {
     this.setState((prevState) => ({
       ...prevState,
       theme: prevState.theme === "dark" ? "light" : "dark",
+    }));
+  };
+
+  toggleSidebar = () => {
+    this.setState((prevState) => ({
+      ...prevState,
+      sidebarOpened: !prevState.sidebarOpened,
     }));
   };
 
@@ -118,7 +148,8 @@ class App extends Component<{}, AppState> {
   };
 
   render() {
-    const { tasks, projects, selectedSection, theme } = this.state;
+    const { tasks, projects, selectedSection, theme, sidebarOpened, isMobile } =
+      this.state;
 
     return (
       <MantineProvider
@@ -127,36 +158,37 @@ class App extends Component<{}, AppState> {
         withNormalizeCSS
       >
         <AppShell
+          header={{ height: 60 }}
           navbar={{
-            width: "22rem",
+            width: isMobile ? (sidebarOpened ? "22rem" : 0) : "22rem",
             breakpoint: "sm",
           }}
         >
-          <AppShell.Navbar>
-            <SideBar
-              userName="John Doe"
-              userProfileImg="https://avatars.githubusercontent.com/u/56477764?v=4"
-              projects={projects}
-              onAddProject={this.handleAddProject}
-              onEditProject={this.handleEditProject}
-              onDeleteProject={this.handleDeleteProject}
-              onSectionChange={this.handleSectionChange}
-            />
-          </AppShell.Navbar>
-          <AppShell.Main>
-            <Container className="w-3/4">
-              <TaskList
-                tasks={tasks}
-                projects={projects}
-                onAddTask={this.handleAddTask}
-                onEditTask={this.handleEditTask}
-                onDeleteTask={this.handleDeleteTask}
-                selectedSection={selectedSection}
-              />
-            </Container>
-            <Container className="absolute top-4 right-4">
+          <AppShell.Header>
+            <Group
+              justify="space-between"
+              align="center"
+              py="xs"
+              px="md"
+              className="h-full"
+            >
+              {isMobile ? (
+                <Burger
+                  opened={sidebarOpened}
+                  onClick={this.toggleSidebar}
+                  size="sm"
+                  color={theme === "dark" ? "white" : "black"}
+                />
+              ) : (
+                <Group gap={12}>
+                  <Image src="harbor-task.svg" h={40} w="auto" />
+                  <Text tt="uppercase" className="font-lexend" fw={400}>
+                    Harbor Task
+                  </Text>
+                </Group>
+              )}
+
               <Switch
-                className="absolute "
                 checked={theme === "dark"}
                 size="md"
                 color="dark.4"
@@ -175,6 +207,31 @@ class App extends Component<{}, AppState> {
                     color="#228be6"
                   />
                 }
+              />
+            </Group>
+          </AppShell.Header>
+          <AppShell.Navbar>
+            <Collapse in={isMobile ? sidebarOpened : true}>
+              <SideBar
+                userName="John Doe"
+                userProfileImg="https://avatars.githubusercontent.com/u/56477764?v=4"
+                projects={projects}
+                onAddProject={this.handleAddProject}
+                onEditProject={this.handleEditProject}
+                onDeleteProject={this.handleDeleteProject}
+                onSectionChange={this.handleSectionChange}
+              />
+            </Collapse>
+          </AppShell.Navbar>
+          <AppShell.Main>
+            <Container className="w-3/4">
+              <TaskList
+                tasks={tasks}
+                projects={projects}
+                onAddTask={this.handleAddTask}
+                onEditTask={this.handleEditTask}
+                onDeleteTask={this.handleDeleteTask}
+                selectedSection={selectedSection}
               />
             </Container>
           </AppShell.Main>

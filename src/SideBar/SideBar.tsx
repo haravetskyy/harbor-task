@@ -75,7 +75,7 @@ class SideBar extends Component<SideBarProps, SideBarState> {
           justify="space-between"
           align="center"
         >
-          <Group>
+          <Group gap={16}>
             <Avatar src={userProfileImg} alt="User Profile" />
             <Title order={6}>{userName}</Title>
           </Group>
