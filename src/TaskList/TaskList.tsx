@@ -44,8 +44,7 @@ class TaskList extends Component<TaskListProps, TaskListState> {
         : selectedSection?.value?.name;
 
     return (
-      <Container size="full">
-        <Space h={64} />
+      <Container size="full" className="pt-4 md:pt-16">
         <Group>
           <Title order={3} size="h2" mr={24}>
             {sectionTitle}

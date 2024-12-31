@@ -216,7 +216,7 @@ class App extends Component<{}, AppState> {
             </Group>
           </AppShell.Header>
           <AppShell.Navbar>
-            <Collapse in={isMobile && sidebarOpened}>
+            <Collapse in={isMobile ? sidebarOpened : true}>
               <SideBar
                 userName="John Doe"
                 userProfileImg="https://avatars.githubusercontent.com/u/56477764?v=4"
@@ -228,8 +228,9 @@ class App extends Component<{}, AppState> {
               />
             </Collapse>
           </AppShell.Navbar>
+
           <AppShell.Main>
-            <Container className="w-3/4">
+            <Container className="w-full md:w-3/4" p={isMobile && 0}>
               <TaskList
                 tasks={tasks}
                 projects={projects}

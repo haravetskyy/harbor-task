@@ -20,6 +20,7 @@ export interface TaskProps {
 export interface TaskState {
   mounted: boolean;
   isDescriptionExpanded: boolean;
+  isMobile: boolean;
 }
 
 export type progressBadge = {

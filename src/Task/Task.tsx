@@ -59,8 +59,24 @@ class Task extends Component<TaskProps, TaskState> {
     this.state = {
       mounted: true,
       isDescriptionExpanded: false,
+      isMobile: window.innerWidth <= 768,
     };
   }
+
+  componentDidMount() {
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
+
+  handleResize = () => {
+    this.setState((prevState) => ({
+      ...prevState,
+      isMobile: window.innerWidth <= 768,
+    }));
+  };
 
   handleDelete = () => {
     this.setState((prevState) => ({ ...prevState, mounted: false }));
@@ -78,8 +94,8 @@ class Task extends Component<TaskProps, TaskState> {
 
   render() {
     const { task, project, onEdit } = this.props;
-    const { title, deadline, progress, description, priority } = task; // Access properties from task
-    const { mounted } = this.state;
+    const { title, deadline, progress, description, priority } = task;
+    const { mounted, isMobile, isDescriptionExpanded } = this.state;
     const { badgeColor, badgeText } = getBadge(progress);
     const flagColor = getFlagColor(task.priority);
 
@@ -91,7 +107,13 @@ class Task extends Component<TaskProps, TaskState> {
         timingFunction="ease"
       >
         {(styles) => (
-          <Container mb={24} size="full" style={styles} className="group">
+          <Container
+            mb={24}
+            size="full"
+            style={styles}
+            className="group"
+            p={isMobile ? 0 : 16}
+          >
             <Flex direction="column" mb={12}>
               <Group align="flex-start" justify="space-between">
                 <Group className="flex-1 min-w-0" align="flex-start">
@@ -108,7 +130,9 @@ class Task extends Component<TaskProps, TaskState> {
                   <ActionIcon
                     variant="light"
                     onClick={onEdit}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    className={`transition-opacity duration-200 ${
+                      isMobile ? "" : "opacity-0 group-hover:opacity-100"
+                    }`}
                   >
                     <IconPencilBolt stroke={1.5} size="1.2rem" />
                   </ActionIcon>
@@ -123,7 +147,7 @@ class Task extends Component<TaskProps, TaskState> {
                   c="dimmed"
                   className="w-11/12"
                   onClick={this.toggleDescriptionExpansion}
-                  lineClamp={this.state.isDescriptionExpanded ? undefined : 3}
+                  lineClamp={isDescriptionExpanded ? undefined : 3}
                 >
                   {description}
                 </Text>
