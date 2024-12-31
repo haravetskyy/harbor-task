@@ -20,11 +20,17 @@ class ProjectInstance extends Component<ProjectProps, ProjectState> {
     this.state = {
       mounted: true,
       isTruncated: false,
+      isMobile: window.innerWidth <= 768,
     };
   }
 
   componentDidMount() {
     this.checkIfTruncated();
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
   }
 
   componentDidUpdate(prevProps: ProjectProps) {
@@ -32,6 +38,13 @@ class ProjectInstance extends Component<ProjectProps, ProjectState> {
       this.checkIfTruncated();
     }
   }
+
+  handleResize = () => {
+    this.setState((prevState) => ({
+      ...prevState,
+      isMobile: window.innerWidth <= 768,
+    }));
+  };
 
   checkIfTruncated = () => {
     const textElement = this.textRef.current;
@@ -66,7 +79,7 @@ class ProjectInstance extends Component<ProjectProps, ProjectState> {
 
   render() {
     const { project } = this.props;
-    const { mounted, isTruncated } = this.state;
+    const { mounted, isTruncated, isMobile } = this.state;
 
     return (
       <Transition
@@ -107,7 +120,9 @@ class ProjectInstance extends Component<ProjectProps, ProjectState> {
               <Flex
                 align="center"
                 gap="sm"
-                className="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                className={`transition-opacity duration-200 ${
+                  isMobile ? "" : "opacity-0 group-hover:opacity-100"
+                }`}
               >
                 <Tooltip label="Edit Project">
                   <ActionIcon variant="light" onClick={this.handleEdit}>

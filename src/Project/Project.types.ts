@@ -15,4 +15,5 @@ export interface ProjectProps {
 export interface ProjectState {
   mounted: true;
   isTruncated: boolean;
+  isMobile: boolean;
 }
