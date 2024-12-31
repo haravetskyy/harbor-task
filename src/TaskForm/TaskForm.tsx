@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { Button, NumberInput, Select, TextInput } from "@mantine/core";
+import {
+  Button,
+  NumberInput,
+  Select,
+  Textarea,
+  TextInput,
+} from "@mantine/core";
 import { DateTimePicker } from "@mantine/dates";
 import { TaskFormProps, TaskFormState } from "./TaskForm.types";
 
@@ -53,9 +59,12 @@ class TaskForm extends Component<TaskFormProps, TaskFormState> {
           onChange={(e) => this.handleChange("title", e.target.value)}
           required
         />
-        <TextInput
+        <Textarea
           label="Description"
           value={description}
+          autosize
+          minRows={2}
+          maxRows={4}
           onChange={(e) => this.handleChange("description", e.target.value)}
         />
         <DateTimePicker
