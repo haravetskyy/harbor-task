@@ -160,8 +160,9 @@ class App extends Component<{}, AppState> {
         <AppShell
           header={{ height: 60 }}
           navbar={{
-            width: isMobile ? (sidebarOpened ? "22rem" : 0) : "22rem",
+            width: "22rem",
             breakpoint: "sm",
+            collapsed: { mobile: !sidebarOpened },
           }}
         >
           <AppShell.Header>
@@ -215,7 +216,7 @@ class App extends Component<{}, AppState> {
             </Group>
           </AppShell.Header>
           <AppShell.Navbar>
-            <Collapse in={isMobile ? sidebarOpened : true}>
+            <Collapse in={isMobile && sidebarOpened}>
               <SideBar
                 userName="John Doe"
                 userProfileImg="https://avatars.githubusercontent.com/u/56477764?v=4"
