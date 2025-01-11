@@ -94,6 +94,30 @@ export class TaskService {
     });
   }
 
+  async search(query: string) {
+    return this.prisma.tasks.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: query,
+              mode: 'insensitive',
+            },
+          },
+          {
+            project: {
+              name: {
+                contains: query,
+                mode: 'insensitive',
+              },
+            },
+          },
+        ],
+      },
+      include: { project: true },
+    });
+  }
+
   async remove(id: string) {
     const task =
       await this.prisma.tasks.findUnique({
