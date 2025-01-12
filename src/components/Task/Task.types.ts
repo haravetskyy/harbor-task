@@ -17,12 +17,6 @@ export interface TaskProps {
   onDelete: (id: string) => void;
 }
 
-export interface TaskState {
-  mounted: boolean;
-  isDescriptionExpanded: boolean;
-  isMobile: boolean;
-}
-
 export type progressBadge = {
   badgeColor: string;
   badgeText: string;

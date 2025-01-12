@@ -1,8 +1,7 @@
-import React, { Component } from "react";
-import { AppState } from "./App.types";
-import { Task } from "./Task/Task.types.ts";
-import SideBar from "./SideBar/SideBar";
-import TaskList from "./TaskList/TaskList";
+import { Task } from "./components/Task/Task.types.ts";
+import SideBar from "./components/SideBar/SideBar";
+import TaskList from "./components/TaskList/TaskList";
+import React, { useState, useEffect } from "react";
 import {
   AppShell,
   Burger,
@@ -16,235 +15,201 @@ import {
   Text,
 } from "@mantine/core";
 import { uuid } from "@supabase/supabase-js/dist/main/lib/helpers";
-import { Project } from "./Project/Project.types.ts";
-import { createProject } from "../lib/createProject.ts";
-import { Section } from "./SideBar/SideBar.types.ts";
+import { Project } from "./components/Project/Project.types";
+import { createProject } from "../lib/createProject";
+import { Section } from "./components/SideBar/SideBar.types";
 import { IconMoonStars, IconSun } from "@tabler/icons-react";
 import "@fontsource/lexend-exa/300.css";
 
-class App extends Component<{}, AppState> {
-  state: AppState = {
-    theme: "dark",
-    sidebarOpened: false,
-    isMobile: window.innerWidth <= 768,
-    projects: [
-      {
-        id: "1",
-        name: "Data Analytics",
-        emoji: "📚",
-        color: "#55e6ba",
-      },
-    ],
-    tasks: [
-      {
-        id: uuid(),
-        title: "Finish IBM Course",
-        deadline: new Date("2025-01-01"),
-        description:
-          "Finishing a course is a journey filled with determination and growth, marked by overcoming challenges and celebrating small victories along the way. It's a process of acquiring knowledge, adapting to new ideas, and staying committed despite moments of struggle or doubt. Ultimately, it’s a transformative experience that leaves you with a sense of accomplishment and readiness to tackle the next challenge.",
-        progress: 75,
-        projectId: "1",
-        priority: 4,
-      },
-    ],
-    selectedSection: { type: "section", value: "All" },
+const App: React.FC = () => {
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [sidebarOpened, setSidebarOpened] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= 768);
+  const [projects, setProjects] = useState<Project[]>([
+    {
+      id: "1",
+      name: "Data Analytics",
+      emoji: "📚",
+      color: "#55e6ba",
+    },
+  ]);
+  const [tasks, setTasks] = useState<Task[]>([
+    {
+      id: uuid(),
+      title: "Finish IBM Course",
+      deadline: new Date("2025-01-01"),
+      description:
+        "Finishing a course is a journey filled with determination and growth, marked by overcoming challenges and celebrating small victories along the way. It's a process of acquiring knowledge, adapting to new ideas, and staying committed despite moments of struggle or doubt. Ultimately, it’s a transformative experience that leaves you with a sense of accomplishment and readiness to tackle the next challenge.",
+      progress: 75,
+      projectId: "1",
+      priority: 4,
+    },
+  ]);
+  const [selectedSection, setSelectedSection] = useState<Section>({
+    type: "section",
+    value: "All",
+  });
+
+  const handleResize = () => {
+    setIsMobile(window.innerWidth <= 768);
   };
 
-  componentDidMount() {
-    window.addEventListener("resize", this.handleResize);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.handleResize);
-  }
-
-  handleResize = () => {
-    this.setState((prevState) => ({
-      ...prevState,
-      isMobile: window.innerWidth <= 768,
-    }));
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
   };
 
-  toggleTheme = () => {
-    this.setState((prevState) => ({
-      ...prevState,
-      theme: prevState.theme === "dark" ? "light" : "dark",
-    }));
+  const toggleSidebar = () => {
+    setSidebarOpened((prev) => !prev);
   };
 
-  toggleSidebar = () => {
-    this.setState((prevState) => ({
-      ...prevState,
-      sidebarOpened: !prevState.sidebarOpened,
-    }));
+  const handleSectionChange = (section: Section) => {
+    setSelectedSection(section);
   };
 
-  handleSectionChange = (section: Section) => {
-    this.setState((prevState) => ({ ...prevState, selectedSection: section }));
+  const updateList = (key: "projects" | "tasks", newItem: Project | Task) => {
+    if (key === "projects") {
+      setProjects((prev) => [...prev, newItem as Project]);
+    } else {
+      setTasks((prev) => [...prev, newItem as Task]);
+    }
   };
 
-  updateList = (key: "projects" | "tasks", newItem: Project | Task) => {
-    this.setState((prevState) => ({
-      ...prevState,
-      [key]: [...prevState[key], newItem],
-    }));
-  };
-
-  handleAddProject = (name: string, emoji: string, color: string) => {
+  const handleAddProject = (name: string, emoji: string, color: string) => {
     const project = createProject(name, emoji, color);
-    this.updateList("projects", project as Project);
+    updateList("projects", project as Project);
   };
 
-  handleEditProject = (updatedProject) => {
-    this.setState((prevState) => ({
-      ...prevState,
-      projects: prevState.projects.map((project) =>
-        project.id === updatedProject.id ? updatedProject : project,
-      ),
-    }));
-  };
-
-  handleDeleteProject = (projectId) => {
-    this.setState((prevState) => {
-      const isDeletedProjectSelected =
-        prevState.selectedSection.type === "project" &&
-        prevState.selectedSection.value.id === projectId;
-
-      const updatedProjects = prevState.projects.filter(
-        (project) => project.id !== projectId,
-      );
-
-      const updatedSection = isDeletedProjectSelected
-        ? { type: "section", value: "All" }
-        : prevState.selectedSection;
-
-      return {
-        ...prevState,
-        projects: updatedProjects,
-        selectedSection: updatedSection,
-      };
-    });
-  };
-
-  handleAddTask = (task: Omit<Task, "id">) => {
-    const newTask = { ...task, id: uuid() };
-    this.updateList("tasks", newTask);
-  };
-
-  handleEditTask = (updatedTask: Task) => {
-    this.setState((prevState) => ({
-      ...prevState,
-      tasks: prevState.tasks.map((task) =>
-        task.id === updatedTask.id ? updatedTask : task,
-      ),
-    }));
-  };
-
-  handleDeleteTask = (id: string) => {
-    this.setState((prevState) => ({
-      ...prevState,
-      tasks: prevState.tasks.filter((Task) => Task.id !== id),
-    }));
-  };
-
-  render() {
-    const { tasks, projects, selectedSection, theme, sidebarOpened, isMobile } =
-      this.state;
-
-    return (
-      <MantineProvider
-        forceColorScheme={theme}
-        withGlobalStyles
-        withNormalizeCSS
-      >
-        <AppShell
-          header={{ height: 60 }}
-          navbar={{
-            width: "22rem",
-            breakpoint: "sm",
-            collapsed: { mobile: !sidebarOpened },
-          }}
-        >
-          <AppShell.Header>
-            <Group
-              justify="space-between"
-              align="center"
-              py="xs"
-              px="md"
-              className="h-full"
-            >
-              {isMobile ? (
-                <Burger
-                  opened={sidebarOpened}
-                  onClick={this.toggleSidebar}
-                  size="sm"
-                  color={theme === "dark" ? "white" : "black"}
-                />
-              ) : (
-                <Group gap={12}>
-                  <Image src="harbor-task.svg" h={40} w="auto" />
-                  <Text
-                    tt="uppercase"
-                    className="font-lexend tracking-tight"
-                    fw={300}
-                  >
-                    Harbor Task
-                  </Text>
-                </Group>
-              )}
-
-              <Switch
-                checked={theme === "dark"}
-                size="md"
-                color="dark.4"
-                onChange={this.toggleTheme}
-                onLabel={
-                  <IconSun
-                    style={{ width: rem(16), height: rem(16) }}
-                    stroke={2.5}
-                    color="#ffd43b"
-                  />
-                }
-                offLabel={
-                  <IconMoonStars
-                    style={{ width: rem(16), height: rem(16) }}
-                    stroke={2.5}
-                    color="#228be6"
-                  />
-                }
-              />
-            </Group>
-          </AppShell.Header>
-          <AppShell.Navbar>
-            <Collapse in={isMobile ? sidebarOpened : true}>
-              <SideBar
-                userName="John Doe"
-                userProfileImg="https://avatars.githubusercontent.com/u/56477764?v=4"
-                projects={projects}
-                onAddProject={this.handleAddProject}
-                onEditProject={this.handleEditProject}
-                onDeleteProject={this.handleDeleteProject}
-                onSectionChange={this.handleSectionChange}
-              />
-            </Collapse>
-          </AppShell.Navbar>
-
-          <AppShell.Main>
-            <Container className="w-full md:w-3/4" p={isMobile && 0}>
-              <TaskList
-                tasks={tasks}
-                projects={projects}
-                onAddTask={this.handleAddTask}
-                onEditTask={this.handleEditTask}
-                onDeleteTask={this.handleDeleteTask}
-                selectedSection={selectedSection}
-              />
-            </Container>
-          </AppShell.Main>
-        </AppShell>
-      </MantineProvider>
+  const handleEditProject = (updatedProject: Project) => {
+    setProjects((prev) =>
+      prev.map((project) =>
+        project.id === updatedProject.id ? updatedProject : project
+      )
     );
-  }
-}
+  };
+
+  const handleDeleteProject = (projectId: string) => {
+    const isDeletedProjectSelected =
+      selectedSection.type === "project" &&
+      selectedSection.value.id === projectId;
+
+    setProjects((prev) => prev.filter((project) => project.id !== projectId));
+
+    if (isDeletedProjectSelected) {
+      setSelectedSection({ type: "section", value: "All" });
+    }
+  };
+
+  const handleAddTask = (task: Omit<Task, "id">) => {
+    const newTask = { ...task, id: uuid() };
+    updateList("tasks", newTask);
+  };
+
+  const handleEditTask = (updatedTask: Task) => {
+    setTasks((prev) =>
+      prev.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+    );
+  };
+
+  const handleDeleteTask = (id: string) => {
+    setTasks((prev) => prev.filter((task) => task.id !== id));
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return (
+    <MantineProvider forceColorScheme={theme}>
+      <AppShell
+        header={{ height: 60 }}
+        navbar={{
+          width: "22rem",
+          breakpoint: "sm",
+          collapsed: { mobile: !sidebarOpened },
+        }}
+      >
+        <AppShell.Header>
+          <Group
+            justify="space-between"
+            align="center"
+            py="xs"
+            px="md"
+            className="h-full"
+          >
+            {isMobile ? (
+              <Burger
+                opened={sidebarOpened}
+                onClick={toggleSidebar}
+                size="sm"
+                color={theme === "dark" ? "white" : "black"}
+              />
+            ) : (
+              <Group gap={12}>
+                <Image src="harbor-task.svg" h={40} w="auto" />
+                <Text
+                  tt="uppercase"
+                  className="font-lexend tracking-tight"
+                  fw={300}
+                >
+                  Harbor Task
+                </Text>
+              </Group>
+            )}
+
+            <Switch
+              checked={theme === "dark"}
+              size="md"
+              color="dark.4"
+              onChange={toggleTheme}
+              onLabel={
+                <IconSun
+                  style={{ width: rem(16), height: rem(16) }}
+                  stroke={2.5}
+                  color="#ffd43b"
+                />
+              }
+              offLabel={
+                <IconMoonStars
+                  style={{ width: rem(16), height: rem(16) }}
+                  stroke={2.5}
+                  color="#228be6"
+                />
+              }
+            />
+          </Group>
+        </AppShell.Header>
+        <AppShell.Navbar>
+          <Collapse in={isMobile ? sidebarOpened : true}>
+            <SideBar
+              userName="John Doe"
+              userProfileImg="https://avatars.githubusercontent.com/u/56477764?v=4"
+              projects={projects}
+              onAddProject={handleAddProject}
+              onEditProject={handleEditProject}
+              onDeleteProject={handleDeleteProject}
+              onSectionChange={handleSectionChange}
+            />
+          </Collapse>
+        </AppShell.Navbar>
+
+        <AppShell.Main>
+          <Container className="w-full md:w-3/4" p={isMobile && 0}>
+            <TaskList
+              tasks={tasks}
+              projects={projects}
+              onAddTask={handleAddTask}
+              onEditTask={handleEditTask}
+              onDeleteTask={handleDeleteTask}
+              selectedSection={selectedSection}
+            />
+          </Container>
+        </AppShell.Main>
+      </AppShell>
+    </MantineProvider>
+  );
+};
 
 export default App;

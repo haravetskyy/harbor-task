@@ -7,12 +7,3 @@ export interface TaskFormProps {
   onClose: () => void;
   projects: Project[];
 }
-
-export interface TaskFormState {
-  title: string;
-  description: string;
-  deadline: Date;
-  priority: number;
-  progress: number;
-  projectId: string;
-}

@@ -10,11 +10,6 @@ export type SideBarProps = {
   onSectionChange: (section: Section) => void;
 };
 
-export type SideBarState = {
-  isModalOpen: boolean;
-  projectToEdit: Project | null;
-};
-
 export interface Section {
   type: "section" | "project";
   value: string | Project;

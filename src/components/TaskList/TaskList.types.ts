@@ -10,8 +10,3 @@ export interface TaskListProps {
   onDeleteTask: (id: string) => void;
   selectedSection: Section;
 }
-
-export interface TaskListState {
-  isModalOpen: boolean;
-  currentTask: Task | null;
-}

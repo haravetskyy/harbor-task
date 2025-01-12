@@ -1,7 +1,9 @@
-export const emojiOptions = [
+const emojiOptions = [
   { value: "📚", label: "Book 📚" },
   { value: "💻", label: "Laptop 💻" },
   { value: "🎨", label: "Paint 🎨" },
   { value: "📈", label: "Stock 📈" },
   { value: "🎯", label: "Target 🎯" },
 ];
+
+export default emojiOptions;
