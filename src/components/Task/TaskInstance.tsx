@@ -98,7 +98,7 @@ const TaskInstance: React.FC<TaskProps> = ({
     >
       {(styles) => (
         <Container
-          mb={24}
+          mb={6}
           size="full"
           style={styles}
           className="group"

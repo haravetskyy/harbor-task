@@ -20,7 +20,9 @@ const TaskForm: React.FC<TaskFormProps> = ({
   const [description, setDescription] = useState(
     initialTask?.description || ""
   );
-  const [deadline, setDeadline] = useState(initialTask?.deadline || new Date());
+  const [deadline, setDeadline] = useState(
+    initialTask?.deadline ? new Date(initialTask.deadline) : new Date()
+  );
   const [priority, setPriority] = useState(initialTask?.priority || 1);
   const [progress, setProgress] = useState(initialTask?.progress || 0);
   const [projectId, setProjectId] = useState(initialTask?.projectId || "");

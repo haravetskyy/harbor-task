@@ -1,7 +1,13 @@
-const formatDate = (date: Date): string => {
+const formatDate = (input: Date | string): string => {
   const today = new Date();
 
   today.setHours(0, 0, 0, 0);
+
+  const date = input instanceof Date ? input : new Date(input);
+  if (isNaN(date.getTime())) {
+    throw new Error(`Invalid date: ${input}`);
+  }
+
   date.setHours(0, 0, 0, 0);
 
   const diffTime = date.getTime() - today.getTime();

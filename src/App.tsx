@@ -1,7 +1,8 @@
-import { Task } from "./components/Task/Task.types.ts";
+import { Task } from "./components/Task/Task.types";
 import SideBar from "./components/SideBar/SideBar";
 import TaskList from "./components/TaskList/TaskList";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   AppShell,
   Burger,
@@ -14,45 +15,54 @@ import {
   Switch,
   Text,
 } from "@mantine/core";
-import { uuid } from "@supabase/supabase-js/dist/main/lib/helpers";
 import { Project } from "./components/Project/Project.types";
-import { createProject } from "../lib/createProject";
 import { Section } from "./components/SideBar/SideBar.types";
 import { IconMoonStars, IconSun } from "@tabler/icons-react";
-import "@fontsource/lexend-exa/300.css";
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [sidebarOpened, setSidebarOpened] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= 768);
-  const [projects, setProjects] = useState<Project[]>([
-    {
-      id: "1",
-      name: "Data Analytics",
-      emoji: "📚",
-      color: "#55e6ba",
-    },
-  ]);
-  const [tasks, setTasks] = useState<Task[]>([
-    {
-      id: uuid(),
-      title: "Finish IBM Course",
-      deadline: new Date("2025-01-01"),
-      description:
-        "Finishing a course is a journey filled with determination and growth, marked by overcoming challenges and celebrating small victories along the way. It's a process of acquiring knowledge, adapting to new ideas, and staying committed despite moments of struggle or doubt. Ultimately, it’s a transformative experience that leaves you with a sense of accomplishment and readiness to tackle the next challenge.",
-      progress: 75,
-      projectId: "1",
-      priority: 4,
-    },
-  ]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedSection, setSelectedSection] = useState<Section>({
     type: "section",
     value: "All",
   });
 
-  const handleResize = () => {
-    setIsMobile(window.innerWidth <= 768);
-  };
+  const apiUrl = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/tasks`);
+        setTasks(response.data);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+    fetchTasks();
+  }, []);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/projects`);
+        setProjects(response.data);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+    fetchProjects();
+  }, []);
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
@@ -66,60 +76,98 @@ const App: React.FC = () => {
     setSelectedSection(section);
   };
 
-  const updateList = (key: "projects" | "tasks", newItem: Project | Task) => {
-    if (key === "projects") {
-      setProjects((prev) => [...prev, newItem as Project]);
-    } else {
-      setTasks((prev) => [...prev, newItem as Task]);
+  const handleAddTask = async (task: Omit<Task, "id">) => {
+    try {
+      const response = await axios.post(`${apiUrl}/tasks`, task);
+      setTasks((prev) => [...prev, response.data]);
+      console.log(apiUrl);
+    } catch (error) {
+      console.error("Error adding task:", error);
     }
   };
 
-  const handleAddProject = (name: string, emoji: string, color: string) => {
-    const project = createProject(name, emoji, color);
-    updateList("projects", project as Project);
-  };
-
-  const handleEditProject = (updatedProject: Project) => {
-    setProjects((prev) =>
-      prev.map((project) =>
-        project.id === updatedProject.id ? updatedProject : project
-      )
-    );
-  };
-
-  const handleDeleteProject = (projectId: string) => {
-    const isDeletedProjectSelected =
-      selectedSection.type === "project" &&
-      selectedSection.value.id === projectId;
-
-    setProjects((prev) => prev.filter((project) => project.id !== projectId));
-
-    if (isDeletedProjectSelected) {
-      setSelectedSection({ type: "section", value: "All" });
+  const handleEditTask = async (updatedTask: Task) => {
+    try {
+      await axios.patch(`${apiUrl}/tasks/${updatedTask.id}`, updatedTask);
+      setTasks((prev) =>
+        prev.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+      );
+    } catch (error) {
+      console.error("Error editing task:", error);
     }
   };
 
-  const handleAddTask = (task: Omit<Task, "id">) => {
-    const newTask = { ...task, id: uuid() };
-    updateList("tasks", newTask);
+  const handleDeleteTask = async (id: string) => {
+    try {
+      await axios.delete(`${apiUrl}/tasks/${id}`);
+      setTasks((prev) => prev.filter((task) => task.id !== id));
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
   };
 
-  const handleEditTask = (updatedTask: Task) => {
-    setTasks((prev) =>
-      prev.map((task) => (task.id === updatedTask.id ? updatedTask : task))
-    );
+  const handleAddProject = async (
+    name: string,
+    emoji?: string,
+    color?: string
+  ) => {
+    try {
+      const projectData: Partial<Project> = { name };
+      if (emoji) projectData.emoji = emoji;
+      if (color) projectData.color = color;
+
+      const response = await axios.post(`${apiUrl}/projects`, projectData);
+      setProjects((prev) => [...prev, response.data]);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          "Error adding project:",
+          error.response?.data || error.message
+        );
+      } else {
+        console.error("Unexpected error:", error);
+      }
+    }
   };
 
-  const handleDeleteTask = (id: string) => {
-    setTasks((prev) => prev.filter((task) => task.id !== id));
+  const handleEditProject = async (updatedProject: Partial<Project>) => {
+    try {
+      const { id, ...projectData } = updatedProject;
+      const response = await axios.patch(
+        `${apiUrl}/projects/${id}`,
+        projectData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setProjects((prev) =>
+        prev.map((project) => (project.id === id ? response.data : project))
+      );
+    } catch (error) {
+      console.error(
+        "Error editing project:",
+        error.response?.data || error.message
+      );
+    }
   };
 
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const handleDeleteProject = async (projectId: string) => {
+    try {
+      await axios.delete(`${apiUrl}/projects/${projectId}`);
+      setProjects((prev) => prev.filter((project) => project.id !== projectId));
+
+      if (
+        selectedSection.type === "project" &&
+        selectedSection.value.id === projectId
+      ) {
+        setSelectedSection({ type: "section", value: "All" });
+      }
+    } catch (error) {
+      console.error("Error deleting project:", error);
+    }
+  };
 
   return (
     <MantineProvider forceColorScheme={theme}>
