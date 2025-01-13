@@ -9,8 +9,6 @@ import {
   HttpCode,
   HttpStatus,
   ParseUUIDPipe,
-  Query,
-  BadRequestException,
 } from '@nestjs/common';
 import { TaskService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -34,17 +32,6 @@ export class TaskController {
   @HttpCode(HttpStatus.OK)
   async findAll() {
     return this.taskService.findAll();
-  }
-
-  @Get('search')
-  @HttpCode(HttpStatus.OK)
-  async search(@Query('q') query: string) {
-    if (!query || query.trim() === '') {
-      throw new BadRequestException(
-        'Query parameter "q" is required',
-      );
-    }
-    return this.taskService.search(query);
   }
 
   @Get(':id')
