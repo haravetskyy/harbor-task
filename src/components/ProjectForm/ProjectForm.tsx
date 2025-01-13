@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, ColorInput, Select, TextInput } from "@mantine/core";
 import { ProjectFormProps } from "./ProjectForm.types";
 import emojiOptions from "../../../lib/emojiOptions";
-import { uuid } from "@supabase/supabase-js/dist/main/lib/helpers";
+import { v4 as uuid } from "uuid";
 import { Project } from "../Project/Project.types";
 import colorOptions from "../../../lib/colorOptions";
 
