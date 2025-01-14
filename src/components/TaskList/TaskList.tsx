@@ -60,7 +60,7 @@ const TaskList: React.FC<TaskListProps> = ({
       <Space h={24} />
 
       <List icon={<></>}>
-        {tasks.map((task) => {
+        {tasks.map((task, index) => {
           const project = projects.find((proj) => proj.id === task.projectId);
           return (
             <TaskInstance
@@ -69,6 +69,7 @@ const TaskList: React.FC<TaskListProps> = ({
               project={project}
               onEdit={() => handleModalOpen(task)}
               onDelete={() => onDeleteTask(task.id)}
+              isLast={index === tasks.length - 1}
             />
           );
         })}

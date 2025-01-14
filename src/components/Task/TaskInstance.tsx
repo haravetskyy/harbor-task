@@ -27,6 +27,7 @@ const TaskInstance: React.FC<TaskProps> = ({
   project,
   onEdit,
   onDelete,
+  isLast,
 }) => {
   const [mounted, setMounted] = useState(true);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
@@ -152,7 +153,7 @@ const TaskInstance: React.FC<TaskProps> = ({
               </Group>
             </Flex>
           </Flex>
-          <Divider orientation="horizontal" />
+          {!isLast && <Divider orientation="horizontal" />}
         </Container>
       )}
     </Transition>

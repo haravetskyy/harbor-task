@@ -15,6 +15,5 @@ export interface TaskProps {
   project?: Project;
   onEdit: () => void;
   onDelete: (id: string) => void;
+  isLast: boolean;
 }
-
-
