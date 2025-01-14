@@ -21,6 +21,7 @@ import { SideBarProps } from "./SideBar.types";
 import ProjectForm from "../ProjectForm/ProjectForm";
 import ProjectInstance from "../Project/ProjectInstance";
 import { Project } from "../Project/Project.types";
+import getInitials from "../../../lib/getInitials";
 
 const SECTIONS = [
   { label: "All", icon: <IconHome2 size="1rem" stroke={1.5} /> },
@@ -60,7 +61,9 @@ const SideBar: React.FC<SideBarProps> = ({
     <Container className="w-full">
       <Flex mb="md" mt="sm" justify="space-between" align="center">
         <Group gap={16}>
-          <Avatar src={userProfileImg} alt="User Profile" />
+          <Avatar src={userProfileImg} alt={userName} color="initials">
+            {getInitials(userName)}
+          </Avatar>
           <Title order={6}>{userName}</Title>
         </Group>
       </Flex>

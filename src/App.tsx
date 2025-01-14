@@ -235,11 +235,8 @@ const App: React.FC = () => {
         <AppShell.Navbar>
           <Collapse in={debouncedIsMobile ? sidebarOpened : true}>
             <SideBar
-              userName={`${user?.firstName || "Unknown"} ${user?.lastName || "Unknown"}`}
-              userProfileImg={
-                user?.avatarUrl ||
-                "https://avatars.githubusercontent.com/u/56477764?v=4"
-              }
+              userName={`${user?.firstName} ${user?.lastName}`}
+              userProfileImg={user?.avatarUrl}
               projects={projects}
               onAddProject={handleAddProject}
               onEditProject={handleEditProject}
