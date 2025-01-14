@@ -1,8 +1,6 @@
-@import '@mantine/dates/styles.css';
-
 @tailwind components;
 @tailwind utilities;
 
 body {
-    overflow-x: hidden;
+  overflow-x: hidden;
 }

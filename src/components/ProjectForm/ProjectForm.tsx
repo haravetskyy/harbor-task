@@ -56,7 +56,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
         onChange={setColor}
         swatches={colorOptions}
       />
-      <Button fullWidth mt="md" onClick={handleSave}>
+      <Button fullWidth mt="md" onClick={handleSave} disabled={!name}>
         Save
       </Button>
     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   ActionIcon,
   Badge,
@@ -12,14 +12,16 @@ import {
   Text,
   Tooltip,
   Transition,
+  useMantineTheme,
 } from "@mantine/core";
-import formatDate from "../../../lib/formatDate";
+import { useMediaQuery } from "@mantine/hooks";
 import {
   IconCalendarDot,
   IconFlagFilled,
   IconPencilBolt,
 } from "@tabler/icons-react";
 import { progressBadge, TaskProps } from "./Task.types";
+import formatDate from "../../../lib/formatDate";
 
 const progressConfig = [
   { limit: 0, badgeColor: "gray" },
@@ -39,18 +41,13 @@ const getBadge = (progress: number | undefined): progressBadge => {
 };
 
 const getFlagColor = (priority: number | undefined): string => {
-  switch (priority) {
-    case 1:
-      return "green";
-    case 2:
-      return "yellow";
-    case 3:
-      return "orange";
-    case 4:
-      return "red";
-    default:
-      return "gray";
-  }
+  const priorityColors: Record<number, MantineColor> = {
+    1: "green",
+    2: "yellow",
+    3: "orange",
+    4: "red",
+  };
+  return priority ? priorityColors[priority] : "gray";
 };
 
 const TaskInstance: React.FC<TaskProps> = ({
@@ -61,33 +58,21 @@ const TaskInstance: React.FC<TaskProps> = ({
 }) => {
   const [mounted, setMounted] = useState(true);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const theme = useMantineTheme();
+  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`);
 
   const { title, deadline, progress, description, priority } = task;
   const { badgeColor, badgeText } = getBadge(progress);
-  const flagColor = getFlagColor(task.priority);
-
-  const handleResize = () => {
-    setIsMobile(window.innerWidth <= 768);
-  };
+  const flagColor = getFlagColor(priority);
 
   const handleDelete = () => {
     setMounted(false);
-    setTimeout(() => {
-      onDelete(task.id);
-    }, 300);
+    setTimeout(() => onDelete(task.id), 300);
   };
 
   const toggleDescriptionExpansion = () => {
     setIsDescriptionExpanded((prev) => !prev);
   };
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   return (
     <Transition
@@ -98,7 +83,6 @@ const TaskInstance: React.FC<TaskProps> = ({
     >
       {(styles) => (
         <Container
-          mb={6}
           size="full"
           style={styles}
           className="group"
@@ -107,7 +91,12 @@ const TaskInstance: React.FC<TaskProps> = ({
           <Flex direction="column" mb={12}>
             <Group align="flex-start" justify="space-between">
               <Group className="flex-1 min-w-0" align="flex-start">
-                <Checkbox radius="50%" size="md" onChange={handleDelete} />
+                <Checkbox
+                  radius="50%"
+                  size="md"
+                  onChange={handleDelete}
+                  aria-label={`Mark task "${title}" as complete`}
+                />
                 <Text size="md" weight={500} className="flex-1 min-w-0">
                   {title}
                 </Text>
@@ -119,11 +108,13 @@ const TaskInstance: React.FC<TaskProps> = ({
                   className={`transition-opacity duration-200 ${
                     isMobile ? "" : "opacity-0 group-hover:opacity-100"
                   }`}
+                  aria-label="Edit task"
                 >
                   <IconPencilBolt stroke={1.5} size="1.2rem" />
                 </ActionIcon>
               </Tooltip>
             </Group>
+
             <Flex direction="column" ml="2.5rem">
               <Text
                 mt={2}
@@ -159,7 +150,6 @@ const TaskInstance: React.FC<TaskProps> = ({
                   <Badge
                     color={project.color as MantineColor}
                     variant="light"
-                    lineClamp={1}
                     className="max-w-36"
                   >
                     {project.emoji} {project.name}
@@ -171,6 +161,7 @@ const TaskInstance: React.FC<TaskProps> = ({
                       color={flagColor as MantineColor}
                       variant="transparent"
                       size="sm"
+                      aria-label={`Priority level ${priority}`}
                     >
                       <IconFlagFilled
                         style={{ width: "100%", height: "100%" }}

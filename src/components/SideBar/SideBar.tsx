@@ -1,4 +1,4 @@
-
+import React, { useState } from "react";
 import {
   Avatar,
   Button,
@@ -8,12 +8,12 @@ import {
   Group,
   Modal,
   NavLink,
-  TextInput,
+  rem,
   Title,
+  Text,
+  Badge,
 } from "@mantine/core";
-import React, { useState } from "react";
-import { SideBarProps } from "./SideBar.types";
-import ProjectForm from "../ProjectForm/ProjectForm";
+import { openSpotlight, SpotlightAction, Spotlight } from "@mantine/spotlight";
 import {
   IconCalendarDot,
   IconChevronRight,
@@ -22,8 +22,16 @@ import {
   IconPlus,
   IconSearch,
 } from "@tabler/icons-react";
+import { SideBarProps } from "./SideBar.types";
+import ProjectForm from "../ProjectForm/ProjectForm";
 import ProjectInstance from "../Project/ProjectInstance";
 import { Project } from "../Project/Project.types";
+
+const SECTIONS = [
+  { label: "All", icon: <IconHome2 size="1rem" stroke={1.5} /> },
+  { label: "Today", icon: <IconCalendarDot size="1rem" stroke={1.5} /> },
+  { label: "Upcoming", icon: <IconGauge size="1rem" stroke={1.5} /> },
+];
 
 const SideBar: React.FC<SideBarProps> = ({
   userName,
@@ -37,111 +45,88 @@ const SideBar: React.FC<SideBarProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
 
-  const toggleModal = (isOpen: boolean) => {
+  const toggleModal = (isOpen: boolean, project: Project | null = null) => {
     setIsModalOpen(isOpen);
-    if (!isOpen) setProjectToEdit(null);
+    setProjectToEdit(project);
   };
 
   const handleSectionClick = (sectionName: string) => {
     onSectionChange({ type: "section", value: sectionName });
   };
 
-  const handleProjectClick = (project: Project) => {
-    onSectionChange({ type: "project", value: project });
+  const handleProjectSave = (project: Project) => {
+    projectToEdit
+      ? onEditProject(project)
+      : onAddProject(project.name, project.emoji, project.color);
+    toggleModal(false);
   };
 
-  const handleEditProject = (project: Project) => {
-    setIsModalOpen(true);
-    setProjectToEdit(project);
-  };
-
-  const handleSaveProject = (project: Project) => {
-    if (projectToEdit) {
-      onEditProject(project);
-    } else {
-      onAddProject(project.name, project.emoji, project.color);
-    }
-    setProjectToEdit(null);
-    setIsModalOpen(false);
-  };
+  // const spotlightActions: SpotlightAction[] = [
+  //   ...SECTIONS.map((section) => ({
+  //     title: section.label,
+  //     onTrigger: () => handleSectionClick(section.label),
+  //     icon: section.icon,
+  //   })),
+  //   ...projects.map((project) => ({
+  //     title: project.name,
+  //     description: `Project: ${project.name}`,
+  //     onTrigger: () => onSectionChange({ type: "project", value: project }),
+  //   })),
+  // ];
 
   return (
     <Container className="w-full">
-      <Flex
-        mb="md"
-        mt="sm"
-        className="w-full"
-        justify="space-between"
-        align="center"
-      >
+      <Flex mb="md" mt="sm" justify="space-between" align="center">
         <Group gap={16}>
           <Avatar src={userProfileImg} alt="User Profile" />
           <Title order={6}>{userName}</Title>
         </Group>
       </Flex>
 
-      <TextInput
-        placeholder="Search"
-        leftSection={<IconSearch size="0.8rem" stroke={1.5} />}
+      <Button
+        leftSection={<IconSearch size="1rem" stroke={1.5} />}
+        rightSection={
+          <Badge color="dark" size="xs">
+            ⌘ + K
+          </Badge>
+        }
         mb="md"
-      />
+        onClick={() => openSpotlight()}
+        fullWidth
+        justify="left"
+        variant="default"
+      >
+        <Text fw={400} size="sm">
+          Search
+        </Text>
+      </Button>
 
-      <NavLink
-        href="#"
-        label="All"
-        onClick={() => handleSectionClick("All")}
-        leftSection={<IconHome2 size="1rem" stroke={1.5} />}
-        rightSection={
-          <IconChevronRight
-            size="0.8rem"
-            stroke={1.5}
-            className="mantine-rotate-rtl"
-          />
-        }
-      />
-      <NavLink
-        href="#"
-        label="Today"
-        onClick={() => handleSectionClick("Today")}
-        leftSection={<IconCalendarDot size="1rem" stroke={1.5} />}
-        rightSection={
-          <IconChevronRight
-            size="0.8rem"
-            stroke={1.5}
-            className="mantine-rotate-rtl"
-          />
-        }
-      />
-      <NavLink
-        href="#"
-        label="Upcoming"
-        onClick={() => handleSectionClick("Upcoming")}
-        leftSection={<IconGauge size="1rem" stroke={1.5} />}
-        rightSection={
-          <IconChevronRight
-            size="0.8rem"
-            stroke={1.5}
-            className="mantine-rotate-rtl"
-          />
-        }
-      />
+      {SECTIONS.map(({ label, icon }) => (
+        <NavLink
+          key={label}
+          label={label}
+          href="#"
+          onClick={() => handleSectionClick(label)}
+          leftSection={icon}
+          rightSection={
+            <IconChevronRight
+              size="0.8rem"
+              stroke={1.5}
+              className="mantine-rotate-rtl"
+            />
+          }
+        />
+      ))}
 
       <Divider mt="sm" />
 
       <Button
         size="sm"
-        justify="center"
         variant="light"
         fullWidth
         mt="xs"
         onClick={() => toggleModal(true)}
-        rightSection={
-          <IconPlus
-            size="0.8rem"
-            stroke={1.5}
-            onClick={() => toggleModal(true)}
-          />
-        }
+        rightSection={<IconPlus size="0.8rem" stroke={1.5} />}
       >
         Add project
       </Button>
@@ -151,9 +136,9 @@ const SideBar: React.FC<SideBarProps> = ({
           <ProjectInstance
             key={project.id}
             project={project}
-            onEdit={handleEditProject}
+            onEdit={() => toggleModal(true, project)}
             onDelete={onDeleteProject}
-            onClick={() => handleProjectClick(project)}
+            onClick={() => onSectionChange({ type: "project", value: project })}
           />
         ))}
       </NavLink>
@@ -165,10 +150,25 @@ const SideBar: React.FC<SideBarProps> = ({
       >
         <ProjectForm
           onClose={() => toggleModal(false)}
-          onSave={handleSaveProject}
+          onSave={handleProjectSave}
           initialProject={projectToEdit}
         />
       </Modal>
+
+      <Spotlight
+        actions={[]}
+        shortcut="mod+k"
+        closeOnActionTrigger
+        searchProps={{
+          leftSection: (
+            <IconSearch
+              style={{ width: rem(20), height: rem(20) }}
+              stroke={1.5}
+            />
+          ),
+          placeholder: "Search...",
+        }}
+      />
     </Container>
   );
 };

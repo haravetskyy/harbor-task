@@ -8,7 +8,9 @@ import {
   Text,
   Tooltip,
   Transition,
+  useMantineTheme,
 } from "@mantine/core";
+import { useResizeObserver, useMediaQuery } from "@mantine/hooks";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { ProjectProps } from "./Project.types";
 
@@ -18,47 +20,41 @@ const ProjectInstance: React.FC<ProjectProps> = ({
   onDelete,
   onClick,
 }) => {
+  const theme = useMantineTheme();
+  const textRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(true);
   const [isTruncated, setIsTruncated] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const textRef = useRef<HTMLDivElement>(null);
+  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`);
 
-  const handleResize = () => {
-    setIsMobile(window.innerWidth <= 768);
-  };
+  useResizeObserver(textRef, (entry) => {
+    const textElement = entry.target as HTMLDivElement;
+    setIsTruncated(textElement.scrollWidth > textElement.clientWidth);
+  });
 
-  const checkIfTruncated = () => {
-    const textElement = textRef.current;
-    if (textElement) {
-      setIsTruncated(textElement.scrollWidth > textElement.clientWidth);
+  const calculateTruncation = () => {
+    if (textRef.current) {
+      setIsTruncated(textRef.current.scrollWidth > textRef.current.clientWidth);
     }
   };
 
+  useEffect(() => {
+    calculateTruncation();
+  }, []);
+
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (onEdit) onEdit(project);
+    onEdit?.(project);
   };
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     setMounted(false);
-    setTimeout(() => {
-      if (onDelete) onDelete(project.id);
-    }, 300);
+    setTimeout(() => onDelete?.(project.id), 300);
   };
 
   const handleClick = () => {
-    if (onClick) onClick(project);
+    onClick?.(project);
   };
-
-  useEffect(() => {
-    checkIfTruncated();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [project.name]);
 
   return (
     <Transition

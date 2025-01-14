@@ -8,11 +8,11 @@ import {
   Space,
   Title,
 } from "@mantine/core";
-import TaskForm from "../TaskForm/TaskForm";
-import { TaskListProps } from "./TaskList.types";
 import { IconPlus } from "@tabler/icons-react";
-import { Task } from "../Task/Task.types";
+import TaskForm from "../TaskForm/TaskForm";
 import TaskInstance from "../Task/TaskInstance";
+import { TaskListProps } from "./TaskList.types";
+import { Task } from "../Task/Task.types";
 
 const TaskList: React.FC<TaskListProps> = ({
   tasks,
@@ -22,23 +22,26 @@ const TaskList: React.FC<TaskListProps> = ({
   onDeleteTask,
   selectedSection,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [currentTask, setCurrentTask] = useState<Task | null>(null);
-
-  const handleOpenModal = (task: Task | null = null) => {
-    setIsModalOpen(true);
-    setCurrentTask(task);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setCurrentTask(null);
-  };
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    task: Task | null;
+  }>({
+    isOpen: false,
+    task: null,
+  });
 
   const sectionTitle =
     selectedSection?.type === "section"
       ? selectedSection.value
       : selectedSection?.value?.name;
+
+  const handleModalOpen = (task: Task | null = null) => {
+    setModalState({ isOpen: true, task });
+  };
+
+  const handleModalClose = () => {
+    setModalState({ isOpen: false, task: null });
+  };
 
   return (
     <Container size="full" className="pt-4 md:pt-16">
@@ -47,7 +50,7 @@ const TaskList: React.FC<TaskListProps> = ({
           {sectionTitle}
         </Title>
         <Button
-          onClick={() => handleOpenModal()}
+          onClick={() => handleModalOpen()}
           variant="light"
           rightSection={<IconPlus size="0.8rem" stroke={1.5} />}
         >
@@ -57,28 +60,29 @@ const TaskList: React.FC<TaskListProps> = ({
       <Space h={24} />
 
       <List icon={<></>}>
-        {tasks.map((task) => (
-          <TaskInstance
-            key={task.id}
-            task={task}
-            project={
-              projects.find((project) => project.id === task.projectId) ||
-              undefined
-            }
-            onEdit={() => handleOpenModal(task)}
-            onDelete={() => onDeleteTask(task.id)}
-          />
-        ))}
+        {tasks.map((task) => {
+          const project = projects.find((proj) => proj.id === task.projectId);
+          return (
+            <TaskInstance
+              key={task.id}
+              task={task}
+              project={project}
+              onEdit={() => handleModalOpen(task)}
+              onDelete={() => onDeleteTask(task.id)}
+            />
+          );
+        })}
       </List>
+
       <Modal
-        opened={isModalOpen}
-        onClose={handleCloseModal}
-        title={currentTask ? "Edit Task" : "Add Task"}
+        opened={modalState.isOpen}
+        onClose={handleModalClose}
+        title={modalState.task ? "Edit Task" : "Add Task"}
       >
         <TaskForm
-          initialTask={currentTask}
-          onSave={currentTask ? onEditTask : onAddTask}
-          onClose={handleCloseModal}
+          initialTask={modalState.task}
+          onSave={modalState.task ? onEditTask : onAddTask}
+          onClose={handleModalClose}
           projects={projects}
         />
       </Modal>
