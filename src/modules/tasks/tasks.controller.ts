@@ -9,10 +9,12 @@ import {
   HttpCode,
   HttpStatus,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { TaskService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { SearchTasksDto } from './dto/search-task.dto';
 
 @Controller('tasks')
 export class TaskController {
@@ -32,6 +34,15 @@ export class TaskController {
   @HttpCode(HttpStatus.OK)
   async findAll() {
     return this.taskService.findAll();
+  }
+
+  @Get('search')
+  async searchTasks(
+    @Query() searchDto: SearchTasksDto,
+  ) {
+    return this.taskService.searchTasks(
+      searchDto,
+    );
   }
 
   @Get(':id')

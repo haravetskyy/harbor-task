@@ -1,9 +1,9 @@
 import {
   IsNotEmpty,
   IsOptional,
+  MaxLength,
   ValidateIf,
 } from 'class-validator';
-import { IsEmoji } from '../../../validators/is-emoji.validator';
 import { CreateProjectDto } from './create-project.dto';
 import { PartialType } from '@nestjs/mapped-types';
 
@@ -14,10 +14,7 @@ export class UpdateProjectDto extends PartialType(
   @IsNotEmpty({ message: 'Name cannot be empty' })
   name?: string;
 
-  @IsEmoji({
-    message:
-      'Emoji must be a valid emoji character',
-  })
+  @MaxLength(1)
   @IsOptional()
   emoji?: string;
 }

@@ -5,6 +5,7 @@ import {
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { SearchTasksDto } from './dto/search-task.dto';
 
 @Injectable()
 export class TaskService {
@@ -90,6 +91,35 @@ export class TaskService {
       data: {
         ...data,
         projectId,
+      },
+    });
+  }
+
+  async searchTasks(searchDto: SearchTasksDto) {
+    const { query } = searchDto;
+
+    if (!query) {
+      throw new NotFoundException(
+        'Query parameter is required for searching tasks.',
+      );
+    }
+
+    return this.prisma.tasks.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: query,
+              mode: 'insensitive',
+            },
+          },
+          {
+            description: {
+              contains: query,
+              mode: 'insensitive',
+            },
+          },
+        ],
       },
     });
   }

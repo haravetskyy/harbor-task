@@ -12,9 +12,9 @@ datasource db {
 
 model Projects {
   id        String   @id @default(uuid())
-  name      String   @db.VarChar(255)
-  emoji     String?  @db.VarChar(10)
-  color     String?  @db.VarChar(7)
+  name      String
+  emoji     String
+  color     String
   tasks     Tasks[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
