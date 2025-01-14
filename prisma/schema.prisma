@@ -12,12 +12,14 @@ datasource db {
 
 model Projects {
   id        String   @id @default(uuid())
-  name      String
+  name      String   @unique
   emoji     String
   color     String
   tasks     Tasks[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([emoji, color])
 }
 
 model Tasks {

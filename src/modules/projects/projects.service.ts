@@ -1,10 +1,13 @@
 import {
+  BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class ProjectService {
@@ -15,6 +18,29 @@ export class ProjectService {
   async create(
     createProjectDto: CreateProjectDto,
   ) {
+    const { name, emoji, color } =
+      createProjectDto;
+
+    const existingByName =
+      await this.prisma.projects.findUnique({
+        where: { name },
+      });
+    if (existingByName) {
+      throw new BadRequestException(
+        `Project with name "${name}" already exists.`,
+      );
+    }
+
+    const existingByEmojiAndColor =
+      await this.prisma.projects.findFirst({
+        where: { emoji, color },
+      });
+    if (existingByEmojiAndColor) {
+      throw new BadRequestException(
+        `Project with emoji "${emoji}" and color "${color}" already exists.`,
+      );
+    }
+
     return this.prisma.projects.create({
       data: createProjectDto,
     });
