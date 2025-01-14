@@ -87,6 +87,7 @@ const ProjectInstance: React.FC<ProjectProps> = ({
               color={project.color as MantineColor}
               size="lg"
               variant="light"
+              circle
             >
               {project.emoji}
             </Badge>

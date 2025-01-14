@@ -96,11 +96,8 @@ const TaskForm: React.FC<TaskFormProps> = ({
         />
       )}
 
-      <Button mt="sm" onClick={handleSave}>
+      <Button mt="sm" onClick={handleSave} disabled={!title} fullWidth>
         Save
-      </Button>
-      <Button mt="sm" variant="subtle" onClick={onClose}>
-        Cancel
       </Button>
     </>
   );

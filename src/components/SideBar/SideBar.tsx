@@ -84,21 +84,29 @@ const SideBar: React.FC<SideBarProps> = ({
       </Flex>
 
       <Button
-        leftSection={<IconSearch size="1rem" stroke={1.5} />}
+        leftSection={
+          <>
+            <Group align="center">
+              <IconSearch size="1rem" stroke={1.5} />
+
+              <Text fw={400} size="sm" c="dimmed">
+                Search
+              </Text>
+            </Group>
+          </>
+        }
         rightSection={
-          <Badge color="dark" size="xs">
+          <Badge color="dark" size="md">
             ⌘ + K
           </Badge>
         }
         mb="md"
         onClick={() => openSpotlight()}
         fullWidth
-        justify="left"
+        justify="space-between"
         variant="default"
       >
-        <Text fw={400} size="sm">
-          Search
-        </Text>
+        <Group justify="space-between" className="w-full"></Group>
       </Button>
 
       {SECTIONS.map(({ label, icon }) => (

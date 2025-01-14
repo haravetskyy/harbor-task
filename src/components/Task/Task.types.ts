@@ -17,7 +17,4 @@ export interface TaskProps {
   onDelete: (id: string) => void;
 }
 
-export type progressBadge = {
-  badgeColor: string;
-  badgeText: string;
-};
+
