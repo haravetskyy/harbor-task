@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import {
   Button,
+  Group,
   NumberInput,
   Select,
   Textarea,
   TextInput,
+  Text,
 } from "@mantine/core";
 import { DateTimePicker } from "@mantine/dates";
 import { TaskFormProps } from "./TaskForm.types";
 import { Task } from "../Task/Task.types";
+
+const MAX_TITLE_LENGTH = 100;
+const MAX_DESCRIPTION_LENGTH = 250;
 
 const TaskForm: React.FC<TaskFormProps> = ({
   initialTask,
@@ -30,8 +35,8 @@ const TaskForm: React.FC<TaskFormProps> = ({
   const handleSave = () => {
     const newTask: Task = {
       id: initialTask?.id || Date.now().toString(),
-      title,
-      description,
+      title: title.trim(),
+      description: description.trim(),
       deadline,
       priority,
       progress,
@@ -42,6 +47,9 @@ const TaskForm: React.FC<TaskFormProps> = ({
     onClose();
   };
 
+  const titleLengthExceeded = title.length > MAX_TITLE_LENGTH;
+  const descriptionLengthExceeded = description.length > MAX_DESCRIPTION_LENGTH;
+
   return (
     <>
       <TextInput
@@ -50,6 +58,11 @@ const TaskForm: React.FC<TaskFormProps> = ({
         onChange={(e) => setTitle(e.target.value)}
         required
       />
+      <Group justify="start" className="w-full">
+        <Text size="sm" c={titleLengthExceeded ? "red" : "dimmed"}>
+          {title.length}/{MAX_TITLE_LENGTH}
+        </Text>
+      </Group>
       <Textarea
         label="Description"
         value={description}
@@ -58,6 +71,11 @@ const TaskForm: React.FC<TaskFormProps> = ({
         maxRows={4}
         onChange={(e) => setDescription(e.target.value)}
       />
+      <Group justify="start" className="w-full">
+        <Text size="sm" c={descriptionLengthExceeded ? "red" : "dimmed"}>
+          {description.length}/{MAX_DESCRIPTION_LENGTH}
+        </Text>
+      </Group>
       <DateTimePicker
         label="Deadline"
         value={deadline}
@@ -96,7 +114,12 @@ const TaskForm: React.FC<TaskFormProps> = ({
         />
       )}
 
-      <Button mt="sm" onClick={handleSave} disabled={!title} fullWidth>
+      <Button
+        mt="sm"
+        onClick={handleSave}
+        disabled={!title || titleLengthExceeded || descriptionLengthExceeded}
+        fullWidth
+      >
         Save
       </Button>
     </>
