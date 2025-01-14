@@ -18,15 +18,25 @@ export class ProjectService {
   async create(
     createProjectDto: CreateProjectDto,
   ) {
-    const { name, emoji, color } =
+    const { name, emoji, color, userId } =
       createProjectDto;
+
+    const user =
+      await this.prisma.users.findUnique({
+        where: { id: userId },
+      });
+    if (!user) {
+      throw new BadRequestException(
+        `User with ID "${userId}" does not exist.`,
+      );
+    }
 
     const existingByName =
       await this.prisma.projects.findUnique({
         where: { name },
       });
     if (existingByName) {
-      throw new BadRequestException(
+      throw new ConflictException(
         `Project with name "${name}" already exists.`,
       );
     }
@@ -36,32 +46,38 @@ export class ProjectService {
         where: { emoji, color },
       });
     if (existingByEmojiAndColor) {
-      throw new BadRequestException(
+      throw new ConflictException(
         `Project with emoji "${emoji}" and color "${color}" already exists.`,
       );
     }
 
     return this.prisma.projects.create({
-      data: createProjectDto,
+      data: {
+        name,
+        emoji,
+        color,
+        userId,
+      },
     });
   }
 
-  async findAll() {
+  async findAll(userId: string) {
     return this.prisma.projects.findMany({
+      where: { userId },
       include: { tasks: true },
     });
   }
 
-  async findOne(id: string) {
+  async findOne(userId: string, id: string) {
     const project =
-      await this.prisma.projects.findUnique({
-        where: { id },
+      await this.prisma.projects.findFirst({
+        where: { id, userId },
         include: { tasks: true },
       });
 
     if (!project) {
       throw new NotFoundException(
-        `Project with ID "${id}" not found`,
+        `Project with ID "${id}" not found.`,
       );
     }
 

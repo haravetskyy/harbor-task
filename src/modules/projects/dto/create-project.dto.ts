@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   MaxLength,
   Matches,
+  IsUUID,
 } from 'class-validator';
 
 export class CreateProjectDto {
@@ -23,4 +24,8 @@ export class CreateProjectDto {
   @IsNotEmpty()
   @IsHexColor()
   color: string;
+
+  @IsNotEmpty()
+  @IsUUID()
+  userId: string;
 }

@@ -14,16 +14,17 @@ export class TaskService {
   ) {}
 
   async create(createTaskDto: CreateTaskDto) {
-    const { projectId, ...data } = createTaskDto;
+    const { userId, projectId, ...data } =
+      createTaskDto;
 
     if (projectId) {
       const project =
-        await this.prisma.projects.findUnique({
-          where: { id: projectId },
+        await this.prisma.projects.findFirst({
+          where: { id: projectId, userId },
         });
       if (!project) {
         throw new NotFoundException(
-          `Project with ID "${projectId}" not found`,
+          `Project with ID "${projectId}" does not exist for this user.`,
         );
       }
     }
@@ -32,26 +33,28 @@ export class TaskService {
       data: {
         ...data,
         projectId,
+        userId,
       },
     });
   }
 
-  async findAll() {
+  async findAll(userId: string) {
     return this.prisma.tasks.findMany({
+      where: { userId },
       include: { project: true },
     });
   }
 
-  async findOne(id: string) {
+  async findOne(userId: string, id: string) {
     const task =
-      await this.prisma.tasks.findUnique({
-        where: { id },
+      await this.prisma.tasks.findFirst({
+        where: { id, userId },
         include: { project: true },
       });
 
     if (!task) {
       throw new NotFoundException(
-        `Task with ID "${id}" not found`,
+        `Task with ID "${id}" not found for this user.`,
       );
     }
 
@@ -60,30 +63,31 @@ export class TaskService {
 
   async update(
     id: string,
+    userId: string,
     updateTaskDto: UpdateTaskDto,
   ) {
     const { projectId, ...data } = updateTaskDto;
 
-    if (projectId) {
-      const project =
-        await this.prisma.projects.findUnique({
-          where: { id: projectId },
-        });
-      if (!project) {
-        throw new NotFoundException(
-          `Project with ID "${projectId}" not found`,
-        );
-      }
-    }
-
     const task =
-      await this.prisma.tasks.findUnique({
-        where: { id },
+      await this.prisma.tasks.findFirst({
+        where: { id, userId },
       });
     if (!task) {
       throw new NotFoundException(
-        `Task with ID "${id}" not found`,
+        `Task with ID "${id}" not found for this user.`,
       );
+    }
+
+    if (projectId) {
+      const project =
+        await this.prisma.projects.findFirst({
+          where: { id: projectId, userId },
+        });
+      if (!project) {
+        throw new NotFoundException(
+          `Project with ID "${projectId}" does not exist for this user.`,
+        );
+      }
     }
 
     return this.prisma.tasks.update({
@@ -124,14 +128,15 @@ export class TaskService {
     });
   }
 
-  async remove(id: string) {
+  async remove(userId: string, id: string) {
     const task =
-      await this.prisma.tasks.findUnique({
-        where: { id },
+      await this.prisma.tasks.findFirst({
+        where: { id, userId },
       });
+
     if (!task) {
       throw new NotFoundException(
-        `Task with ID "${id}" not found`,
+        `Task with ID "${id}" not found for this user.`,
       );
     }
 

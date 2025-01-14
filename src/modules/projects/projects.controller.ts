@@ -14,7 +14,7 @@ import { ProjectService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 
-@Controller('projects')
+@Controller('users/:userId/projects')
 export class ProjectController {
   constructor(
     private readonly projectService: ProjectService,
@@ -23,30 +23,43 @@ export class ProjectController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(
+    @Param('userId', new ParseUUIDPipe())
+    userId: string,
     @Body() createProjectDto: CreateProjectDto,
   ) {
-    return this.projectService.create(
-      createProjectDto,
-    );
+    return this.projectService.create({
+      ...createProjectDto,
+      userId,
+    });
   }
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  async findAll() {
-    return this.projectService.findAll();
+  async findAll(
+    @Param('userId', new ParseUUIDPipe())
+    userId: string,
+  ) {
+    return this.projectService.findAll(userId);
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async findOne(
+    @Param('userId', new ParseUUIDPipe())
+    userId: string,
     @Param('id', new ParseUUIDPipe()) id: string,
   ) {
-    return this.projectService.findOne(id);
+    return this.projectService.findOne(
+      userId,
+      id,
+    );
   }
 
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
   async update(
+    @Param('userId', new ParseUUIDPipe())
+    userId: string,
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updateProjectDto: UpdateProjectDto,
   ) {
@@ -59,6 +72,8 @@ export class ProjectController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(
+    @Param('userId', new ParseUUIDPipe())
+    userId: string,
     @Param('id', new ParseUUIDPipe()) id: string,
   ) {
     await this.projectService.remove(id);

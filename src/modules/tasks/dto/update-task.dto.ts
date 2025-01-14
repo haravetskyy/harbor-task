@@ -1,12 +1,13 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { OmitType } from '@nestjs/mapped-types';
 import { CreateTaskDto } from './create-task.dto';
 import {
   IsNotEmpty,
   ValidateIf,
 } from 'class-validator';
 
-export class UpdateTaskDto extends PartialType(
+export class UpdateTaskDto extends OmitType(
   CreateTaskDto,
+  ['userId', 'title'],
 ) {
   @ValidateIf((obj) => obj.title !== undefined)
   @IsNotEmpty({

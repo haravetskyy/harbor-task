@@ -39,4 +39,8 @@ export class CreateTaskDto {
   @IsUUID()
   @IsOptional()
   projectId?: string;
+
+  @IsUUID()
+  @IsNotEmpty()
+  userId: string;
 }
