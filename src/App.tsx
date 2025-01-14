@@ -23,6 +23,13 @@ import { Section } from "./components/SideBar/SideBar.types";
 import useApi from "./hooks/useApi";
 import { openSpotlight, Spotlight } from "@mantine/spotlight";
 
+interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  avatarUrl?: string;
+}
+
 const App: React.FC = () => {
   const [colorScheme, setColorScheme] = useState<"dark" | "light">("dark");
   const [sidebarOpened, setSidebarOpened] = useState(false);
@@ -33,7 +40,7 @@ const App: React.FC = () => {
     type: "section",
     value: "All",
   });
-
+  const [user, setUser] = useState<User | null>(null);
   const [debouncedIsMobile] = useDebouncedValue(isMobile, 200);
   const apiUrl = import.meta.env.VITE_API_URL;
   const { fetchData, postData, patchData, deleteData } = useApi(apiUrl);
@@ -45,22 +52,36 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    (async () => {
-      const [tasksData, projectsData] = await Promise.all([
-        fetchData<Task[]>("tasks"),
-        fetchData<Project[]>("projects"),
-      ]);
-      if (tasksData) setTasks(tasksData);
-      if (projectsData) setProjects(projectsData);
-    })();
+    const fetchUser = async () => {
+      const fetchedUser = await fetchData<User>("users");
+      if (fetchedUser) {
+        setUser(fetchedUser);
+        fetchUserData(fetchedUser.id);
+      }
+    };
+
+    fetchUser();
   }, []);
+
+  const fetchUserData = async (userId: string) => {
+    const [tasksData, projectsData] = await Promise.all([
+      fetchData<Task[]>(`users/${userId}/tasks`),
+      fetchData<Project[]>(`users/${userId}/projects`),
+    ]);
+    if (tasksData) setTasks(tasksData);
+    if (projectsData) setProjects(projectsData);
+  };
 
   const toggleColorScheme = () => {
     setColorScheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
-  const handleAddTask = async (task: Omit<Task, "id">) => {
-    const newTask = await postData<Task>("tasks", task);
+  const handleAddTask = async (task: Omit<Task, "id" | "userId">) => {
+    const userId = "specific-user-id";
+    const newTask = await postData<Task>(`users/${userId}/tasks`, {
+      ...task,
+      userId,
+    });
     if (newTask) setTasks((prev) => [...prev, newTask]);
   };
 
@@ -87,20 +108,14 @@ const App: React.FC = () => {
     emoji?: string,
     color?: string
   ) => {
-    const projectData = { name };
+    const userId = "specific-user-id";
+    const projectData = { name, emoji, color, userId };
 
-    if (emoji) projectData["emoji"] = emoji;
-    if (color) projectData["color"] = color;
-
-    console.log("Adding project payload:", projectData);
-
-    const project = await postData<Project>("projects", projectData);
-    if (project) {
-      console.log("Project added successfully:", project);
-      setProjects((prev) => [...prev, project]);
-    } else {
-      console.error("Failed to add project");
-    }
+    const project = await postData<Project>(
+      `users/${userId}/projects`,
+      projectData
+    );
+    if (project) setProjects((prev) => [...prev, project]);
   };
 
   const handleEditProject = async (updatedProject: Partial<Project>) => {
@@ -220,8 +235,11 @@ const App: React.FC = () => {
         <AppShell.Navbar>
           <Collapse in={debouncedIsMobile ? sidebarOpened : true}>
             <SideBar
-              userName="John Doe"
-              userProfileImg="https://avatars.githubusercontent.com/u/56477764?v=4"
+              userName={`${user?.firstName || "Unknown"} ${user?.lastName || "Unknown"}`}
+              userProfileImg={
+                user?.avatarUrl ||
+                "https://avatars.githubusercontent.com/u/56477764?v=4"
+              }
               projects={projects}
               onAddProject={handleAddProject}
               onEditProject={handleEditProject}
