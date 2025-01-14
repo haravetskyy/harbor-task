@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
   AppShell,
+  Badge,
   Burger,
+  Button,
   Collapse,
   Container,
   Group,
@@ -12,13 +14,14 @@ import {
   rem,
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
-import { IconMoonStars, IconSun } from "@tabler/icons-react";
+import { IconMoonStars, IconSearch, IconSun } from "@tabler/icons-react";
 import SideBar from "./components/SideBar/SideBar";
 import TaskList from "./components/TaskList/TaskList";
 import { Task } from "./components/Task/Task.types";
 import { Project } from "./components/Project/Project.types";
 import { Section } from "./components/SideBar/SideBar.types";
 import useApi from "./hooks/useApi";
+import { openSpotlight, Spotlight } from "@mantine/spotlight";
 
 const App: React.FC = () => {
   const [colorScheme, setColorScheme] = useState<"dark" | "light">("dark");
@@ -145,23 +148,61 @@ const App: React.FC = () => {
             className="h-full"
           >
             {debouncedIsMobile ? (
-              <Burger
-                opened={sidebarOpened}
-                onClick={() => setSidebarOpened((prev) => !prev)}
-                size="sm"
-                color={colorScheme === "dark" ? "white" : "black"}
-              />
-            ) : (
-              <Group gap={12}>
-                <Image src="harbor-task.svg" h={40} w="auto" />
-                <Text
-                  tt="uppercase"
-                  className="font-lexend tracking-tight"
-                  fw={300}
+              <Group align="center">
+                <Burger
+                  opened={sidebarOpened}
+                  onClick={() => setSidebarOpened((prev) => !prev)}
+                  size="sm"
+                  color={colorScheme === "dark" ? "white" : "black"}
+                />
+                <Button
+                  leftSection={
+                    <>
+                      <Group align="center">
+                        <IconSearch size="1rem" stroke={1.5} />
+
+                        <Text fw={400} size="sm" c="dimmed">
+                          Search
+                        </Text>
+                      </Group>
+                    </>
+                  }
+                  onClick={() => openSpotlight()}
+                  justify="space-between"
+                  variant="default"
                 >
-                  Harbor Task
-                </Text>
+                  <Group justify="space-between" className="w-full"></Group>
+                </Button>
               </Group>
+            ) : (
+              <Button
+                leftSection={
+                  <>
+                    <Group align="center">
+                      <IconSearch size="1rem" stroke={1.5} />
+
+                      <Text fw={400} size="sm" c="dimmed">
+                        Search
+                      </Text>
+                    </Group>
+                  </>
+                }
+                rightSection={
+                  <Badge
+                    color={colorScheme === "dark" ? "dark" : ""}
+                    size="md"
+                    variant="light"
+                    c={colorScheme === "dark" ? "white" : ""}
+                  >
+                    ⌘ + K
+                  </Badge>
+                }
+                onClick={() => openSpotlight()}
+                justify="space-between"
+                variant="default"
+              >
+                <Group justify="space-between" className="w-full"></Group>
+              </Button>
             )}
             <Switch
               checked={colorScheme === "dark"}
@@ -201,6 +242,20 @@ const App: React.FC = () => {
               selectedSection={selectedSection}
             />
           </Container>
+          <Spotlight
+            actions={[]}
+            shortcut="mod+k"
+            closeOnActionTrigger
+            searchProps={{
+              leftSection: (
+                <IconSearch
+                  style={{ width: rem(20), height: rem(20) }}
+                  stroke={1.5}
+                />
+              ),
+              placeholder: "Search...",
+            }}
+          />
         </AppShell.Main>
       </AppShell>
     </MantineProvider>

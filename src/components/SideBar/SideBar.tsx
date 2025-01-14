@@ -8,19 +8,14 @@ import {
   Group,
   Modal,
   NavLink,
-  rem,
   Title,
-  Text,
-  Badge,
 } from "@mantine/core";
-import { openSpotlight, SpotlightAction, Spotlight } from "@mantine/spotlight";
 import {
   IconCalendarDot,
   IconChevronRight,
   IconGauge,
   IconHome2,
   IconPlus,
-  IconSearch,
 } from "@tabler/icons-react";
 import { SideBarProps } from "./SideBar.types";
 import ProjectForm from "../ProjectForm/ProjectForm";
@@ -61,19 +56,6 @@ const SideBar: React.FC<SideBarProps> = ({
     toggleModal(false);
   };
 
-  // const spotlightActions: SpotlightAction[] = [
-  //   ...SECTIONS.map((section) => ({
-  //     title: section.label,
-  //     onTrigger: () => handleSectionClick(section.label),
-  //     icon: section.icon,
-  //   })),
-  //   ...projects.map((project) => ({
-  //     title: project.name,
-  //     description: `Project: ${project.name}`,
-  //     onTrigger: () => onSectionChange({ type: "project", value: project }),
-  //   })),
-  // ];
-
   return (
     <Container className="w-full">
       <Flex mb="md" mt="sm" justify="space-between" align="center">
@@ -82,32 +64,6 @@ const SideBar: React.FC<SideBarProps> = ({
           <Title order={6}>{userName}</Title>
         </Group>
       </Flex>
-
-      <Button
-        leftSection={
-          <>
-            <Group align="center">
-              <IconSearch size="1rem" stroke={1.5} />
-
-              <Text fw={400} size="sm" c="dimmed">
-                Search
-              </Text>
-            </Group>
-          </>
-        }
-        rightSection={
-          <Badge color="dark" size="md">
-            ⌘ + K
-          </Badge>
-        }
-        mb="md"
-        onClick={() => openSpotlight()}
-        fullWidth
-        justify="space-between"
-        variant="default"
-      >
-        <Group justify="space-between" className="w-full"></Group>
-      </Button>
 
       {SECTIONS.map(({ label, icon }) => (
         <NavLink
@@ -162,21 +118,6 @@ const SideBar: React.FC<SideBarProps> = ({
           initialProject={projectToEdit}
         />
       </Modal>
-
-      <Spotlight
-        actions={[]}
-        shortcut="mod+k"
-        closeOnActionTrigger
-        searchProps={{
-          leftSection: (
-            <IconSearch
-              style={{ width: rem(20), height: rem(20) }}
-              stroke={1.5}
-            />
-          ),
-          placeholder: "Search...",
-        }}
-      />
     </Container>
   );
 };
