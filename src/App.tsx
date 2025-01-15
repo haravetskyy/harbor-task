@@ -177,14 +177,17 @@ const App: React.FC = () => {
   };
 
   const handleSearch = async (query: string) => {
-    if (!user) return;
+    const userId = user?.id;
+    if (!user) {
+      return;
+    }
     const [allProjects, allTasks] = await Promise.all([
       fetchData<Project[]>(`users/${user?.id}/projects`),
       fetchData<Task[]>(`users/${user?.id}/tasks`),
     ]);
 
     const searchResults = query
-      ? await searchData<{ tasks: Task[]; projects: Project[] }>(query)
+      ? await searchData<{ tasks: Task[]; projects: Project[] }>(userId, query)
       : { tasks: allTasks || [], projects: allProjects || [] };
 
     if (searchResults) {
