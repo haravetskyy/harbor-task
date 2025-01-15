@@ -29,7 +29,6 @@ import { Section } from "./components/SideBar/SideBar.types";
 import useApi from "./hooks/useApi";
 import { openSpotlight, Spotlight } from "@mantine/spotlight";
 import { getFlagColor } from "../lib/taskUtils";
-import formatDate from "../lib/formatDate";
 
 interface User {
   id: string;
@@ -52,8 +51,14 @@ const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [debouncedIsMobile] = useDebouncedValue(isMobile, 200);
   const apiUrl = import.meta.env.VITE_API_URL;
-  const { fetchData, postData, patchData, deleteData, searchData } =
-    useApi(apiUrl);
+  const {
+    fetchData,
+    fetchFilteredTasks,
+    postData,
+    patchData,
+    deleteData,
+    searchData,
+  } = useApi(apiUrl);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -86,6 +91,27 @@ const App: React.FC = () => {
     ]);
     if (tasksData) setTasks(tasksData);
     if (projectsData) setProjects(projectsData);
+  };
+
+  const getFilteredTasks = async (section?: string, projectId?: string) => {
+    if (!user?.id) return;
+    const filteredTasks = await fetchFilteredTasks<Task[]>(
+      user.id,
+      section,
+      projectId
+    );
+    if (filteredTasks) {
+      setTasks(filteredTasks);
+    }
+  };
+
+  const handleSectionChange = (section: Section) => {
+
+    if (section.type === "section") {
+      getFilteredTasks(section.value);
+    } else if (section.type === "project") {
+      getFilteredTasks(undefined, section.value.id);
+    }
   };
 
   const toggleColorScheme = () => {
@@ -327,7 +353,7 @@ const App: React.FC = () => {
               onAddProject={handleAddProject}
               onEditProject={handleEditProject}
               onDeleteProject={handleDeleteProject}
-              onSectionChange={setSelectedSection}
+              onSectionChange={handleSectionChange}
             />
           </Collapse>
         </AppShell.Navbar>

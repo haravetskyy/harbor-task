@@ -10,6 +10,29 @@ const useApi = (apiUrl: string) => {
     }
   };
 
+  const fetchFilteredTasks = async <T>(
+    userId: string,
+    section?: string,
+    projectId?: string
+  ): Promise<T | null> => {
+    try {
+      const queryParams = section
+        ? `section=${section}`
+        : projectId
+          ? `projectId=${projectId}`
+          : "";
+
+      const endpoint = `users/${userId}/tasks${
+        queryParams ? `?${queryParams}` : ""
+      }`;
+
+      return await fetchData<T>(endpoint);
+    } catch (error) {
+      console.error("Error fetching filtered tasks:", error);
+      return null;
+    }
+  };
+
   const postData = async <T>(
     endpoint: string,
     data: Partial<T>
@@ -86,7 +109,14 @@ const useApi = (apiUrl: string) => {
     }
   };
 
-  return { fetchData, postData, patchData, deleteData, searchData };
+  return {
+    fetchData,
+    fetchFilteredTasks,
+    postData,
+    patchData,
+    deleteData,
+    searchData,
+  };
 };
 
 export default useApi;
