@@ -104,7 +104,8 @@ const App: React.FC = () => {
   };
 
   const handleDeleteTask = async (id: string) => {
-    if (await deleteData(`tasks/${id}`)) {
+    const userId = user?.id;
+    if (await deleteData(`users/${userId}/tasks/${id}`)) {
       setTasks((prev) => prev.filter((task) => task.id !== id));
     }
   };
@@ -146,7 +147,9 @@ const App: React.FC = () => {
   };
 
   const handleDeleteProject = async (projectId: string) => {
-    if (await deleteData(`projects/${projectId}`)) {
+    const userId = user?.id;
+
+    if (await deleteData(`users/${userId}/projects/${projectId}`)) {
       setProjects((prev) => prev.filter((project) => project.id !== projectId));
       if (
         selectedSection.type === "project" &&
