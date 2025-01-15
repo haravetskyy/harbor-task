@@ -37,10 +37,54 @@ export class TaskService {
     });
   }
 
+  async getFilteredTasks(
+    userId: string,
+    section?: string,
+    projectId?: string,
+  ) {
+    const where: any = { userId };
+
+    if (projectId) {
+      where.projectId = projectId;
+    }
+
+    const now = new Date();
+    const startOfToday = new Date(
+      now.setHours(0, 0, 0, 0),
+    );
+    const endOfToday = new Date(
+      now.setHours(23, 59, 59, 999),
+    );
+
+    if (section === 'Today') {
+      where.deadline = {
+        gte: startOfToday,
+        lte: endOfToday,
+      };
+    } else if (section === 'Upcoming') {
+      const oneWeekFromNow = new Date(
+        now.getTime() + 7 * 24 * 60 * 60 * 1000,
+      );
+      where.deadline = {
+        gte: startOfToday,
+        lte: oneWeekFromNow,
+      };
+    }
+
+    return this.prisma.tasks.findMany({
+      where,
+      orderBy: { deadline: 'asc' },
+      include: { project: true },
+    });
+  }
+
   async findAll(userId: string) {
     return this.prisma.tasks.findMany({
       where: { userId },
       include: { project: true },
+      orderBy: {
+        deadline: 'asc',
+      },
     });
   }
 

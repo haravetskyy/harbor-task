@@ -42,12 +42,15 @@ export class SearchService {
             },
           ],
         },
+        orderBy: {
+          deadline: 'asc',
+        },
       });
 
     const projects =
       await this.prisma.projects.findMany({
         where: {
-          userId, // Filter by userId
+          userId,
           OR: [
             {
               name: {

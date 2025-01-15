@@ -9,6 +9,7 @@ import {
   HttpCode,
   HttpStatus,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { TaskService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -31,6 +32,19 @@ export class TaskController {
       ...createTaskDto,
       userId,
     });
+  }
+
+  @Get()
+  async getTasks(
+    @Param('userId') userId: string,
+    @Query('section') section?: string,
+    @Query('projectId') projectId?: string,
+  ) {
+    return this.taskService.getFilteredTasks(
+      userId,
+      section,
+      projectId,
+    );
   }
 
   @Get()
