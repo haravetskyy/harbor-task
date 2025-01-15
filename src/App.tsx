@@ -77,7 +77,7 @@ const App: React.FC = () => {
   };
 
   const handleAddTask = async (task: Omit<Task, "id" | "userId">) => {
-    const userId = "specific-user-id";
+    const userId = user?.id;
     const newTask = await postData<Task>(`users/${userId}/tasks`, {
       ...task,
       userId,
@@ -85,10 +85,16 @@ const App: React.FC = () => {
     if (newTask) setTasks((prev) => [...prev, newTask]);
   };
 
-  const handleEditTask = async (updatedTask: Task) => {
+  const handleEditTask = async (updatedTask: Partial<Task>) => {
+    if (!user?.id) {
+      console.error("User ID is undefined");
+      return;
+    }
+
+    const payload = { ...updatedTask };
     const editedTask = await patchData<Task>(
-      `tasks/${updatedTask.id}`,
-      updatedTask
+      `users/${user.id}/tasks/${updatedTask.id}`,
+      payload
     );
     if (editedTask) {
       setTasks((prev) =>
@@ -108,7 +114,7 @@ const App: React.FC = () => {
     emoji?: string,
     color?: string
   ) => {
-    const userId = "specific-user-id";
+    const userId = user?.id;
     const projectData = { name, emoji, color, userId };
 
     const project = await postData<Project>(
@@ -119,10 +125,17 @@ const App: React.FC = () => {
   };
 
   const handleEditProject = async (updatedProject: Partial<Project>) => {
+    if (!user?.id) {
+      console.error("User ID is undefined");
+      return;
+    }
+
+    const payload = { ...updatedProject };
     const editedProject = await patchData<Project>(
-      `projects/${updatedProject.id}`,
-      updatedProject
+      `users/${user.id}/projects/${updatedProject.id}`,
+      payload
     );
+
     if (editedProject) {
       setProjects((prev) =>
         prev.map((project) =>

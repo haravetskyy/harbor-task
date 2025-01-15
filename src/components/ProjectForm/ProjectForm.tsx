@@ -59,8 +59,8 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
         value={emoji}
         onChange={(value) => setEmoji(value || "")}
         checkIconPosition="right"
-        allowDeselect
-        clearable
+        nothingFoundMessage="Nothing found..."
+        maxDropdownHeight={200}
         searchable
         required
       />

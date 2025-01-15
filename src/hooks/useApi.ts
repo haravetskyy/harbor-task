@@ -34,20 +34,23 @@ const useApi = (apiUrl: string) => {
 
   const patchData = async <T>(
     endpoint: string,
-    data: Partial<T>
+    payload: Partial<T>
   ): Promise<T | null> => {
     try {
-      const filteredData = Object.fromEntries(
-        Object.entries(data).filter(([_, value]) => value !== undefined)
-      );
-
       const response = await fetch(`${apiUrl}/${endpoint}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(filteredData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
       });
-      if (!response.ok) throw new Error(`Failed to patch ${endpoint}`);
-      return (await response.json()) as T;
+
+      if (!response.ok) {
+        console.error(`Error patching ${endpoint}:`, response.statusText);
+        return null;
+      }
+
+      return await response.json();
     } catch (error) {
       console.error(`Error patching ${endpoint}:`, error);
       return null;
