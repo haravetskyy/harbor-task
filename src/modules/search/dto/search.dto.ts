@@ -3,7 +3,7 @@ import {
   IsString,
 } from 'class-validator';
 
-export class SearchTasksDto {
+export class SearchDto {
   @IsOptional()
   @IsString()
   query?: string;
