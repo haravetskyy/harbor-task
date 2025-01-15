@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {
-  ActionIcon,
   AppShell,
   Badge,
   Burger,
   Button,
   Collapse,
   Container,
-  Flex,
   Group,
   MantineColor,
   MantineProvider,
-  Space,
   Switch,
   Text,
   ThemeIcon,
@@ -19,7 +16,6 @@ import {
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import {
-  IconCalendarDot,
   IconFlagFilled,
   IconMoonStars,
   IconSearch,
@@ -31,7 +27,7 @@ import { Task } from "./components/Task/Task.types";
 import { Project } from "./components/Project/Project.types";
 import { Section } from "./components/SideBar/SideBar.types";
 import useApi from "./hooks/useApi";
-import { openSpotlight, Spotlight, SpotlightAction } from "@mantine/spotlight";
+import { openSpotlight, Spotlight } from "@mantine/spotlight";
 import { getFlagColor } from "../lib/taskUtils";
 import formatDate from "../lib/formatDate";
 
@@ -181,6 +177,7 @@ const App: React.FC = () => {
   };
 
   const handleSearch = async (query: string) => {
+    if (!user) return;
     const [allProjects, allTasks] = await Promise.all([
       fetchData<Project[]>(`users/${user?.id}/projects`),
       fetchData<Task[]>(`users/${user?.id}/tasks`),

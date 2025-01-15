@@ -71,10 +71,13 @@ const useApi = (apiUrl: string) => {
   };
 
   const searchData = async <T>(
+    userId: string,
     query: string
   ): Promise<{ tasks: T[]; projects: T[] } | null> => {
     try {
-      const response = await fetch(`${apiUrl}/search?query=${query}`);
+      const response = await fetch(
+        `${apiUrl}/users/${userId}/search?query=${query}`
+      );
       if (!response.ok) throw new Error("Failed to search data");
       return await response.json();
     } catch (error) {
