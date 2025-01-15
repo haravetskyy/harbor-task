@@ -70,7 +70,20 @@ const useApi = (apiUrl: string) => {
     }
   };
 
-  return { fetchData, postData, patchData, deleteData };
+  const searchData = async <T>(
+    query: string
+  ): Promise<{ tasks: T[]; projects: T[] } | null> => {
+    try {
+      const response = await fetch(`${apiUrl}/search?query=${query}`);
+      if (!response.ok) throw new Error("Failed to search data");
+      return await response.json();
+    } catch (error) {
+      console.error("Error searching data:", error);
+      return null;
+    }
+  };
+
+  return { fetchData, postData, patchData, deleteData, searchData };
 };
 
 export default useApi;

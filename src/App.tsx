@@ -1,27 +1,39 @@
 import React, { useEffect, useState } from "react";
 import {
+  ActionIcon,
   AppShell,
   Badge,
   Burger,
   Button,
   Collapse,
   Container,
+  Flex,
   Group,
-  Image,
+  MantineColor,
   MantineProvider,
+  Space,
   Switch,
   Text,
+  ThemeIcon,
   rem,
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
-import { IconMoonStars, IconSearch, IconSun } from "@tabler/icons-react";
+import {
+  IconCalendarDot,
+  IconFlagFilled,
+  IconMoonStars,
+  IconSearch,
+  IconSun,
+} from "@tabler/icons-react";
 import SideBar from "./components/SideBar/SideBar";
 import TaskList from "./components/TaskList/TaskList";
 import { Task } from "./components/Task/Task.types";
 import { Project } from "./components/Project/Project.types";
 import { Section } from "./components/SideBar/SideBar.types";
 import useApi from "./hooks/useApi";
-import { openSpotlight, Spotlight } from "@mantine/spotlight";
+import { openSpotlight, Spotlight, SpotlightAction } from "@mantine/spotlight";
+import { getFlagColor } from "../lib/taskUtils";
+import formatDate from "../lib/formatDate";
 
 interface User {
   id: string;
@@ -36,6 +48,7 @@ const App: React.FC = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [projects, setProjects] = useState<Project[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [actions, setActions] = useState<any[]>([]);
   const [selectedSection, setSelectedSection] = useState<Section>({
     type: "section",
     value: "All",
@@ -43,7 +56,8 @@ const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [debouncedIsMobile] = useDebouncedValue(isMobile, 200);
   const apiUrl = import.meta.env.VITE_API_URL;
-  const { fetchData, postData, patchData, deleteData } = useApi(apiUrl);
+  const { fetchData, postData, patchData, deleteData, searchData } =
+    useApi(apiUrl);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -62,6 +76,12 @@ const App: React.FC = () => {
 
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    if (user?.id) {
+      handleSearch("");
+    }
+  }, [user?.id]);
 
   const fetchUserData = async (userId: string) => {
     const [tasksData, projectsData] = await Promise.all([
@@ -157,6 +177,56 @@ const App: React.FC = () => {
       ) {
         setSelectedSection({ type: "section", value: "All" });
       }
+    }
+  };
+
+  const handleSearch = async (query: string) => {
+    const [allProjects, allTasks] = await Promise.all([
+      fetchData<Project[]>(`users/${user?.id}/projects`),
+      fetchData<Task[]>(`users/${user?.id}/tasks`),
+    ]);
+
+    const searchResults = query
+      ? await searchData<{ tasks: Task[]; projects: Project[] }>(query)
+      : { tasks: allTasks || [], projects: allProjects || [] };
+
+    if (searchResults) {
+      setActions([
+        {
+          group: "Projects",
+          actions: searchResults.projects.map((project) => ({
+            id: project.id,
+            label: project.name,
+            leftSection: (
+              <Badge
+                color={project.color as MantineColor}
+                size="lg"
+                variant="light"
+                circle
+              >
+                {project.emoji}
+              </Badge>
+            ),
+          })),
+        },
+        {
+          group: "Tasks",
+          actions: searchResults.tasks.map((task) => ({
+            id: task.id,
+            label: task.title,
+            description: task.description || "",
+            leftSection: (
+              <ThemeIcon
+                color={getFlagColor(task.priority) as MantineColor}
+                variant="transparent"
+                size="sm"
+              >
+                <IconFlagFilled stroke={1} />
+              </ThemeIcon>
+            ),
+          })),
+        },
+      ]);
     }
   };
 
@@ -274,9 +344,13 @@ const App: React.FC = () => {
             />
           </Container>
           <Spotlight
-            actions={[]}
+            actions={actions}
             shortcut="mod+k"
             closeOnActionTrigger
+            scrollable
+            highlightQuery
+            maxHeight={350}
+            onQueryChange={handleSearch}
             searchProps={{
               leftSection: (
                 <IconSearch

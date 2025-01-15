@@ -8,6 +8,7 @@ export interface Task {
   progress?: number;
   priority?: number;
   projectId?: string;
+  userId: string;
 }
 
 export interface TaskProps {
