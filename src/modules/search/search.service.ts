@@ -11,7 +11,10 @@ export class SearchService {
     private readonly prisma: PrismaService,
   ) {}
 
-  async search(searchDto: SearchDto) {
+  async search(
+    userId: string,
+    searchDto: SearchDto,
+  ) {
     const { query } = searchDto;
 
     if (!query) {
@@ -23,6 +26,7 @@ export class SearchService {
     const tasks =
       await this.prisma.tasks.findMany({
         where: {
+          userId,
           OR: [
             {
               title: {
@@ -43,6 +47,7 @@ export class SearchService {
     const projects =
       await this.prisma.projects.findMany({
         where: {
+          userId, // Filter by userId
           OR: [
             {
               name: {
