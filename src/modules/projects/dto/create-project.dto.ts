@@ -25,7 +25,7 @@ export class CreateProjectDto {
   @IsHexColor()
   color: string;
 
-  @IsNotEmpty()
   @IsUUID()
+  @IsNotEmpty()
   userId: string;
 }

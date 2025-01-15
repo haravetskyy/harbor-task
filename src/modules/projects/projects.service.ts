@@ -16,38 +16,34 @@ export class ProjectService {
   ) {}
 
   async create(
+    userId: string,
     createProjectDto: CreateProjectDto,
   ) {
-    const { name, emoji, color, userId } =
+    const { name, emoji, color } =
       createProjectDto;
 
     const user =
       await this.prisma.users.findUnique({
         where: { id: userId },
       });
+
     if (!user) {
-      throw new BadRequestException(
+      throw new NotFoundException(
         `User with ID "${userId}" does not exist.`,
       );
     }
 
-    const existingByName =
-      await this.prisma.projects.findUnique({
-        where: { name },
-      });
-    if (existingByName) {
-      throw new ConflictException(
-        `Project with name "${name}" already exists.`,
-      );
-    }
-
-    const existingByEmojiAndColor =
+    const existingProject =
       await this.prisma.projects.findFirst({
-        where: { emoji, color },
+        where: {
+          userId,
+          OR: [{ name }, { emoji, color }],
+        },
       });
-    if (existingByEmojiAndColor) {
+
+    if (existingProject) {
       throw new ConflictException(
-        `Project with emoji "${emoji}" and color "${color}" already exists.`,
+        `A project with similar properties already exists.`,
       );
     }
 

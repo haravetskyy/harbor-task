@@ -24,13 +24,15 @@ export class ProjectController {
   @HttpCode(HttpStatus.CREATED)
   async create(
     @Param('userId', new ParseUUIDPipe())
-    userId: string,
+    routeUserId: string,
     @Body() createProjectDto: CreateProjectDto,
   ) {
-    return this.projectService.create({
-      ...createProjectDto,
+    const userId =
+      routeUserId || createProjectDto.userId;
+    return this.projectService.create(
       userId,
-    });
+      createProjectDto,
+    );
   }
 
   @Get()
