@@ -40,6 +40,9 @@ generate-prisma-client:
 backend-seed:
 	cd backend && pnpm data:seed
 
+backend-delete:
+	cd backend && pnpm data:delete
+
 backend-start:
 	cd backend && pnpm start:dev
 
