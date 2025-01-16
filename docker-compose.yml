@@ -2,22 +2,24 @@ services:
   dev-db:
     image: postgres:latest
     ports:
-      - 5434:5432
+      - "${DB_DEV_PORTS}:5432"
     environment:
-      POSTGRES_USER: harbor_admin
-      POSTGRES_PASSWORD: 123
-      POSTGRES_DB: harbor_db
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     networks:
       - harbor_network
+
   test-db:
     image: postgres:latest
     ports:
-      - 5435:5432
+      - "${DB_TEST_PORTS}:5432"
     environment:
-      POSTGRES_USER: harbor_admin
-      POSTGRES_PASSWORD: 123
-      POSTGRES_DB: harbor_db
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     networks:
       - harbor_network
+
 networks:
   harbor_network:
