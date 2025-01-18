@@ -34,7 +34,7 @@ Environment variables are required for the project. You can generate example `.e
 This option is great for most cases:
 
 ```bash
-make create-env
+./script.sh create-env
 ```
 
 #### **Option 2: Generate Example `.env` Templates**
@@ -42,7 +42,7 @@ make create-env
 If you have other projects running and need custom ports, use this option:
 
 ```bash
-make create-env-example
+./script.sh create-env-example
 ```
 
 You will need to customize the following files:
@@ -58,7 +58,7 @@ You will need to customize the following files:
 Install all required Node.js packages for both the frontend and backend:
 
 ```bash
-make install
+./script.sh install
 ```
 
 ---
@@ -68,7 +68,7 @@ make install
 This command will start the application, including a database running in a Docker container and some pre-generated data:
 
 ```bash
-make start
+./script.sh start
 ```
 
 ---
