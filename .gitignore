@@ -14,9 +14,6 @@ node_modules
 dist
 /dist-ssr
 
-# Lockfiles
-pnpm-lock.yaml
-
 # Environment variables
 .env
 .env.local

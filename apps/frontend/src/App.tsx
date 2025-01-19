@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   AppShell,
   Badge,
@@ -13,22 +13,22 @@ import {
   Text,
   ThemeIcon,
   rem,
-} from "@mantine/core";
-import { useDebouncedValue } from "@mantine/hooks";
+} from '@mantine/core';
+import { useDebouncedValue } from '@mantine/hooks';
 import {
   IconFlagFilled,
   IconMoonStars,
   IconSearch,
   IconSun,
-} from "@tabler/icons-react";
-import SideBar from "./components/SideBar/SideBar";
-import TaskList from "./components/TaskList/TaskList";
-import { Task } from "./components/Task/Task.types";
-import { Project } from "./components/Project/Project.types";
-import { Section } from "./components/SideBar/SideBar.types";
-import useApi from "./hooks/useApi";
-import { openSpotlight, Spotlight } from "@mantine/spotlight";
-import { getFlagColor } from "../lib/taskUtils";
+} from '@tabler/icons-react';
+import SideBar from './components/SideBar/SideBar';
+import TaskList from './components/TaskList/TaskList';
+import { Task } from './components/Task/Task.types';
+import { Project } from './components/Project/Project.types';
+import { Section } from './components/SideBar/SideBar.types';
+import useApi from './hooks/useApi';
+import { openSpotlight, Spotlight } from '@mantine/spotlight';
+import { getFlagColor } from '../lib/taskUtils';
 
 interface User {
   id: string;
@@ -38,15 +38,15 @@ interface User {
 }
 
 const App: React.FC = () => {
-  const [colorScheme, setColorScheme] = useState<"dark" | "light">("dark");
+  const [colorScheme, setColorScheme] = useState<'dark' | 'light'>('dark');
   const [sidebarOpened, setSidebarOpened] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [projects, setProjects] = useState<Project[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [actions, setActions] = useState<any[]>([]);
   const [selectedSection, setSelectedSection] = useState<Section>({
-    type: "section",
-    value: "All",
+    type: 'section',
+    value: 'All',
   });
   const [user, setUser] = useState<User | null>(null);
   const [debouncedIsMobile] = useDebouncedValue(isMobile, 200);
@@ -62,13 +62,13 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
     const fetchUser = async () => {
-      const fetchedUser = await fetchData<User>("users");
+      const fetchedUser = await fetchData<User>('users');
       if (fetchedUser) {
         setUser(fetchedUser);
         fetchUserData(fetchedUser.id);
@@ -80,7 +80,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (user?.id) {
-      handleSearch("");
+      handleSearch('');
     }
   }, [user?.id]);
 
@@ -98,7 +98,7 @@ const App: React.FC = () => {
     const filteredTasks = await fetchFilteredTasks<Task[]>(
       user.id,
       section,
-      projectId
+      projectId,
     );
     if (filteredTasks) {
       setTasks(filteredTasks);
@@ -106,19 +106,18 @@ const App: React.FC = () => {
   };
 
   const handleSectionChange = (section: Section) => {
-
-    if (section.type === "section") {
+    if (section.type === 'section') {
       getFilteredTasks(section.value);
-    } else if (section.type === "project") {
+    } else if (section.type === 'project') {
       getFilteredTasks(undefined, section.value.id);
     }
   };
 
   const toggleColorScheme = () => {
-    setColorScheme((prev) => (prev === "dark" ? "light" : "dark"));
+    setColorScheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
-  const handleAddTask = async (task: Omit<Task, "id" | "userId">) => {
+  const handleAddTask = async (task: Omit<Task, 'id' | 'userId'>) => {
     const userId = user?.id;
     const newTask = await postData<Task>(`users/${userId}/tasks`, {
       ...task,
@@ -129,18 +128,18 @@ const App: React.FC = () => {
 
   const handleEditTask = async (updatedTask: Partial<Task>) => {
     if (!user?.id) {
-      console.error("User ID is undefined");
+      console.error('User ID is undefined');
       return;
     }
 
     const payload = { ...updatedTask };
     const editedTask = await patchData<Task>(
       `users/${user.id}/tasks/${updatedTask.id}`,
-      payload
+      payload,
     );
     if (editedTask) {
       setTasks((prev) =>
-        prev.map((task) => (task.id === updatedTask.id ? editedTask : task))
+        prev.map((task) => (task.id === updatedTask.id ? editedTask : task)),
       );
     }
   };
@@ -155,35 +154,35 @@ const App: React.FC = () => {
   const handleAddProject = async (
     name: string,
     emoji?: string,
-    color?: string
+    color?: string,
   ) => {
     const userId = user?.id;
     const projectData = { name, emoji, color, userId };
 
     const project = await postData<Project>(
       `users/${userId}/projects`,
-      projectData
+      projectData,
     );
     if (project) setProjects((prev) => [...prev, project]);
   };
 
   const handleEditProject = async (updatedProject: Partial<Project>) => {
     if (!user?.id) {
-      console.error("User ID is undefined");
+      console.error('User ID is undefined');
       return;
     }
 
     const payload = { ...updatedProject };
     const editedProject = await patchData<Project>(
       `users/${user.id}/projects/${updatedProject.id}`,
-      payload
+      payload,
     );
 
     if (editedProject) {
       setProjects((prev) =>
         prev.map((project) =>
-          project.id === updatedProject.id ? editedProject : project
-        )
+          project.id === updatedProject.id ? editedProject : project,
+        ),
       );
     }
   };
@@ -194,10 +193,10 @@ const App: React.FC = () => {
     if (await deleteData(`users/${userId}/projects/${projectId}`)) {
       setProjects((prev) => prev.filter((project) => project.id !== projectId));
       if (
-        selectedSection.type === "project" &&
+        selectedSection.type === 'project' &&
         selectedSection.value.id === projectId
       ) {
-        setSelectedSection({ type: "section", value: "All" });
+        setSelectedSection({ type: 'section', value: 'All' });
       }
     }
   };
@@ -219,7 +218,7 @@ const App: React.FC = () => {
     if (searchResults) {
       setActions([
         {
-          group: "Projects",
+          group: 'Projects',
           actions: searchResults.projects.map((project) => ({
             id: project.id,
             label: project.name,
@@ -236,11 +235,11 @@ const App: React.FC = () => {
           })),
         },
         {
-          group: "Tasks",
+          group: 'Tasks',
           actions: searchResults.tasks.map((task) => ({
             id: task.id,
             label: task.title,
-            description: task.description || "",
+            description: task.description || '',
             leftSection: (
               <ThemeIcon
                 color={getFlagColor(task.priority) as MantineColor}
@@ -261,8 +260,8 @@ const App: React.FC = () => {
       <AppShell
         header={{ height: 60 }}
         navbar={{
-          width: "22rem",
-          breakpoint: "sm",
+          width: '22rem',
+          breakpoint: 'sm',
           collapsed: { mobile: !debouncedIsMobile || !sidebarOpened },
         }}
       >
@@ -280,7 +279,7 @@ const App: React.FC = () => {
                   opened={sidebarOpened}
                   onClick={() => setSidebarOpened((prev) => !prev)}
                   size="sm"
-                  color={colorScheme === "dark" ? "white" : "black"}
+                  color={colorScheme === 'dark' ? 'white' : 'black'}
                 />
                 <Button
                   leftSection={
@@ -316,10 +315,10 @@ const App: React.FC = () => {
                 }
                 rightSection={
                   <Badge
-                    color={colorScheme === "dark" ? "dark" : ""}
+                    color={colorScheme === 'dark' ? 'dark' : ''}
                     size="md"
                     variant="light"
-                    c={colorScheme === "dark" ? "white" : ""}
+                    c={colorScheme === 'dark' ? 'white' : ''}
                   >
                     ⌘ + K
                   </Badge>
@@ -332,7 +331,7 @@ const App: React.FC = () => {
               </Button>
             )}
             <Switch
-              checked={colorScheme === "dark"}
+              checked={colorScheme === 'dark'}
               size="md"
               color="dark.4"
               onChange={toggleColorScheme}
@@ -384,7 +383,7 @@ const App: React.FC = () => {
                   stroke={1.5}
                 />
               ),
-              placeholder: "Search...",
+              placeholder: 'Search...',
             }}
           />
         </AppShell.Main>

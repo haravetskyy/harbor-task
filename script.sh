@@ -1,11 +1,11 @@
 set -e
 
 create_env() {
-  echo "VITE_API_URL=http://localhost:3000" > ./frontend/.env
+  echo "VITE_API_URL=http://localhost:3000" > ./apps/frontend/.env
 
-  echo "DATABASE_URL=\"postgresql://harbor_admin:123@localhost:5434/harbor_db?schema=public\"" > ./backend/.env
-  echo "CORS_ORIGIN=http://localhost:5173" >> ./backend/.env
-  echo "PORT=3000" >> ./backend/.env
+  echo "DATABASE_URL=\"postgresql://harbor_admin:123@localhost:5434/harbor_db?schema=public\"" > ./apps/backend/.env
+  echo "CORS_ORIGIN=http://localhost:5173" >> ./apps/backend/.env
+  echo "PORT=3000" >> ./apps/backend/.env
 
   echo "DB_USER=harbor_admin" > ./.env
   echo "DB_PASSWORD=123" >> ./.env
@@ -15,11 +15,11 @@ create_env() {
 }
 
 create_env_example() {
-  echo "VITE_API_URL=http://localhost:your-backend-port" > ./frontend/.env.example
+  echo "VITE_API_URL=http://localhost:your-backend-port" > ./apps/frontend/.env.example
 
-  echo "DATABASE_URL=\"postgresql://your-admin-name:your-password@localhost:your-db-dev-port/your-db-name\"" > ./backend/.env.example
-  echo "CORS_ORIGIN=http://localhost:your-frontend-port" >> ./backend/.env.example
-  echo "PORT=your-port" >> ./backend/.env.example
+  echo "DATABASE_URL=\"postgresql://your-admin-name:your-password@localhost:your-db-dev-port/your-db-name\"" > ./apps/backend/.env.example
+  echo "CORS_ORIGIN=http://localhost:your-apps/frontend-port" >> ./apps/backend/.env.example
+  echo "PORT=your-port" >> ./apps/backend/.env.example
 
   echo "DB_USER=your-admin-name" > ./.env.example
   echo "DB_PASSWORD=your-password" >> ./.env.example
@@ -28,38 +28,38 @@ create_env_example() {
   echo "DB_TEST_PORTS=your-db-test-port" >> ./.env.example
 }
 
-install() {
-  (cd ./backend && pnpm install)
-  (cd ./frontend && pnpm install)
-}
+# install() {
+#   (cd ./backend && pnpm install)
+#   (cd ./apps/frontend && pnpm install)
+# }
 
-backend_db_up() {
-  (cd backend && pnpm db:dev:up)
-}
+# backend_db_up() {
+#   (cd backend && pnpm db:dev:up)
+# }
 
-backend_db_migrate() {
-  (cd backend && pnpm prisma:dev:deploy)
-}
+# backend_db_migrate() {
+#   (cd backend && pnpm prisma:dev:deploy)
+# }
 
-generate_prisma_client() {
-  (cd ./backend && pnpm prisma generate)
-}
+# generate_prisma_client() {
+#   (cd backend && pnpm prisma generate)
+# }
 
-backend_seed() {
-  (cd backend && pnpm data:seed)
-}
+# backend_seed() {
+#   (cd backend && pnpm data:seed)
+# }
 
-backend_delete() {
-  (cd backend && pnpm data:delete)
-}
+# backend_delete() {
+#   (cd backend && pnpm data:delete)
+# }
 
-backend_start() {
-  (cd backend && pnpm start:dev)
-}
+# backend_start() {
+#   (cd backend && pnpm start:dev)
+# }
 
-frontend_start() {
-  (cd frontend && pnpm dev)
-}
+# apps/frontend_start() {
+#   (cd apps/frontend && pnpm dev)
+# }
 
 start() {
   backend_db_up

@@ -1,11 +1,12 @@
 {
-  "name": "harbor-task-backend",
+  "name": "@apps/backend",
   "version": "0.0.1",
   "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "prisma:generate": "prisma generate",
     "data:seed": "ts-node scripts/seed.ts",
     "data:delete": "ts-node scripts/clearData.ts",
     "prisma:dev:deploy": "prisma migrate deploy",
@@ -49,7 +50,8 @@
     "prisma": "^6.2.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "shared": "^0.2.0"
   },
   "devDependencies": {
     "@nestjs/schematics": "^8.0.0",

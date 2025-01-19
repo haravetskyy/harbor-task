@@ -10,6 +10,10 @@
   ],
   "compilerOptions": {
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "baseUrl": "./",
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@shared/*": ["../../libs/shared/*"]
+    }
   }
 }

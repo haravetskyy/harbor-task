@@ -1,6 +1,6 @@
 # **Harbor Task**
 
-A full-stack project consisting of a **frontend** (Vite + React), a **backend** (Nest.js), and a **PostgreSQL** database.
+A full-stack project consisting of a **apps/frontend** (Vite + React), a **backend** (Nest.js), and a **PostgreSQL** database.
 
 ---
 
@@ -47,7 +47,7 @@ If you have other projects running and need custom ports, use this option:
 
 You will need to customize the following files:
 
-- `frontend/.env`
+- `apps/frontend/.env`
 - `backend/.env`
 - `root/.env`
 
@@ -55,7 +55,7 @@ You will need to customize the following files:
 
 ### **3. Install Dependencies**
 
-Install all required Node.js packages for both the frontend and backend:
+Install all required Node.js packages for both the apps/frontend and backend:
 
 ```bash
 ./script.sh install
@@ -75,7 +75,7 @@ This command will start the application, including a database running in a Docke
 
 ### **5. Access the Application**
 
-- **Frontend**: [http://localhost:5173](http://localhost:5173)
+- **apps/frontend**: [http://localhost:5173](http://localhost:5173)
 - **Backend API**: [http://localhost:3000](http://localhost:3000)
 
 > **Note**: These ports are correct if you generated the Ready-to-Use `.env` files. If you generated `.env.example` files, you will need to provide your own ports.
