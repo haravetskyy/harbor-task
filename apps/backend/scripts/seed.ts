@@ -2,9 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-function generateRandomDescription(
-  length: number,
-): string {
+function generateRandomDescription(length: number): string {
   const words = [
     'implement',
     'design',
@@ -31,15 +29,9 @@ function generateRandomDescription(
   ];
   const result = [];
   while (result.join(' ').length < length) {
-    result.push(
-      words[
-        Math.floor(Math.random() * words.length)
-      ],
-    );
+    result.push(words[Math.floor(Math.random() * words.length)]);
   }
-  return (
-    result.join(' ').slice(0, length).trim() + '.'
-  );
+  return result.join(' ').slice(0, length).trim() + '.';
 }
 
 async function main() {
@@ -50,9 +42,7 @@ async function main() {
       avatarUrl: 'https://example.com/avatar.jpg',
     },
   });
-  console.log(
-    `Created user: ${user.firstName} ${user.lastName}`,
-  );
+  console.log(`Created user: ${user.firstName} ${user.lastName}`);
 
   const projectNames = [
     'Website Redesign',
@@ -62,91 +52,47 @@ async function main() {
     'E-commerce Integration',
   ];
 
-  const projects = await Promise.all(
+  await Promise.all(
     projectNames
       .slice(0, Math.floor(Math.random() * 2) + 3)
       .map(async (name, index) => {
-        const project =
-          await prisma.projects.create({
-            data: {
-              name,
-              emoji: [
-                '🌐',
-                '📈',
-                '📱',
-                '📊',
-                '🛒',
-              ][index],
-              color: [
-                '#FF5733',
-                '#33FF57',
-                '#3357FF',
-                '#F3FF33',
-                '#FF33A6',
-              ][index],
-              userId: user.id,
-            },
-          });
-        console.log(
-          `Created project: ${project.name}`,
-        );
+        const project = await prisma.projects.create({
+          data: {
+            name,
+            emoji: ['🌐', '📈', '📱', '📊', '🛒'][index],
+            color: ['#FF5733', '#33FF57', '#3357FF', '#F3FF33', '#FF33A6'][
+              index
+            ],
+            userId: user.id,
+          },
+        });
+        console.log(`Created project: ${project.name}`);
 
-        const taskCount =
-          Math.floor(Math.random() * 6) + 5;
+        const taskCount = Math.floor(Math.random() * 6) + 5;
         const tasks = await Promise.all(
-          Array.from({ length: taskCount }).map(
-            async (_, taskIndex) => {
-              const descriptionLength =
-                Math.floor(
-                  Math.random() * (200 - 35 + 1),
-                ) + 35;
-              const task =
-                await prisma.tasks.create({
-                  data: {
-                    title: `${
-                      [
-                        'Implement',
-                        'Design',
-                        'Fix',
-                        'Test',
-                        'Analyze',
-                      ][
-                        Math.floor(
-                          Math.random() * 5,
-                        )
-                      ]
-                    } ${project.name} feature ${
-                      taskIndex + 1
-                    }`,
-                    description:
-                      generateRandomDescription(
-                        descriptionLength,
-                      ),
-                    deadline: new Date(
-                      Date.now() +
-                        taskIndex *
-                          1000 *
-                          60 *
-                          60 *
-                          24,
-                    ),
-                    progress: Math.floor(
-                      Math.random() * 101,
-                    ),
-                    priority:
-                      Math.floor(
-                        Math.random() * 5,
-                      ) + 1,
-                    projectId: project.id,
-                    userId: user.id,
-                  },
-                });
-              console.log(
-                `  Created task: ${task.title}`,
-              );
-              return task;
-            },
-          ),
+          Array.from({ length: taskCount }).map(async (_, taskIndex) => {
+            const descriptionLength =
+              Math.floor(Math.random() * (200 - 35 + 1)) + 35;
+            const task = await prisma.tasks.create({
+              data: {
+                title: `${
+                  ['Implement', 'Design', 'Fix', 'Test', 'Analyze'][
+                    Math.floor(Math.random() * 5)
+                  ]
+                } ${project.name} feature ${taskIndex + 1}`,
+                description: generateRandomDescription(descriptionLength),
+                deadline: new Date(
+                  Date.now() + taskIndex * 1000 * 60 * 60 * 24,
+                ),
+                progress: Math.floor(Math.random() * 101),
+                priority: Math.floor(Math.random() * 5) + 1,
+                projectId: project.id,
+                userId: user.id,
+              },
+            });
+            console.log(`  Created task: ${task.title}`);
+            return task;
+          }),
         );
         return { project, tasks };
       }),

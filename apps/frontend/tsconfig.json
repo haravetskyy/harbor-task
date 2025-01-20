@@ -1,5 +1,5 @@
 {
-  "files": [],
+  "extends": "../../tsconfig.base.json",
   "references": [
     {
       "path": "./tsconfig.app.json"
@@ -9,11 +9,10 @@
     }
   ],
   "compilerOptions": {
-    "esModuleInterop": true,
-    "baseUrl": "./",
-    "allowSyntheticDefaultImports": true,
-    "paths": {
-      "@shared/*": ["../../libs/shared/*"]
-    }
-  }
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "types": ["vite/client"]
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }

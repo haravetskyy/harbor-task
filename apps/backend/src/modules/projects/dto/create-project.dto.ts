@@ -3,7 +3,6 @@ import {
   IsHexColor,
   IsNotEmpty,
   MaxLength,
-  Matches,
   IsUUID,
 } from 'class-validator';
 

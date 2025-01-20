@@ -4,13 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "pnpm run -r start:dev",
+    "start:dev": "pnpm run -r --parallel --stream start:dev",
     "install": "pnpm run -r install",
     "db:dev:up": "pnpm --filter @apps/backend db:dev:up",
     "prisma:dev:deploy": "pnpm --filter @apps/backend prisma:dev:deploy",
     "prisma:generate": "pnpm --filter @apps/backend prisma:generate",
-    "data:seed": "pnpm --filter @apps/backend data:seed",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "data:seed": "pnpm --filter @apps/backend data:seed"
   },
   "keywords": [],
   "author": "",

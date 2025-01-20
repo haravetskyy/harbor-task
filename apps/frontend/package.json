@@ -1,10 +1,10 @@
 {
-  "name": "@apps/frontend",
+  "name": "@harbor/frontend",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start:dev": "vite",
+    "start:dev": "echo 'Starting frontend...' && vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -30,6 +30,8 @@
     "@tiptap/pm": "^2.11.2",
     "@tiptap/react": "^2.11.2",
     "@tiptap/starter-kit": "^2.11.2",
+    "@harbor-task/eslint-config": "workspace:^",
+    "@harbor-task/prettier-config": "workspace:^",
     "dayjs": "^1.11.13",
     "embla-carousel-react": "^7.1.0",
     "react": "^18.3.1",

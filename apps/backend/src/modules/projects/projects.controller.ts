@@ -13,12 +13,11 @@ import {
 import { ProjectService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { NotFoundError } from 'rxjs';
 
 @Controller('users/:userId/projects')
 export class ProjectController {
-  constructor(
-    private readonly projectService: ProjectService,
-  ) {}
+  constructor(private readonly projectService: ProjectService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -27,12 +26,8 @@ export class ProjectController {
     routeUserId: string,
     @Body() createProjectDto: CreateProjectDto,
   ) {
-    const userId =
-      routeUserId || createProjectDto.userId;
-    return this.projectService.create(
-      userId,
-      createProjectDto,
-    );
+    const userId = routeUserId || createProjectDto.userId;
+    return this.projectService.create(userId, createProjectDto);
   }
 
   @Get()
@@ -51,10 +46,10 @@ export class ProjectController {
     userId: string,
     @Param('id', new ParseUUIDPipe()) id: string,
   ) {
-    return this.projectService.findOne(
-      userId,
-      id,
-    );
+    if (!userId) {
+      throw NotFoundError;
+    }
+    return this.projectService.findOne(userId, id);
   }
 
   @Patch(':id')
@@ -65,10 +60,11 @@ export class ProjectController {
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updateProjectDto: UpdateProjectDto,
   ) {
-    return this.projectService.update(
-      id,
-      updateProjectDto,
-    );
+    if (!userId) {
+      throw NotFoundError;
+    }
+
+    return this.projectService.update(id, updateProjectDto);
   }
 
   @Delete(':id')
@@ -78,6 +74,9 @@ export class ProjectController {
     userId: string,
     @Param('id', new ParseUUIDPipe()) id: string,
   ) {
+    if (!userId) {
+      throw NotFoundError;
+    }
     await this.projectService.remove(id);
   }
 }

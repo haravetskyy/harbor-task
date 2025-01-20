@@ -1,0 +1,1 @@
+export default "@harbor-task/prettier-config";
