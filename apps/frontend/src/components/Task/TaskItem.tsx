@@ -26,7 +26,7 @@ interface TaskProps {
   isLast: boolean;
 }
 
-const TaskInstance: React.FC<TaskProps> = ({ task, project, onEdit, onDelete, isLast }) => {
+const TaskItem: React.FC<TaskProps> = ({ task, project, onEdit, onDelete, isLast }) => {
   const [mounted, setMounted] = useState(true);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -136,4 +136,4 @@ const TaskInstance: React.FC<TaskProps> = ({ task, project, onEdit, onDelete, is
   );
 };
 
-export default TaskInstance;
+export default TaskItem;

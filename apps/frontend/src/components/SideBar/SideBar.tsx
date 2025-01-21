@@ -18,7 +18,7 @@ import {
   IconPlus,
 } from "@tabler/icons-react";
 import ProjectForm from "../ProjectForm/ProjectForm";
-import ProjectInstance from "../Project/ProjectInstance";
+import ProjectItem from "../Project/ProjectItem";
 import { Project, Section } from "@harbor-task/models";
 import getInitials from "../../../lib/getInitials";
 
@@ -104,7 +104,7 @@ const SideBar: React.FC<SideBarProps> = ({
 
       <NavLink label="Projects" defaultOpened>
         {projects.map((project) => (
-          <ProjectInstance
+          <ProjectItem
             key={project.id}
             project={project}
             onEdit={() => toggleModal(true, project)}

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Container, Group, List, Modal, Space, Title } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import TaskForm from "../TaskForm/TaskForm";
-import TaskInstance from "../Task/TaskInstance";
+import TaskItem from "../Task/TaskItem";
 import { Project, Section, Task } from "@harbor-task/models";
 
 export interface TaskListProps {
@@ -60,7 +60,7 @@ const TaskList: React.FC<TaskListProps> = ({
         {tasks.map((task, index) => {
           const project = projects.find((proj) => proj.id === task.projectId);
           return (
-            <TaskInstance
+            <TaskItem
               key={task.id}
               task={task}
               project={project}

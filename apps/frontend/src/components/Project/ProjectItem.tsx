@@ -21,7 +21,7 @@ interface ProjectProps {
   onClick?: (project: Project) => void;
 }
 
-const ProjectInstance: React.FC<ProjectProps> = ({ project, onEdit, onDelete, onClick }) => {
+const ProjectItem: React.FC<ProjectProps> = ({ project, onEdit, onDelete, onClick }) => {
   const theme = useMantineTheme();
   const textRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(true);
@@ -105,4 +105,4 @@ const ProjectInstance: React.FC<ProjectProps> = ({ project, onEdit, onDelete, on
   );
 };
 
-export default ProjectInstance;
+export default ProjectItem;
