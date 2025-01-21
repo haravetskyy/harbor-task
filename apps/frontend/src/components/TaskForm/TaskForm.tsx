@@ -1,32 +1,25 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Group,
-  NumberInput,
-  Select,
-  Textarea,
-  TextInput,
-  Text,
-} from "@mantine/core";
+import { Button, Group, NumberInput, Select, Textarea, TextInput, Text } from "@mantine/core";
 import { DateTimePicker } from "@mantine/dates";
-import { TaskFormProps } from "./TaskForm.types";
-import { Task } from "../Task/Task.types";
+import {
+  MAX_TASK_DESCRIPTION_LENGTH,
+  MAX_TASK_TITLE_LENGTH,
+  Project,
+  Task,
+} from "@harbor-task/models";
 
-const MAX_TITLE_LENGTH = 100;
-const MAX_DESCRIPTION_LENGTH = 250;
+export interface TaskFormProps {
+  initialTask?: Task | null;
+  onSave: (task: Task) => void;
+  onClose: () => void;
+  projects: Project[];
+}
 
-const TaskForm: React.FC<TaskFormProps> = ({
-  initialTask,
-  projects,
-  onSave,
-  onClose,
-}) => {
+const TaskForm: React.FC<TaskFormProps> = ({ initialTask, projects, onSave, onClose }) => {
   const [title, setTitle] = useState(initialTask?.title || "");
-  const [description, setDescription] = useState(
-    initialTask?.description || ""
-  );
+  const [description, setDescription] = useState(initialTask?.description || "");
   const [deadline, setDeadline] = useState(
-    initialTask?.deadline ? new Date(initialTask.deadline) : new Date()
+    initialTask?.deadline ? new Date(initialTask.deadline) : new Date(),
   );
   const [priority, setPriority] = useState(initialTask?.priority || 1);
   const [progress, setProgress] = useState(initialTask?.progress || 0);
@@ -47,20 +40,15 @@ const TaskForm: React.FC<TaskFormProps> = ({
     onClose();
   };
 
-  const titleLengthExceeded = title.length > MAX_TITLE_LENGTH;
-  const descriptionLengthExceeded = description.length > MAX_DESCRIPTION_LENGTH;
+  const titleLengthExceeded = title.length > MAX_TASK_TITLE_LENGTH;
+  const descriptionLengthExceeded = description.length > MAX_TASK_DESCRIPTION_LENGTH;
 
   return (
     <>
-      <TextInput
-        label="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        required
-      />
+      <TextInput label="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
       <Group justify="start" className="w-full">
         <Text size="sm" c={titleLengthExceeded ? "red" : "dimmed"}>
-          {title.length}/{MAX_TITLE_LENGTH}
+          {title.length}/{MAX_TASK_TITLE_LENGTH}
         </Text>
       </Group>
       <Textarea
@@ -73,21 +61,11 @@ const TaskForm: React.FC<TaskFormProps> = ({
       />
       <Group justify="start" className="w-full">
         <Text size="sm" c={descriptionLengthExceeded ? "red" : "dimmed"}>
-          {description.length}/{MAX_DESCRIPTION_LENGTH}
+          {description.length}/{MAX_TASK_DESCRIPTION_LENGTH}
         </Text>
       </Group>
-      <DateTimePicker
-        label="Deadline"
-        value={deadline}
-        onChange={setDeadline}
-      />
-      <NumberInput
-        label="Priority"
-        value={priority}
-        onChange={setPriority}
-        min={1}
-        max={4}
-      />
+      <DateTimePicker label="Deadline" value={deadline} onChange={setDeadline} />
+      <NumberInput label="Priority" value={priority} onChange={setPriority} min={1} max={4} />
       <NumberInput
         label="Progress"
         suffix="%"
@@ -118,8 +96,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
         mt="sm"
         onClick={handleSave}
         disabled={!title || titleLengthExceeded || descriptionLengthExceeded}
-        fullWidth
-      >
+        fullWidth>
         Save
       </Button>
     </>

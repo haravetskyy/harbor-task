@@ -1,25 +1,17 @@
 import React, { useState } from "react";
-import {
-  Button,
-  ColorInput,
-  Group,
-  Select,
-  TextInput,
-  Text,
-} from "@mantine/core";
-import { ProjectFormProps } from "./ProjectForm.types";
+import { Button, ColorInput, Group, Select, TextInput, Text } from "@mantine/core";
 import emojiOptions from "../../../lib/emojiOptions";
 import { v4 as uuid } from "uuid";
-import { Project } from "../Project/Project.types";
+import { Project, MAX_PROJECT_NAME_LENGTH } from "@harbor-task/models";
 import colorOptions from "../../../lib/colorOptions";
 
-const MAX_NAME_LENGTH = 60;
+interface ProjectFormProps {
+  initialProject?: Project;
+  onClose: () => void;
+  onSave: (project: Project) => void;
+}
 
-const ProjectForm: React.FC<ProjectFormProps> = ({
-  initialProject,
-  onSave,
-  onClose,
-}) => {
+const ProjectForm: React.FC<ProjectFormProps> = ({ initialProject, onSave, onClose }) => {
   const [name, setName] = useState<string>(initialProject?.name || "");
   const [emoji, setEmoji] = useState<string>(initialProject?.emoji || "");
   const [color, setColor] = useState<string>(initialProject?.color || "");
@@ -36,7 +28,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
     onClose();
   };
 
-  const nameLengthExceeded = name.length > MAX_NAME_LENGTH;
+  const nameLengthExceeded = name.length > MAX_PROJECT_NAME_LENGTH;
 
   return (
     <div>
@@ -49,7 +41,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
       />
       <Group justify="start" className="w-full">
         <Text size="sm" c={nameLengthExceeded ? "red" : "dimmed"}>
-          {name.length}/{MAX_NAME_LENGTH}
+          {name.length}/{MAX_PROJECT_NAME_LENGTH}
         </Text>
       </Group>
       <Select
@@ -76,8 +68,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
         fullWidth
         mt="md"
         onClick={handleSave}
-        disabled={!name || !emoji || !color || nameLengthExceeded}
-      >
+        disabled={!name || !emoji || !color || nameLengthExceeded}>
         Save
       </Button>
     </div>

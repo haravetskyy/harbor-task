@@ -4,8 +4,10 @@
     "baseUrl": "./src",
     "paths": {
       "@/frontend/*": ["./src/*"],
-      "@/components/*": ["./src/components/*"]
-    }
+      "@/components/*": ["./src/components/*"],
+      "@/lib/*": ["./lib/*"]
+    },
+    "composite": true
   },
-  "include": ["src"]
+  "include": ["src", "lib"]
 }

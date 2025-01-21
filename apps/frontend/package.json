@@ -1,5 +1,5 @@
 {
-  "name": "@harbor/frontend",
+  "name": "@harbor-task/frontend",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -12,6 +12,9 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@fontsource/lexend-exa": "^5.1.1",
+    "@harbor-task/eslint-config": "workspace:^",
+    "@harbor-task/prettier-config": "workspace:^",
+    "@harbor-task/models": "workspace:^",
     "@mantine/carousel": "^7.15.3",
     "@mantine/charts": "^7.15.3",
     "@mantine/code-highlight": "^7.15.3",
@@ -30,18 +33,18 @@
     "@tiptap/pm": "^2.11.2",
     "@tiptap/react": "^2.11.2",
     "@tiptap/starter-kit": "^2.11.2",
-    "@harbor-task/eslint-config": "workspace:^",
-    "@harbor-task/prettier-config": "workspace:^",
     "dayjs": "^1.11.13",
     "embla-carousel-react": "^7.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "recharts": "^2.15.0",
     "shared": "^0.2.0",
-    "uuid": "^11.0.5"
+    "uuid": "^11.0.5",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
+    "@types/node": "^16.0.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",

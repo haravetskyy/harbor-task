@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Container,
-  Group,
-  List,
-  Modal,
-  Space,
-  Title,
-} from "@mantine/core";
+import { Button, Container, Group, List, Modal, Space, Title } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import TaskForm from "../TaskForm/TaskForm";
 import TaskInstance from "../Task/TaskInstance";
-import { TaskListProps } from "./TaskList.types";
-import { Task } from "../Task/Task.types";
+import { Project, Section, Task } from "@harbor-task/models";
+
+export interface TaskListProps {
+  tasks: Task[];
+  projects: Project[];
+  onAddTask: (task: Task) => void;
+  onEditTask: (task: Task) => void;
+  onDeleteTask: (id: string) => void;
+  selectedSection: Section;
+}
 
 const TaskList: React.FC<TaskListProps> = ({
   tasks,
@@ -31,9 +31,7 @@ const TaskList: React.FC<TaskListProps> = ({
   });
 
   const sectionTitle =
-    selectedSection?.type === "section"
-      ? selectedSection.value
-      : selectedSection?.value?.name;
+    selectedSection?.type === "section" ? selectedSection.value : selectedSection?.value?.name;
 
   const handleModalOpen = (task: Task | null = null) => {
     setModalState({ isOpen: true, task });
@@ -52,8 +50,7 @@ const TaskList: React.FC<TaskListProps> = ({
         <Button
           onClick={() => handleModalOpen()}
           variant="light"
-          rightSection={<IconPlus size="0.8rem" stroke={1.5} />}
-        >
+          rightSection={<IconPlus size="0.8rem" stroke={1.5} />}>
           Add task
         </Button>
       </Group>
@@ -78,8 +75,7 @@ const TaskList: React.FC<TaskListProps> = ({
       <Modal
         opened={modalState.isOpen}
         onClose={handleModalClose}
-        title={modalState.task ? "Edit Task" : "Add Task"}
-      >
+        title={modalState.task ? "Edit Task" : "Add Task"}>
         <TaskForm
           initialTask={modalState.task}
           onSave={modalState.task ? onEditTask : onAddTask}

@@ -17,10 +17,9 @@ import {
   IconHome2,
   IconPlus,
 } from "@tabler/icons-react";
-import { SideBarProps } from "./SideBar.types";
 import ProjectForm from "../ProjectForm/ProjectForm";
 import ProjectInstance from "../Project/ProjectInstance";
-import { Project } from "../Project/Project.types";
+import { Project, Section } from "@harbor-task/models";
 import getInitials from "../../../lib/getInitials";
 
 const SECTIONS = [
@@ -28,6 +27,16 @@ const SECTIONS = [
   { label: "Today", icon: <IconCalendarDot size="1rem" stroke={1.5} /> },
   { label: "Upcoming", icon: <IconGauge size="1rem" stroke={1.5} /> },
 ];
+
+type SideBarProps = {
+  userName: string;
+  userProfileImg: string;
+  projects: Project[];
+  onAddProject: (name: string, emoji: string, color: string) => void;
+  onEditProject: (project: Project) => void;
+  onDeleteProject: (projectId: string) => void;
+  onSectionChange: (section: Section) => void;
+};
 
 const SideBar: React.FC<SideBarProps> = ({
   userName,
@@ -76,11 +85,7 @@ const SideBar: React.FC<SideBarProps> = ({
           onClick={() => handleSectionClick(label)}
           leftSection={icon}
           rightSection={
-            <IconChevronRight
-              size="0.8rem"
-              stroke={1.5}
-              className="mantine-rotate-rtl"
-            />
+            <IconChevronRight size="0.8rem" stroke={1.5} className="mantine-rotate-rtl" />
           }
         />
       ))}
@@ -93,8 +98,7 @@ const SideBar: React.FC<SideBarProps> = ({
         fullWidth
         mt="xs"
         onClick={() => toggleModal(true)}
-        rightSection={<IconPlus size="0.8rem" stroke={1.5} />}
-      >
+        rightSection={<IconPlus size="0.8rem" stroke={1.5} />}>
         Add project
       </Button>
 
@@ -113,8 +117,7 @@ const SideBar: React.FC<SideBarProps> = ({
       <Modal
         opened={isModalOpen}
         onClose={() => toggleModal(false)}
-        title={projectToEdit ? "Edit Project" : "Add New Project"}
-      >
+        title={projectToEdit ? "Edit Project" : "Add New Project"}>
         <ProjectForm
           onClose={() => toggleModal(false)}
           onSave={handleProjectSave}

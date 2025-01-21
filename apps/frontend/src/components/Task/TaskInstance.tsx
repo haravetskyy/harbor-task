@@ -14,21 +14,19 @@ import {
   Transition,
 } from "@mantine/core";
 import formatDate from "../../../lib/formatDate";
-import {
-  IconCalendarDot,
-  IconFlagFilled,
-  IconPencilBolt,
-} from "@tabler/icons-react";
-import { TaskProps } from "./Task.types";
+import { IconCalendarDot, IconFlagFilled, IconPencilBolt } from "@tabler/icons-react";
 import { getBadge, getFlagColor } from "../../../lib/taskUtils";
+import { Project, Task } from "@harbor-task/models";
 
-const TaskInstance: React.FC<TaskProps> = ({
-  task,
-  project,
-  onEdit,
-  onDelete,
-  isLast,
-}) => {
+interface TaskProps {
+  task: Task;
+  project?: Project;
+  onEdit: () => void;
+  onDelete: (id: string) => void;
+  isLast: boolean;
+}
+
+const TaskInstance: React.FC<TaskProps> = ({ task, project, onEdit, onDelete, isLast }) => {
   const [mounted, setMounted] = useState(true);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -60,20 +58,14 @@ const TaskInstance: React.FC<TaskProps> = ({
   }, []);
 
   return (
-    <Transition
-      mounted={mounted}
-      transition="slide-right"
-      duration={500}
-      timingFunction="ease"
-    >
+    <Transition mounted={mounted} transition="slide-right" duration={500} timingFunction="ease">
       {(styles) => (
         <Container
           size="full"
           style={styles}
           className="group"
           p={isMobile ? 0 : 16}
-          mb={isMobile ? 12 : 0}
-        >
+          mb={isMobile ? 12 : 0}>
           <Flex direction="column" mb={12}>
             <Group align="flex-start" justify="space-between">
               <Group className="flex-1 min-w-0" align="flex-start">
@@ -88,8 +80,7 @@ const TaskInstance: React.FC<TaskProps> = ({
                   onClick={onEdit}
                   className={`transition-opacity duration-200 ${
                     isMobile ? "" : "opacity-0 group-hover:opacity-100"
-                  }`}
-                >
+                  }`}>
                   <IconPencilBolt stroke={1.5} size="1.2rem" />
                 </ActionIcon>
               </Tooltip>
@@ -103,18 +94,14 @@ const TaskInstance: React.FC<TaskProps> = ({
                 c="dimmed"
                 className="w-11/12"
                 onClick={toggleDescriptionExpansion}
-                lineClamp={isDescriptionExpanded ? undefined : 3}
-              >
+                lineClamp={isDescriptionExpanded ? undefined : 3}>
                 {description}
               </Text>
               <Group>
                 {deadline && (
                   <Flex justify="flex-start" align="center">
                     <ActionIcon color="red" variant="transparent" size="sm">
-                      <IconCalendarDot
-                        style={{ width: "100%", height: "100%" }}
-                        stroke={1}
-                      />
+                      <IconCalendarDot style={{ width: "100%", height: "100%" }} stroke={1} />
                     </ActionIcon>
                     <Space w="xs" />
                     <Text weight={100} c="red" size="xs">
@@ -127,26 +114,15 @@ const TaskInstance: React.FC<TaskProps> = ({
                 </Badge>
                 {project && (
                   <Tooltip label={`${project.name}`} position="top">
-                    <Badge
-                      color={project.color as MantineColor}
-                      variant="light"
-                      circle
-                    >
+                    <Badge color={project.color as MantineColor} variant="light" circle>
                       {project.emoji}
                     </Badge>
                   </Tooltip>
                 )}
                 {priority && (
                   <Tooltip label={`Priority level: ${priority}/4`}>
-                    <ActionIcon
-                      color={flagColor as MantineColor}
-                      variant="transparent"
-                      size="sm"
-                    >
-                      <IconFlagFilled
-                        style={{ width: "100%", height: "100%" }}
-                        stroke={1}
-                      />
+                    <ActionIcon color={flagColor as MantineColor} variant="transparent" size="sm">
+                      <IconFlagFilled style={{ width: "100%", height: "100%" }} stroke={1} />
                     </ActionIcon>
                   </Tooltip>
                 )}

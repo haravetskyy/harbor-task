@@ -1,9 +1,0 @@
-import { Task } from "../Task/Task.types";
-import { Project } from "../Project/Project.types.ts";
-
-export interface TaskFormProps {
-  initialTask?: Task | null;
-  onSave: (task: Task) => void;
-  onClose: () => void;
-  projects: Project[];
-}

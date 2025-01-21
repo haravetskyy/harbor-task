@@ -12,14 +12,16 @@ import {
 } from "@mantine/core";
 import { useResizeObserver, useMediaQuery } from "@mantine/hooks";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
-import { ProjectProps } from "./Project.types";
+import { Project } from "@harbor-task/models";
 
-const ProjectInstance: React.FC<ProjectProps> = ({
-  project,
-  onEdit,
-  onDelete,
-  onClick,
-}) => {
+interface ProjectProps {
+  project: Project;
+  onEdit?: (project: Project) => void;
+  onDelete?: (projectId: string) => void;
+  onClick?: (project: Project) => void;
+}
+
+const ProjectInstance: React.FC<ProjectProps> = ({ project, onEdit, onDelete, onClick }) => {
   const theme = useMantineTheme();
   const textRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(true);
@@ -57,38 +59,23 @@ const ProjectInstance: React.FC<ProjectProps> = ({
   };
 
   return (
-    <Transition
-      mounted={mounted}
-      transition="slide-right"
-      duration={500}
-      timingFunction="ease"
-    >
+    <Transition mounted={mounted} transition="slide-right" duration={500} timingFunction="ease">
       {(styles) => (
         <NavLink
           style={styles}
           label={
-            <Tooltip
-              label={project.name}
-              disabled={!isTruncated}
-              position="right"
-            >
+            <Tooltip label={project.name} disabled={!isTruncated} position="right">
               <Text
                 size="sm"
                 ref={textRef}
-                className="overflow-hidden whitespace-nowrap text-ellipsis"
-              >
+                className="overflow-hidden whitespace-nowrap text-ellipsis">
                 {project.name}
               </Text>
             </Tooltip>
           }
           className="group"
           leftSection={
-            <Badge
-              color={project.color as MantineColor}
-              size="lg"
-              variant="light"
-              circle
-            >
+            <Badge color={project.color as MantineColor} size="lg" variant="light" circle>
               {project.emoji}
             </Badge>
           }
@@ -98,8 +85,7 @@ const ProjectInstance: React.FC<ProjectProps> = ({
               gap="sm"
               className={`transition-opacity duration-200 ${
                 isMobile ? "" : "opacity-0 group-hover:opacity-100"
-              }`}
-            >
+              }`}>
               <Tooltip label="Edit Project">
                 <ActionIcon variant="light" onClick={handleEdit}>
                   <IconPencil size="1rem" />

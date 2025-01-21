@@ -13,6 +13,7 @@ node_modules
 # Compiled output
 dist
 /dist-ssr
+tsconfig.build.tsbuildinfo
 
 # Environment variables
 .env
