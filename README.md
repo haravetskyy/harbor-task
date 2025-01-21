@@ -1,4 +1,4 @@
-# **Harbor Task**
+# Harbor Task <img src="./apps/frontend/public/harbor-task.svg" alt="Logo" width="30" style="vertical-align: middle;" align="right">
 
 A full-stack project consisting of a **apps/frontend** (Vite + React), a **backend** (Nest.js), and a **PostgreSQL** database.
 
@@ -27,29 +27,13 @@ cd harbor-task
 
 ### **2. Configure Environment Variables**
 
-Environment variables are required for the project. You can generate example `.env` files using the `Makefile`. Two options are available:
+The project requires environment variables to function properly. To assist you, `.env.example` files are provided in the following directories:
 
-#### **Option 1: Generate Ready-to-Use `.env` Files**
+- `apps/frontend/`
+- `apps/backend/`
+- `root/`
 
-This option is great for most cases:
-
-```bash
-./script.sh create-env
-```
-
-#### **Option 2: Generate Example `.env` Templates**
-
-If you have other projects running and need custom ports, use this option:
-
-```bash
-./script.sh create-env-example
-```
-
-You will need to customize the following files:
-
-- `apps/frontend/.env`
-- `backend/.env`
-- `root/.env`
+These files serve as templates, listing all necessary variables. You need to copy them to their respective `.env` files and fill them with valid data specific to your setup.
 
 ---
 
@@ -58,24 +42,53 @@ You will need to customize the following files:
 Install all required Node.js packages for both the apps/frontend and backend:
 
 ```bash
-./script.sh install
+pnpm install
 ```
 
 ---
 
-### **4. Start the Application**
+### **4. Run All Essential Scripts**
 
-This command will start the application, including a database running in a Docker container and some pre-generated data:
+You need to execute these scripts to ensure everything works correctly.
+
+#### **4.1. Start the Development Database**
 
 ```bash
-./script.sh start
+pnpm db:dev:up
 ```
+
+This script initializes and starts the development database.
+
+#### **4.2. Apply Prisma Migrations**
+
+```bash
+pnpm prisma:dev:deploy
+```
+
+This command applies the Prisma migrations to the database.
+
+#### **4.3. Generate Prisma Client**
+
+```bash
+pnpm prisma:generate
+```
+
+This script generates the Prisma client based on the Prisma schema.
+
+#### **4.4. (Optional) Seed Data**
+
+```bash
+pnpm data:seed
+```
+
+If you want to generate some initial data, run this command.
 
 ---
 
-### **5. Access the Application**
+### **5. Start the Application**
 
-- **apps/frontend**: [http://localhost:5173](http://localhost:5173)
-- **Backend API**: [http://localhost:3000](http://localhost:3000)
+```bash
+pnpm start:dev
+```
 
-> **Note**: These ports are correct if you generated the Ready-to-Use `.env` files. If you generated `.env.example` files, you will need to provide your own ports.
+Finally, you are good to go :)
