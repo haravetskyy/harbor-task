@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Button, Container, Group, List, Modal, Space, Title } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
-import TaskForm from "../TaskForm/TaskForm";
-import TaskItem from "../Task/TaskItem";
+import TaskForm from "./TaskForm";
+import TaskItem from "./TaskItem";
 import { Project, Section, Task } from "@harbor-task/models";
 
 export interface TaskListProps {

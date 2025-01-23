@@ -13,9 +13,9 @@ import {
   Tooltip,
   Transition,
 } from "@mantine/core";
-import formatDate from "../../../lib/formatDate";
+import formatDate from "../../lib/formatDate";
 import { IconCalendarDot, IconFlagFilled, IconPencilBolt } from "@tabler/icons-react";
-import { getBadge, getFlagColor } from "../../../lib/taskUtils";
+import { getBadge, getFlagColor } from "../../lib/taskUtils";
 import { Project, Task } from "@harbor-task/models";
 
 interface TaskProps {

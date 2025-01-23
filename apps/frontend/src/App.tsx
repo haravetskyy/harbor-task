@@ -16,8 +16,8 @@ import {
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconFlagFilled, IconMoonStars, IconSearch, IconSun } from "@tabler/icons-react";
-import SideBar from "./components/SideBar/SideBar";
-import TaskList from "./components/TaskList/TaskList";
+import SideBar from "./components/SideBar";
+import TaskList from "./components/TaskList";
 import { Task, User } from "@harbor-task/models";
 import { Project } from "@harbor-task/models";
 import { Section } from "@harbor-task/models";

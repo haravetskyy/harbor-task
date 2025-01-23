@@ -17,10 +17,10 @@ import {
   IconHome2,
   IconPlus,
 } from "@tabler/icons-react";
-import ProjectForm from "../ProjectForm/ProjectForm";
-import ProjectItem from "../Project/ProjectItem";
+import ProjectForm from "./ProjectForm";
+import ProjectItem from "./ProjectItem";
 import { Project, Section } from "@harbor-task/models";
-import getInitials from "../../../lib/getInitials";
+import getInitials from "../../lib/getInitials";
 
 const SECTIONS = [
   { label: "All", icon: <IconHome2 size="1rem" stroke={1.5} /> },
