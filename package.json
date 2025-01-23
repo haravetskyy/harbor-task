@@ -6,10 +6,10 @@
   "scripts": {
     "start:dev": "pnpm run -r --parallel --stream start:dev",
     "install": "pnpm run -r install",
-    "db:dev:up": "pnpm --filter @apps/backend db:dev:up",
-    "prisma:dev:deploy": "pnpm --filter @apps/backend prisma:dev:deploy",
-    "prisma:generate": "pnpm --filter @apps/backend prisma:generate",
-    "data:seed": "pnpm --filter @apps/backend data:seed"
+    "db:dev:up": "pnpm --filter @harbor-task/backend db:dev:up",
+    "prisma:dev:deploy": "pnpm --filter @harbor-task/backend prisma:dev:deploy",
+    "prisma:generate": "pnpm --filter @harbor-task/backend prisma:generate",
+    "data:seed": "pnpm --filter @harbor-task/backend data:seed"
   },
   "keywords": [],
   "author": "",

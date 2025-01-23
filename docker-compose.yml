@@ -2,7 +2,7 @@ services:
   dev-db:
     image: postgres:latest
     ports:
-      - "${DB_DEV_PORTS}:5432"
+      - '${DB_DEV_PORTS}:5432'
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -13,7 +13,7 @@ services:
   test-db:
     image: postgres:latest
     ports:
-      - "${DB_TEST_PORTS}:5432"
+      - '${DB_TEST_PORTS}:5432'
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}

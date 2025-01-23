@@ -33,6 +33,8 @@
     "test:e2e": "dotenv -e .env.test -- jest --watch --no-cache --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@harbor-task/eslint-config": "workspace:^",
+    "@harbor-task/prettier-config": "workspace:^",
     "@nestjs/cli": "^10.4.9",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^3.3.0",
@@ -42,8 +44,6 @@
     "@nestjs/passport": "^8.1.0",
     "@nestjs/platform-express": "^8.0.0",
     "@prisma/client": "^6.2.1",
-    "@harbor-task/eslint-config": "workspace:^",
-    "@harbor-task/prettier-config": "workspace:^",
     "argon2": "^0.28.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
@@ -56,11 +56,12 @@
     "shared": "^0.2.0"
   },
   "devDependencies": {
+    "@harbor-task/prettier-config": "workspace:*",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
     "@types/express": "^4.17.13",
     "@types/jest": "27.0.2",
-    "@types/node": "^16.0.0",
+    "@types/node": "^22.10.10",
     "@types/passport-jwt": "^3.0.6",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
@@ -72,7 +73,6 @@
     "jest": "^27.2.5",
     "pactum": "^3.1.3",
     "prettier": "^2.3.2",
-    "@harbor-task/prettier-config": "workspace:*",
     "source-map-support": "^0.5.20",
     "supertest": "^6.1.3",
     "ts-jest": "^27.0.3",
