@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { Project, Task } from "@harbor-task/models";
 import {
   ActionIcon,
   Badge,
@@ -13,10 +13,10 @@ import {
   Tooltip,
   Transition,
 } from "@mantine/core";
-import formatDate from "../../lib/formatDate";
 import { IconCalendarDot, IconFlagFilled, IconPencilBolt } from "@tabler/icons-react";
+import React, { useEffect, useState } from "react";
+import formatDate from "../../lib/formatDate";
 import { getBadge, getFlagColor } from "../../lib/taskUtils";
-import { Project, Task } from "@harbor-task/models";
 
 interface TaskProps {
   task: Task;

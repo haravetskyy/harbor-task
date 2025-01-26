@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { Project } from "@harbor-task/models";
 import {
   ActionIcon,
   Badge,
@@ -10,9 +10,9 @@ import {
   Transition,
   useMantineTheme,
 } from "@mantine/core";
-import { useResizeObserver, useMediaQuery } from "@mantine/hooks";
+import { useMediaQuery, useResizeObserver } from "@mantine/hooks";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
-import { Project } from "@harbor-task/models";
+import React, { useEffect, useRef, useState } from "react";
 
 interface ProjectProps {
   project: Project;

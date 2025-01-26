@@ -19,8 +19,8 @@ import { openSpotlight, Spotlight } from "@mantine/spotlight";
 import { IconFlagFilled, IconMoonStars, IconSearch, IconSun } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
 import { getFlagColor } from "../lib/taskUtils";
-import SideBar from "./components/SideBar/SideBar";
-import TaskList from "./components/TaskList/TaskList";
+import SideBar from "./components/SideBar";
+import TaskList from "./components/TaskList";
 import useApi from "./hooks/useApi";
 
 const App: React.FC = () => {

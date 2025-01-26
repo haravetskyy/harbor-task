@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Button, Group, NumberInput, Select, Textarea, TextInput, Text } from "@mantine/core";
-import { DateTimePicker } from "@mantine/dates";
 import {
   MAX_TASK_DESCRIPTION_LENGTH,
   MAX_TASK_TITLE_LENGTH,
   Project,
   Task,
 } from "@harbor-task/models";
+import { Button, Group, NumberInput, Select, Text, Textarea, TextInput } from "@mantine/core";
+import { DateTimePicker } from "@mantine/dates";
+import React, { useState } from "react";
 
 export interface TaskFormProps {
   initialTask?: Task | null;
