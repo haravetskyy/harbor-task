@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Button, ColorInput, Group, Select, TextInput, Text } from "@mantine/core";
-import emojiOptions from "../../../lib/emojiOptions";
+import emojiOptions from "../../lib/emojiOptions";
 import { v4 as uuid } from "uuid";
 import { Project, MAX_PROJECT_NAME_LENGTH } from "@harbor-task/models";
-import colorOptions from "../../../lib/colorOptions";
+import colorOptions from "../../lib/colorOptions";
 
 interface ProjectFormProps {
   initialProject?: Project;
