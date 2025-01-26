@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { Project, Section, Task, User } from "@harbor-task/models";
 import {
   AppShell,
   Badge,
@@ -9,21 +9,19 @@ import {
   Group,
   MantineColor,
   MantineProvider,
+  rem,
   Switch,
   Text,
   ThemeIcon,
-  rem,
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
+import { openSpotlight, Spotlight } from "@mantine/spotlight";
 import { IconFlagFilled, IconMoonStars, IconSearch, IconSun } from "@tabler/icons-react";
+import React, { useEffect, useState } from "react";
+import { getFlagColor } from "../lib/taskUtils";
 import SideBar from "./components/SideBar/SideBar";
 import TaskList from "./components/TaskList/TaskList";
-import { Task, User } from "@harbor-task/models";
-import { Project } from "@harbor-task/models";
-import { Section } from "@harbor-task/models";
 import useApi from "./hooks/useApi";
-import { openSpotlight, Spotlight } from "@mantine/spotlight";
-import { getFlagColor } from "../lib/taskUtils";
 
 const App: React.FC = () => {
   const [colorScheme, setColorScheme] = useState<"dark" | "light">("dark");
@@ -129,6 +127,7 @@ const App: React.FC = () => {
     const projectData = { name, emoji, color, userId };
 
     const project = await postData<Project>(`users/${userId}/projects`, projectData);
+    console.log(await postData<Project>(`users/${userId}/projects`, projectData));
     if (project) setProjects((prev) => [...prev, project]);
   };
 

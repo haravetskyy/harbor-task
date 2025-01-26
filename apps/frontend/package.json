@@ -13,8 +13,8 @@
     "@emotion/react": "^11.14.0",
     "@fontsource/lexend-exa": "^5.1.1",
     "@harbor-task/eslint-config": "workspace:^",
-    "@harbor-task/prettier-config": "workspace:^",
     "@harbor-task/models": "workspace:^",
+    "@harbor-task/prettier-config": "workspace:^",
     "@mantine/carousel": "^7.15.3",
     "@mantine/charts": "^7.15.3",
     "@mantine/code-highlight": "^7.15.3",
@@ -40,7 +40,8 @@
     "recharts": "^2.15.0",
     "shared": "^0.2.0",
     "uuid": "^11.0.5",
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",

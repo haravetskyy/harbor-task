@@ -5,11 +5,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "outDir": "./dist",
-    "rootDir": "./src",
-    "paths": {
-      "@/backend/*": ["./src/*"],
-      "@/modules/*": ["./src/modules/*"]
-    }
+    "rootDir": "./src"
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", "test"]

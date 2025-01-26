@@ -3,9 +3,9 @@ import { z } from 'zod';
 export const MAX_PROJECT_NAME_LENGTH = 60;
 
 export const ProjectSchema = z.object({
-  id: z.string().nonempty().uuid(),
-  name: z.string().nonempty().max(MAX_PROJECT_NAME_LENGTH),
-  emoji: z.string().nonempty().max(1).emoji(),
+  id: z.string().uuid(),
+  name: z.string().max(MAX_PROJECT_NAME_LENGTH),
+  emoji: z.string().max(1).emoji(),
   color: z
     .string()
     .nonempty()
