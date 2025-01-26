@@ -35,6 +35,7 @@
   "dependencies": {
     "@harbor-task/eslint-config": "workspace:^",
     "@harbor-task/prettier-config": "workspace:^",
+    "@harbor-task/models": "workspace:^",
     "@nestjs/cli": "^10.4.9",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^3.3.0",
