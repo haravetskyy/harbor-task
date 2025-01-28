@@ -1,7 +1,6 @@
 {
   "name": "harbor-task",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start:dev": "pnpm run -r --parallel --stream start:dev",

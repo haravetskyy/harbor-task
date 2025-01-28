@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",
   "private": true,
-  "license": "UNLICENSED",
   "scripts": {
     "prisma:generate": "prisma generate",
     "data:seed": "tsx scripts/seedData.ts",
