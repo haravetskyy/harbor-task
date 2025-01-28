@@ -1,8 +1,7 @@
 {
   "name": "@harbor-task/backend",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -20,22 +19,14 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
     "start:dev": "echo 'Starting backend...' && nest start --watch",
-    "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "pretest:e2e": "pnpm db:test:restart",
-    "test:e2e": "dotenv -e .env.test -- jest --watch --no-cache --config ./test/jest-e2e.json"
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
   },
   "dependencies": {
     "@harbor-task/eslint-config": "workspace:^",
-    "@harbor-task/prettier-config": "workspace:^",
     "@harbor-task/models": "workspace:^",
+    "@harbor-task/prettier-config": "workspace:^",
     "@nestjs/cli": "^10.4.9",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^3.3.0",
@@ -47,15 +38,16 @@
     "@prisma/client": "^6.2.1",
     "argon2": "^0.28.3",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.1",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
     "prisma": "^6.2.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@abitia/zod-dto": "^0.4.0",
     "@harbor-task/prettier-config": "workspace:*",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",

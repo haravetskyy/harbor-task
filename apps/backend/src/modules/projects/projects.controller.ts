@@ -9,13 +9,15 @@ import {
   HttpCode,
   HttpStatus,
   ParseUUIDPipe,
+  UsePipes,
 } from '@nestjs/common';
 import { ProjectService } from './projects.service';
-import { CreateProjectDto } from './dto/create-project.dto';
-import { UpdateProjectDto } from './dto/update-project.dto';
+import { CreateProjectDto, EditProjectDto } from './projects.dto';
 import { NotFoundError } from 'rxjs';
+import { ZodValidationPipe } from '@abitia/zod-dto';
 
 @Controller('users/:userId/projects')
+@UsePipes(ZodValidationPipe)
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
@@ -54,17 +56,17 @@ export class ProjectController {
 
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
-  async update(
+  async edit(
     @Param('userId', new ParseUUIDPipe())
     userId: string,
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Body() updateProjectDto: UpdateProjectDto,
+    @Body() editProjectDto: EditProjectDto,
   ) {
     if (!userId) {
       throw NotFoundError;
     }
 
-    return this.projectService.update(id, updateProjectDto);
+    return this.projectService.edit(id, editProjectDto);
   }
 
   @Delete(':id')

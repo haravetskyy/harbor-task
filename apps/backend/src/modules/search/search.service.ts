@@ -1,72 +1,60 @@
-import {
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { SearchDto } from './dto/search.dto';
+import { SearchDto } from './search.dto';
 
 @Injectable()
 export class SearchService {
-  constructor(
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async search(
-    userId: string,
-    searchDto: SearchDto,
-  ) {
+  async search(userId: string, searchDto: SearchDto) {
     const { query } = searchDto;
 
     if (!query) {
-      throw new NotFoundException(
-        'Query parameter is required for searching.',
-      );
+      throw new NotFoundException('Query parameter is required for searching.');
     }
 
-    const tasks =
-      await this.prisma.tasks.findMany({
-        where: {
-          userId,
-          OR: [
-            {
-              title: {
-                contains: query,
-                mode: 'insensitive',
-              },
+    const tasks = await this.prisma.tasks.findMany({
+      where: {
+        userId,
+        OR: [
+          {
+            title: {
+              contains: query,
+              mode: 'insensitive',
             },
-            {
-              description: {
-                contains: query,
-                mode: 'insensitive',
-              },
+          },
+          {
+            description: {
+              contains: query,
+              mode: 'insensitive',
             },
-          ],
-        },
-        orderBy: {
-          deadline: 'asc',
-        },
-      });
+          },
+        ],
+      },
+      orderBy: {
+        deadline: 'asc',
+      },
+    });
 
-    const projects =
-      await this.prisma.projects.findMany({
-        where: {
-          userId,
-          OR: [
-            {
-              name: {
-                contains: query,
-                mode: 'insensitive',
-              },
+    const projects = await this.prisma.projects.findMany({
+      where: {
+        userId,
+        OR: [
+          {
+            name: {
+              contains: query,
+              mode: 'insensitive',
             },
-            {
-              emoji: {
-                contains: query,
-                mode: 'insensitive',
-              },
+          },
+          {
+            emoji: {
+              contains: query,
+              mode: 'insensitive',
             },
-          ],
-        },
-      });
+          },
+        ],
+      },
+    });
 
     return { tasks, projects };
   }

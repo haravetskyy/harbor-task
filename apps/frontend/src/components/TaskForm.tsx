@@ -26,14 +26,14 @@ const TaskForm: React.FC<TaskFormProps> = ({ initialTask, projects, onSave, onCl
   const [projectId, setProjectId] = useState(initialTask?.projectId || "");
 
   const handleSave = () => {
-    const newTask: Task = {
+    const newTask: Omit<Task, "userId"> = {
       id: initialTask?.id || Date.now().toString(),
       title: title.trim(),
       description: description.trim(),
       deadline,
       priority,
       progress,
-      projectId: projectId || null,
+      projectId: projectId || undefined,
     };
 
     onSave(newTask);

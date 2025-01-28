@@ -12,6 +12,6 @@
     "data:seed": "pnpm --filter @harbor-task/backend data:seed"
   },
   "keywords": [],
-  "author": "",
+  "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",
   "license": "ISC"
 }

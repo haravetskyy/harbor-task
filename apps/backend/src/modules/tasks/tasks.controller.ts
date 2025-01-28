@@ -12,14 +12,11 @@ import {
   Query,
 } from '@nestjs/common';
 import { TaskService } from './tasks.service';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
+import { CreateTaskDto, EditTaskDto } from './tasks.dto';
 
 @Controller('users/:userId/tasks')
 export class TaskController {
-  constructor(
-    private readonly taskService: TaskService,
-  ) {}
+  constructor(private readonly taskService: TaskService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -40,11 +37,7 @@ export class TaskController {
     @Query('section') section?: string,
     @Query('projectId') projectId?: string,
   ) {
-    return this.taskService.getFilteredTasks(
-      userId,
-      section,
-      projectId,
-    );
+    return this.taskService.getFilteredTasks(userId, section, projectId);
   }
 
   @Get()
@@ -68,17 +61,13 @@ export class TaskController {
 
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
-  async update(
+  async edit(
     @Param('userId', new ParseUUIDPipe())
     userId: string,
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Body() updateTaskDto: UpdateTaskDto,
+    @Body() editTaskDto: EditTaskDto,
   ) {
-    return this.taskService.update(
-      id,
-      userId,
-      updateTaskDto,
-    );
+    return this.taskService.edit(id, userId, editTaskDto);
   }
 
   @Delete(':id')
