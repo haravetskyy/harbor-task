@@ -112,45 +112,6 @@ const App: React.FC = () => {
     }
   };
 
-  const handleAddProject = async (name: string, emoji?: string, color?: string) => {
-    const userId = user?.id;
-    const projectData = { name, emoji, color, userId };
-
-    const project = await postData<Project>(`users/${userId}/projects`, projectData);
-    console.log(await postData<Project>(`users/${userId}/projects`, projectData));
-    if (project) setProjects((prev) => [...prev, project]);
-  };
-
-  const handleEditProject = async (updatedProject: Partial<Project>) => {
-    if (!user?.id) {
-      console.error("User ID is undefined");
-      return;
-    }
-
-    const payload = { ...updatedProject };
-    const editedProject = await patchData<Project>(
-      `users/${user.id}/projects/${updatedProject.id}`,
-      payload,
-    );
-
-    if (editedProject) {
-      setProjects((prev) =>
-        prev.map((project) => (project.id === updatedProject.id ? editedProject : project)),
-      );
-    }
-  };
-
-  const handleDeleteProject = async (projectId: string) => {
-    const userId = user?.id;
-
-    if (await deleteData(`users/${userId}/projects/${projectId}`)) {
-      setProjects((prev) => prev.filter((project) => project.id !== projectId));
-      if (selectedSection.type === "project" && selectedSection.value.id === projectId) {
-        setSelectedSection({ type: "section", value: "All" });
-      }
-    }
-  };
-
   return (
     <MantineProvider forceColorScheme={colorScheme}>
       <AppShell
@@ -229,15 +190,7 @@ const App: React.FC = () => {
 
         <AppShell.Navbar>
           <Collapse in={debouncedIsMobile ? sidebarOpened : true}>
-            <SideBar
-              userName={`${user?.firstName} ${user?.lastName}`}
-              userProfileImg={user?.avatarUrl}
-              projects={projects}
-              onAddProject={handleAddProject}
-              onEditProject={handleEditProject}
-              onDeleteProject={handleDeleteProject}
-              onSectionChange={handleSectionChange}
-            />
+            <SideBar onSectionChange={handleSectionChange} />
           </Collapse>
         </AppShell.Navbar>
 
@@ -252,7 +205,7 @@ const App: React.FC = () => {
               selectedSection={selectedSection}
             />
           </Container>
-          <Searcher userId={user?.id} />
+          <Searcher />
         </AppShell.Main>
       </AppShell>
     </MantineProvider>

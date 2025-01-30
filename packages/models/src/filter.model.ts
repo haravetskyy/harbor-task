@@ -3,6 +3,8 @@ import { ProjectSchema } from './project.model';
 
 const allowedSections = ['All', 'Today', 'Upcoming'] as const;
 
+export type AllowedSection = (typeof allowedSections)[number];
+
 const FitlerSectionSchema = z.object({
   type: z.literal('section'),
   value: z.enum(allowedSections),

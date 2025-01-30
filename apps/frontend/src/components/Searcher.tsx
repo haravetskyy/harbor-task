@@ -10,23 +10,22 @@ import { getFlagColor } from "../../lib/taskUtils";
 import { IconFlagFilled, IconSearch } from "@tabler/icons-react";
 import { useProjects } from "../hooks/useProjects";
 import { useTasks } from "../hooks/useTasks";
+import { useUser } from "../hooks/useUser";
 
 export const [searcherStore, searcherSpotlight] = createSpotlight();
 
-export const Searcher = ({ userId }: { userId: string | undefined }) => {
+export const Searcher = () => {
   const [query, setQuery] = useState("");
+  const { data: user } = useUser();
 
-  const { data: projects, isLoading: loadingProjects } = useProjects(userId, query);
-  const { data: tasks, isLoading: loadingTasks } = useTasks(userId, query);
-
-  const safeProjects = Array.isArray(projects) ? projects : [];
-  const safeTasks = Array.isArray(tasks) ? tasks : [];
+  const { data: projects } = useProjects(user?.id, query);
+  const { data: tasks } = useTasks(user?.id, query);
 
   const actions: (SpotlightActionGroupData | SpotlightActionData)[] = [
     {
       group: "Projects",
       actions:
-        safeProjects?.map((project) => ({
+        projects?.map((project) => ({
           id: project.id,
           label: project.name,
           leftSection: (
@@ -39,7 +38,7 @@ export const Searcher = ({ userId }: { userId: string | undefined }) => {
     {
       group: "Tasks",
       actions:
-        safeTasks?.map((task) => ({
+        tasks?.map((task) => ({
           id: task.id,
           label: task.title,
           description: task.description || "",
@@ -62,7 +61,6 @@ export const Searcher = ({ userId }: { userId: string | undefined }) => {
       closeOnActionTrigger
       scrollable
       highlightQuery
-      maxHeight={350}
       onQueryChange={setQuery}
       searchProps={{
         leftSection: <IconSearch style={{ width: rem(20), height: rem(20) }} stroke={1.5} />,

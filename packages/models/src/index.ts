@@ -1,7 +1,7 @@
 export type { Project } from './project.model';
 export { ProjectSchema, MAX_PROJECT_NAME_LENGTH } from './project.model';
 
-export type { Filter } from './filter.model';
+export type { Filter, AllowedSection } from './filter.model';
 export { FilterSchema } from './filter.model';
 
 export type { Task } from './task.model';

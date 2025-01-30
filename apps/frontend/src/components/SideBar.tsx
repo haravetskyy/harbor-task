@@ -1,4 +1,4 @@
-import { Project, Filter } from "@harbor-task/models";
+import { Filter, Project } from "@harbor-task/models";
 import {
   Avatar,
   Button,
@@ -19,6 +19,8 @@ import {
 } from "@tabler/icons-react";
 import React, { useState } from "react";
 import getInitials from "../../lib/getInitials";
+import { useAddProject, useDeleteProject, useEditProject, useProjects } from "../hooks/useProjects";
+import { useUser } from "../hooks/useUser";
 import ProjectForm from "./ProjectForm";
 import ProjectItem from "./ProjectItem";
 
@@ -29,51 +31,58 @@ const SECTIONS = [
 ];
 
 type SideBarProps = {
-  userName: string;
-  userProfileImg: string;
-  projects: Project[];
-  onAddProject: (name: string, emoji: string, color: string) => void;
-  onEditProject: (project: Project) => void;
-  onDeleteProject: (projectId: string) => void;
   onSectionChange: (section: Filter) => void;
 };
 
-const SideBar: React.FC<SideBarProps> = ({
-  userName,
-  userProfileImg,
-  projects,
-  onSectionChange,
-  onAddProject,
-  onEditProject,
-  onDeleteProject,
-}) => {
+const SideBar: React.FC<SideBarProps> = ({ onSectionChange }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
+  const { data: user } = useUser();
+  const { data: projects = [] } = useProjects(user?.id);
+  const addProjectMutation = useAddProject();
+  const editProjectMutation = useEditProject();
+  const deleteProjectMutation = useDeleteProject();
+
+  const userFullName = `${user?.firstName} ${user?.lastName}`;
+
+  const handleProjectSave = (project: Project) => {
+    if (projectToEdit) {
+      editProjectMutation.mutate({ userId: user?.id, project });
+    } else {
+      addProjectMutation.mutate({
+        userId: user?.id,
+        project: {
+          name: project.name,
+          emoji: project.emoji,
+          color: project.color,
+          userId: user?.id,
+        },
+      });
+    }
+    toggleModal(false);
+  };
+
+  const handleDeleteProject = (projectId: string) => {
+    deleteProjectMutation.mutate({ userId: user?.id, projectId });
+  };
 
   const toggleModal = (isOpen: boolean, project: Project | null = null) => {
     setIsModalOpen(isOpen);
     setProjectToEdit(project);
   };
 
-  const handleSectionClick = (sectionName: string) => {
+  const handleSectionClick = (sectionName: "All" | "Upcoming" | "Today") => {
     onSectionChange({ type: "section", value: sectionName });
-  };
-
-  const handleProjectSave = (project: Project) => {
-    projectToEdit
-      ? onEditProject(project)
-      : onAddProject(project.name, project.emoji, project.color);
-    toggleModal(false);
   };
 
   return (
     <Container className="w-full">
       <Flex mb="md" mt="sm" justify="space-between" align="center">
         <Group gap={16}>
-          <Avatar src={userProfileImg} alt={userName} color="initials">
-            {getInitials(userName)}
+          <Avatar src={user?.avatarUrl} alt={userFullName} color="initials">
+            {getInitials(userFullName)}
           </Avatar>
-          <Title order={6}>{userName}</Title>
+          <Title order={6}>{userFullName}</Title>
         </Group>
       </Flex>
 
@@ -108,7 +117,7 @@ const SideBar: React.FC<SideBarProps> = ({
             key={project.id}
             project={project}
             onEdit={() => toggleModal(true, project)}
-            onDelete={onDeleteProject}
+            onDelete={handleDeleteProject}
             onClick={() => onSectionChange({ type: "project", value: project })}
           />
         ))}
