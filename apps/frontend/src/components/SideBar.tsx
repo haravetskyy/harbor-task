@@ -1,4 +1,4 @@
-import { Project, Section } from "@harbor-task/models";
+import { Project, Filter } from "@harbor-task/models";
 import {
   Avatar,
   Button,
@@ -35,7 +35,7 @@ type SideBarProps = {
   onAddProject: (name: string, emoji: string, color: string) => void;
   onEditProject: (project: Project) => void;
   onDeleteProject: (projectId: string) => void;
-  onSectionChange: (section: Section) => void;
+  onSectionChange: (section: Filter) => void;
 };
 
 const SideBar: React.FC<SideBarProps> = ({

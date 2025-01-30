@@ -1,4 +1,4 @@
-import { Project, Section, Task, User } from "@harbor-task/models";
+import { Filter, Project, Task, User } from "@harbor-task/models";
 import {
   AppShell,
   Badge,
@@ -7,18 +7,15 @@ import {
   Collapse,
   Container,
   Group,
-  MantineColor,
   MantineProvider,
   rem,
   Switch,
   Text,
-  ThemeIcon,
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
-import { openSpotlight, Spotlight } from "@mantine/spotlight";
-import { IconFlagFilled, IconMoonStars, IconSearch, IconSun } from "@tabler/icons-react";
+import { IconMoonStars, IconSearch, IconSun } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
-import { getFlagColor } from "../lib/taskUtils";
+import { Searcher, searcherSpotlight } from "./components/Searcher";
 import SideBar from "./components/SideBar";
 import TaskList from "./components/TaskList";
 import useApi from "./hooks/useApi";
@@ -29,12 +26,11 @@ const App: React.FC = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [projects, setProjects] = useState<Project[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [actions, setActions] = useState<any[]>([]);
-  const [selectedSection, setSelectedSection] = useState<Section>({
+  const [selectedSection, setSelectedSection] = useState<Filter>({
     type: "section",
     value: "All",
   });
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | undefined>(undefined);
   const [debouncedIsMobile] = useDebouncedValue(isMobile, 200);
   const apiUrl = import.meta.env.VITE_API_URL;
   const { fetchData, fetchFilteredTasks, postData, patchData, deleteData, searchData } =
@@ -58,12 +54,6 @@ const App: React.FC = () => {
     fetchUser();
   }, []);
 
-  useEffect(() => {
-    if (user?.id) {
-      handleSearch("");
-    }
-  }, [user?.id]);
-
   const fetchUserData = async (userId: string) => {
     const [tasksData, projectsData] = await Promise.all([
       fetchData<Task[]>(`users/${userId}/tasks`),
@@ -81,7 +71,7 @@ const App: React.FC = () => {
     }
   };
 
-  const handleSectionChange = (section: Section) => {
+  const handleSectionChange = (section: Filter) => {
     if (section.type === "section") {
       getFilteredTasks(section.value);
     } else if (section.type === "project") {
@@ -161,54 +151,6 @@ const App: React.FC = () => {
     }
   };
 
-  const handleSearch = async (query: string) => {
-    const userId = user?.id;
-    if (!user) {
-      return;
-    }
-    const [allProjects, allTasks] = await Promise.all([
-      fetchData<Project[]>(`users/${user?.id}/projects`),
-      fetchData<Task[]>(`users/${user?.id}/tasks`),
-    ]);
-
-    const searchResults = query
-      ? await searchData<{ tasks: Task[]; projects: Project[] }>(userId, query)
-      : { tasks: allTasks || [], projects: allProjects || [] };
-
-    if (searchResults) {
-      setActions([
-        {
-          group: "Projects",
-          actions: searchResults.projects.map((project) => ({
-            id: project.id,
-            label: project.name,
-            leftSection: (
-              <Badge color={project.color as MantineColor} size="lg" variant="light" circle>
-                {project.emoji}
-              </Badge>
-            ),
-          })),
-        },
-        {
-          group: "Tasks",
-          actions: searchResults.tasks.map((task) => ({
-            id: task.id,
-            label: task.title,
-            description: task.description || "",
-            leftSection: (
-              <ThemeIcon
-                color={getFlagColor(task.priority) as MantineColor}
-                variant="transparent"
-                size="sm">
-                <IconFlagFilled stroke={1} />
-              </ThemeIcon>
-            ),
-          })),
-        },
-      ]);
-    }
-  };
-
   return (
     <MantineProvider forceColorScheme={colorScheme}>
       <AppShell
@@ -240,7 +182,7 @@ const App: React.FC = () => {
                       </Group>
                     </>
                   }
-                  onClick={() => openSpotlight()}
+                  onClick={searcherSpotlight.open}
                   justify="space-between"
                   variant="default">
                   <Group justify="space-between" className="w-full"></Group>
@@ -268,7 +210,7 @@ const App: React.FC = () => {
                     ⌘ + K
                   </Badge>
                 }
-                onClick={() => openSpotlight()}
+                onClick={searcherSpotlight.open}
                 justify="space-between"
                 variant="default">
                 <Group justify="space-between" className="w-full"></Group>
@@ -310,19 +252,7 @@ const App: React.FC = () => {
               selectedSection={selectedSection}
             />
           </Container>
-          <Spotlight
-            actions={actions}
-            shortcut="mod+k"
-            closeOnActionTrigger
-            scrollable
-            highlightQuery
-            maxHeight={350}
-            onQueryChange={handleSearch}
-            searchProps={{
-              leftSection: <IconSearch style={{ width: rem(20), height: rem(20) }} stroke={1.5} />,
-              placeholder: "Search...",
-            }}
-          />
+          <Searcher userId={user?.id} />
         </AppShell.Main>
       </AppShell>
     </MantineProvider>

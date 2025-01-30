@@ -1,4 +1,4 @@
-import { Project, Section, Task } from "@harbor-task/models";
+import { Project, Filter, Task } from "@harbor-task/models";
 import { Button, Container, Group, List, Modal, Space, Title } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import React, { useState } from "react";
@@ -11,7 +11,7 @@ export interface TaskListProps {
   onAddTask: (task: Task) => void;
   onEditTask: (task: Task) => void;
   onDeleteTask: (id: string) => void;
-  selectedSection: Section;
+  selectedSection: Filter;
 }
 
 const TaskList: React.FC<TaskListProps> = ({

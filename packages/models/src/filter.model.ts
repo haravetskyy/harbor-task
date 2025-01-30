@@ -3,19 +3,16 @@ import { ProjectSchema } from './project.model';
 
 const allowedSections = ['All', 'Today', 'Upcoming'] as const;
 
-const RegularSectionSchema = z.object({
+const FitlerSectionSchema = z.object({
   type: z.literal('section'),
   value: z.enum(allowedSections),
 });
 
-const ProjectSectionSchema = z.object({
+const FilterProjectSchema = z.object({
   type: z.literal('project'),
   value: ProjectSchema.shape.id,
 });
 
-export const SectionSchema = z.union([
-  RegularSectionSchema,
-  ProjectSectionSchema,
-]);
+export const FilterSchema = z.union([FitlerSectionSchema, FilterProjectSchema]);
 
-export type Section = z.infer<typeof SectionSchema>;
+export type Filter = z.infer<typeof FilterSchema>;

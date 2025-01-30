@@ -7,4 +7,7 @@ export default defineConfig({
   optimizeDeps: {
     include: ["@harbor-task/models"],
   },
+  build: {
+    sourcemap: false,
+  },
 });
