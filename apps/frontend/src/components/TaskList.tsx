@@ -1,18 +1,15 @@
-import { Project, Filter, Task } from "@harbor-task/models";
+import { Task } from "@harbor-task/models";
 import { Button, Container, Group, List, Modal, Space, Title } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import React, { useState } from "react";
-import TaskForm from "./TaskForm";
-import TaskItem from "./TaskItem";
+import { useProjects } from "../hooks/useProjects";
 import { useAddTask, useDeleteTask, useEditTask, useTasks } from "../hooks/useTasks";
 import { useUser } from "../hooks/useUser";
-import { useProjects } from "../hooks/useProjects";
+import { useFilter } from "./FilterContext";
+import TaskForm from "./TaskForm";
+import TaskItem from "./TaskItem";
 
-export interface TaskListProps {
-  selectedSection: Filter;
-}
-
-const TaskList: React.FC<TaskListProps> = ({ selectedSection }) => {
+const TaskList: React.FC = () => {
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     task: Task | null;
@@ -21,15 +18,19 @@ const TaskList: React.FC<TaskListProps> = ({ selectedSection }) => {
     task: null,
   });
 
+  const { selectedFilter } = useFilter();
   const { data: user } = useUser();
   const { data: projects = [] } = useProjects(user?.id);
-  const { data: tasks = [] } = useTasks(user?.id);
+  const { data: tasks = [] } = useTasks(user?.id, selectedFilter.value);
+
+  const filterValue =
+    selectedFilter.type === "project"
+      ? projects.find((project) => project.id === selectedFilter.value)?.name || "Unknown Project"
+      : selectedFilter.value;
+
   const addTaskMutation = useAddTask();
   const editTaskMutation = useEditTask();
   const deleteTaskMutation = useDeleteTask();
-
-  const sectionTitle =
-    selectedSection?.type === "section" ? selectedSection.value : selectedSection?.value?.name;
 
   const handleModalOpen = (task: Task | null = null) => {
     setModalState({ isOpen: true, task });
@@ -58,7 +59,7 @@ const TaskList: React.FC<TaskListProps> = ({ selectedSection }) => {
     <Container size="full" className="pt-4 md:pt-16">
       <Group>
         <Title order={3} size="h2" mr={24}>
-          {sectionTitle}
+          {filterValue}
         </Title>
         <Button
           onClick={() => handleModalOpen()}

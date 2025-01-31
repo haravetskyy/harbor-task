@@ -1,4 +1,4 @@
-import { Filter, Project } from "@harbor-task/models";
+import { AllowedSection, Project } from "@harbor-task/models";
 import {
   Avatar,
   Button,
@@ -21,22 +21,20 @@ import React, { useState } from "react";
 import getInitials from "../../lib/getInitials";
 import { useAddProject, useDeleteProject, useEditProject, useProjects } from "../hooks/useProjects";
 import { useUser } from "../hooks/useUser";
+import { useFilter } from "./FilterContext";
 import ProjectForm from "./ProjectForm";
 import ProjectItem from "./ProjectItem";
 
-const SECTIONS = [
+const SECTIONS: { label: AllowedSection; icon: any }[] = [
   { label: "All", icon: <IconHome2 size="1rem" stroke={1.5} /> },
   { label: "Today", icon: <IconCalendarDot size="1rem" stroke={1.5} /> },
   { label: "Upcoming", icon: <IconGauge size="1rem" stroke={1.5} /> },
 ];
 
-type SideBarProps = {
-  onSectionChange: (section: Filter) => void;
-};
-
-const SideBar: React.FC<SideBarProps> = ({ onSectionChange }) => {
+const SideBar: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
+  const { setSelectedFilter } = useFilter();
+  const [projectToEdit, setProjectToEdit] = useState<Project | undefined>(undefined);
   const { data: user } = useUser();
   const { data: projects = [] } = useProjects(user?.id);
   const addProjectMutation = useAddProject();
@@ -66,13 +64,9 @@ const SideBar: React.FC<SideBarProps> = ({ onSectionChange }) => {
     deleteProjectMutation.mutate({ userId: user?.id, projectId });
   };
 
-  const toggleModal = (isOpen: boolean, project: Project | null = null) => {
+  const toggleModal = (isOpen: boolean, project: Project | undefined = undefined) => {
     setIsModalOpen(isOpen);
     setProjectToEdit(project);
-  };
-
-  const handleSectionClick = (sectionName: "All" | "Upcoming" | "Today") => {
-    onSectionChange({ type: "section", value: sectionName });
   };
 
   return (
@@ -91,7 +85,7 @@ const SideBar: React.FC<SideBarProps> = ({ onSectionChange }) => {
           key={label}
           label={label}
           href="#"
-          onClick={() => handleSectionClick(label)}
+          onClick={() => setSelectedFilter({ type: "section", value: label })}
           leftSection={icon}
           rightSection={
             <IconChevronRight size="0.8rem" stroke={1.5} className="mantine-rotate-rtl" />
@@ -118,7 +112,7 @@ const SideBar: React.FC<SideBarProps> = ({ onSectionChange }) => {
             project={project}
             onEdit={() => toggleModal(true, project)}
             onDelete={handleDeleteProject}
-            onClick={() => onSectionChange({ type: "project", value: project })}
+            onClick={() => setSelectedFilter({ type: "project", value: project.id })}
           />
         ))}
       </NavLink>

@@ -12,19 +12,18 @@ const fetchSearchedTasks = async (userId: string, query: string): Promise<Task[]
 
 const fetchFilteredTasks = async ({
   userId,
-  section,
-  projectId,
+  filterValue,
 }: {
   userId: string;
-  section?: string;
-  projectId?: string;
+  filterValue: string;
 }): Promise<Task[]> => {
   let url = `${apiUrl}/users/${userId}/tasks`;
 
-  if (section) {
-    url += `?section=${section}`;
-  } else if (projectId) {
-    url += `?projectId=${projectId}`;
+  if (["All", "Today", "Upcoming"].includes(filterValue)) {
+    url += `?section=${filterValue}`;
+  } else {
+    console.log(filterValue);
+    url += `?projectId=${filterValue}`;
   }
 
   const response = await fetch(url);
@@ -64,20 +63,16 @@ const deleteTask = async ({ userId, taskId }: { userId: string; taskId: string }
   return { taskId };
 };
 
-export const useTasks = (
-  userId: string | undefined,
-  section?: string,
-  projectId?: string,
-  query?: string,
-) => {
+export const useTasks = (userId: string | undefined, filterValue?: string, query?: string) => {
   return useQuery({
-    queryKey: query ? ["search", "tasks", userId, query] : ["tasks", userId],
+    queryKey: query ? ["search", "tasks", userId, query] : ["tasks", userId, filterValue],
     queryFn: () =>
       query
         ? fetchSearchedTasks(userId!, query)
-        : fetchFilteredTasks({ userId: userId!, section, projectId }),
+        : fetchFilteredTasks({ userId: userId!, filterValue: filterValue! }),
     enabled: !!userId,
     staleTime: 5 * 60 * 1000,
+    retry: 1,
   });
 };
 
