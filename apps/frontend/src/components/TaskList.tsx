@@ -4,24 +4,15 @@ import { IconPlus } from "@tabler/icons-react";
 import React, { useState } from "react";
 import TaskForm from "./TaskForm";
 import TaskItem from "./TaskItem";
+import { useAddTask, useDeleteTask, useEditTask, useTasks } from "../hooks/useTasks";
+import { useUser } from "../hooks/useUser";
+import { useProjects } from "../hooks/useProjects";
 
 export interface TaskListProps {
-  tasks: Task[];
-  projects: Project[];
-  onAddTask: (task: Task) => void;
-  onEditTask: (task: Task) => void;
-  onDeleteTask: (id: string) => void;
   selectedSection: Filter;
 }
 
-const TaskList: React.FC<TaskListProps> = ({
-  tasks,
-  projects,
-  onAddTask,
-  onEditTask,
-  onDeleteTask,
-  selectedSection,
-}) => {
+const TaskList: React.FC<TaskListProps> = ({ selectedSection }) => {
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     task: Task | null;
@@ -29,6 +20,13 @@ const TaskList: React.FC<TaskListProps> = ({
     isOpen: false,
     task: null,
   });
+
+  const { data: user } = useUser();
+  const { data: projects = [] } = useProjects(user?.id);
+  const { data: tasks = [] } = useTasks(user?.id);
+  const addTaskMutation = useAddTask();
+  const editTaskMutation = useEditTask();
+  const deleteTaskMutation = useDeleteTask();
 
   const sectionTitle =
     selectedSection?.type === "section" ? selectedSection.value : selectedSection?.value?.name;
@@ -39,6 +37,21 @@ const TaskList: React.FC<TaskListProps> = ({
 
   const handleModalClose = () => {
     setModalState({ isOpen: false, task: null });
+  };
+
+  const handleAddTask = (task: Omit<Task, "id">) => {
+    if (!user?.id) return;
+    addTaskMutation.mutate({ userId: user.id, task });
+  };
+
+  const handleEditTask = (updatedTask: Partial<Task>) => {
+    if (!user?.id) return;
+    editTaskMutation.mutate({ userId: user.id, task: updatedTask });
+  };
+
+  const handleDeleteTask = (taskId: string) => {
+    if (!user?.id) return;
+    deleteTaskMutation.mutate({ userId: user.id, taskId });
   };
 
   return (
@@ -65,7 +78,7 @@ const TaskList: React.FC<TaskListProps> = ({
               task={task}
               project={project}
               onEdit={() => handleModalOpen(task)}
-              onDelete={() => onDeleteTask(task.id)}
+              onDelete={() => handleDeleteTask(task.id)}
               isLast={index === tasks.length - 1}
             />
           );
@@ -78,7 +91,7 @@ const TaskList: React.FC<TaskListProps> = ({
         title={modalState.task ? "Edit Task" : "Add Task"}>
         <TaskForm
           initialTask={modalState.task}
-          onSave={modalState.task ? onEditTask : onAddTask}
+          onSave={modalState.task ? handleEditTask : handleAddTask}
           onClose={handleModalClose}
           projects={projects}
         />

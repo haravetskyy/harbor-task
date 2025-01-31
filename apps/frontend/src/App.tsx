@@ -24,17 +24,18 @@ const App: React.FC = () => {
   const [colorScheme, setColorScheme] = useState<"dark" | "light">("dark");
   const [sidebarOpened, setSidebarOpened] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [debouncedIsMobile] = useDebouncedValue(isMobile, 200);
+
+  // const [user, setUser] = useState<User | undefined>(undefined);
+  // const [projects, setProjects] = useState<Project[]>([]);
+  // const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedSection, setSelectedSection] = useState<Filter>({
     type: "section",
     value: "All",
   });
-  const [user, setUser] = useState<User | undefined>(undefined);
-  const [debouncedIsMobile] = useDebouncedValue(isMobile, 200);
   const apiUrl = import.meta.env.VITE_API_URL;
-  const { fetchData, fetchFilteredTasks, postData, patchData, deleteData, searchData } =
-    useApi(apiUrl);
+  // const { fetchData, fetchFilteredTasks, postData, patchData, deleteData, searchData } =
+  //   useApi(apiUrl);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -42,26 +43,26 @@ const App: React.FC = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const fetchedUser = await fetchData<User>("users");
-      if (fetchedUser) {
-        setUser(fetchedUser);
-        fetchUserData(fetchedUser.id);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const fetchedUser = await fetchData<User>("users");
+  //     if (fetchedUser) {
+  //       setUser(fetchedUser);
+  //       fetchUserData(fetchedUser.id);
+  //     }
+  //   };
 
-    fetchUser();
-  }, []);
+  //   fetchUser();
+  // }, []);
 
-  const fetchUserData = async (userId: string) => {
-    const [tasksData, projectsData] = await Promise.all([
-      fetchData<Task[]>(`users/${userId}/tasks`),
-      fetchData<Project[]>(`users/${userId}/projects`),
-    ]);
-    if (tasksData) setTasks(tasksData);
-    if (projectsData) setProjects(projectsData);
-  };
+  // const fetchUserData = async (userId: string) => {
+  //   const [tasksData, projectsData] = await Promise.all([
+  //     fetchData<Task[]>(`users/${userId}/tasks`),
+  //     fetchData<Project[]>(`users/${userId}/projects`),
+  //   ]);
+  //   if (tasksData) setTasks(tasksData);
+  //   if (projectsData) setProjects(projectsData);
+  // };
 
   const getFilteredTasks = async (section?: string, projectId?: string) => {
     if (!user?.id) return;
@@ -81,35 +82,6 @@ const App: React.FC = () => {
 
   const toggleColorScheme = () => {
     setColorScheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
-
-  const handleAddTask = async (task: Omit<Task, "id" | "userId">) => {
-    const userId = user?.id;
-    const newTask = await postData<Task>(`users/${userId}/tasks`, {
-      ...task,
-      userId,
-    });
-    if (newTask) setTasks((prev) => [...prev, newTask]);
-  };
-
-  const handleEditTask = async (updatedTask: Partial<Task>) => {
-    if (!user?.id) {
-      console.error("User ID is undefined");
-      return;
-    }
-
-    const payload = { ...updatedTask };
-    const editedTask = await patchData<Task>(`users/${user.id}/tasks/${updatedTask.id}`, payload);
-    if (editedTask) {
-      setTasks((prev) => prev.map((task) => (task.id === updatedTask.id ? editedTask : task)));
-    }
-  };
-
-  const handleDeleteTask = async (id: string) => {
-    const userId = user?.id;
-    if (await deleteData(`users/${userId}/tasks/${id}`)) {
-      setTasks((prev) => prev.filter((task) => task.id !== id));
-    }
   };
 
   return (
@@ -196,14 +168,7 @@ const App: React.FC = () => {
 
         <AppShell.Main>
           <Container className="w-full md:w-3/4" p={debouncedIsMobile && 0}>
-            <TaskList
-              tasks={tasks}
-              projects={projects}
-              onAddTask={handleAddTask}
-              onEditTask={handleEditTask}
-              onDeleteTask={handleDeleteTask}
-              selectedSection={selectedSection}
-            />
+            <TaskList selectedSection={selectedSection} />
           </Container>
           <Searcher />
         </AppShell.Main>

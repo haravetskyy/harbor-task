@@ -1,13 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Task } from "@harbor-task/models";
 
 const apiUrl = import.meta.env.VITE_API_URL;
-
-const fetchTasks = async (userId: string): Promise<Task[]> => {
-  const response = await fetch(`${apiUrl}/users/${userId}/tasks`);
-  if (!response.ok) throw new Error("Failed to fetch tasks");
-  return response.json();
-};
 
 const fetchSearchedTasks = async (userId: string, query: string): Promise<Task[]> => {
   const response = await fetch(`${apiUrl}/users/${userId}/search?query=${query}`);
@@ -16,11 +10,108 @@ const fetchSearchedTasks = async (userId: string, query: string): Promise<Task[]
   return data.tasks || [];
 };
 
-export const useTasks = (userId: string | undefined, query?: string) => {
+const fetchFilteredTasks = async ({
+  userId,
+  section,
+  projectId,
+}: {
+  userId: string;
+  section?: string;
+  projectId?: string;
+}): Promise<Task[]> => {
+  let url = `${apiUrl}/users/${userId}/tasks`;
+
+  if (section) {
+    url += `?section=${section}`;
+  } else if (projectId) {
+    url += `?projectId=${projectId}`;
+  }
+
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Failed to fetch tasks");
+  return response.json();
+};
+
+const addTask = async ({ userId, task }: { userId: string; task: Omit<Task, "id"> }) => {
+  const payload = { ...task, userId };
+
+  const response = await fetch(`${apiUrl}/users/${userId}/tasks`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) throw new Error("Failed to add task");
+
+  return response.json() as Promise<Task>;
+};
+
+const editTask = async ({ userId, task }: { userId: string; task: Partial<Task> }) => {
+  const response = await fetch(`${apiUrl}/users/${userId}/tasks/${task.id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(task),
+  });
+  if (!response.ok) throw new Error("Failed to edit task");
+  return response.json();
+};
+
+const deleteTask = async ({ userId, taskId }: { userId: string; taskId: string }) => {
+  const response = await fetch(`${apiUrl}/users/${userId}/tasks/${taskId}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) throw new Error("Failed to delete task");
+  return { taskId };
+};
+
+export const useTasks = (
+  userId: string | undefined,
+  section?: string,
+  projectId?: string,
+  query?: string,
+) => {
   return useQuery({
     queryKey: query ? ["search", "tasks", userId, query] : ["tasks", userId],
-    queryFn: () => (query ? fetchSearchedTasks(userId!, query) : fetchTasks(userId!)),
+    queryFn: () =>
+      query
+        ? fetchSearchedTasks(userId!, query)
+        : fetchFilteredTasks({ userId: userId!, section, projectId }),
     enabled: !!userId,
     staleTime: 5 * 60 * 1000,
+  });
+};
+
+export const useAddTask = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ userId, task }: { userId: string; task: Omit<Task, "id"> }) => {
+      return addTask({ userId, task });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+};
+
+export const useEditTask = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<Task, Error, { userId: string; task: Partial<Task> }>({
+    mutationFn: editTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+};
+
+export const useDeleteTask = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<{ taskId: string }, Error, { userId: string; taskId: string }>({
+    mutationFn: deleteTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
   });
 };
