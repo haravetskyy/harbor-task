@@ -2,12 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "baseUrl": "./src",
-    "paths": {
-      "@/frontend/*": ["./src/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/lib/*": ["./lib/*"]
-    },
     "composite": true
   },
-  "include": ["src", "lib"]
+  "include": ["src"]
 }

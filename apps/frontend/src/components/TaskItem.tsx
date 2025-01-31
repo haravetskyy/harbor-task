@@ -1,3 +1,5 @@
+import formatDate from "@/lib/formatDate";
+import { getBadge, getFlagColor } from "@/lib/taskUtils";
 import { Project, Task } from "@harbor-task/models";
 import {
   ActionIcon,
@@ -15,8 +17,6 @@ import {
 } from "@mantine/core";
 import { IconCalendarDot, IconFlagFilled, IconPencilBolt } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
-import formatDate from "../../lib/formatDate";
-import { getBadge, getFlagColor } from "../../lib/taskUtils";
 
 interface TaskProps {
   task: Task;

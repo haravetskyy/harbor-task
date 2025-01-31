@@ -11,7 +11,13 @@
   "compilerOptions": {
     "module": "ESNext",
     "jsx": "react-jsx",
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    "baseUrl": "./src",
+    "paths": {
+      "@/hooks/*": ["hooks/*"],
+      "@/components/*": ["components/*"],
+      "@/lib/*": ["lib/*"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

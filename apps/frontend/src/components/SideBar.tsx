@@ -1,3 +1,6 @@
+import { useAddProject, useDeleteProject, useEditProject, useProjects } from "@/hooks/useProjects";
+import { useUser } from "@/hooks/useUser";
+import getInitials from "@/lib/getInitials";
 import { AllowedSection, Project } from "@harbor-task/models";
 import {
   Avatar,
@@ -18,9 +21,6 @@ import {
   IconPlus,
 } from "@tabler/icons-react";
 import React, { useState } from "react";
-import getInitials from "../../lib/getInitials";
-import { useAddProject, useDeleteProject, useEditProject, useProjects } from "../hooks/useProjects";
-import { useUser } from "../hooks/useUser";
 import { useFilter } from "./FilterContext";
 import ProjectForm from "./ProjectForm";
 import ProjectItem from "./ProjectItem";

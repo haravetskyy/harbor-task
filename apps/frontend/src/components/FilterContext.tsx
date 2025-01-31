@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, ReactNode, useMemo } from "react";
 import { Filter } from "@harbor-task/models";
+import { createContext, ReactNode, useContext, useMemo, useState } from "react";
 
 interface FilterContextType {
   selectedFilter: Filter;

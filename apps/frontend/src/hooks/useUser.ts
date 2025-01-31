@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
 import { User } from "@harbor-task/models";
+import { useQuery } from "@tanstack/react-query";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 

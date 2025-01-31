@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useProjects } from "@/hooks/useProjects";
+import { useTasks } from "@/hooks/useTasks";
+import { useUser } from "@/hooks/useUser";
+import { getFlagColor } from "@/lib/taskUtils";
 import { Badge, MantineColor, rem, ThemeIcon } from "@mantine/core";
 import {
+  createSpotlight,
   Spotlight,
   SpotlightActionData,
   SpotlightActionGroupData,
-  createSpotlight,
 } from "@mantine/spotlight";
-import { getFlagColor } from "../../lib/taskUtils";
 import { IconFlagFilled, IconSearch } from "@tabler/icons-react";
-import { useProjects } from "../hooks/useProjects";
-import { useTasks } from "../hooks/useTasks";
-import { useUser } from "../hooks/useUser";
+import { useState } from "react";
 
 export const [searcherStore, searcherSpotlight] = createSpotlight();
 
