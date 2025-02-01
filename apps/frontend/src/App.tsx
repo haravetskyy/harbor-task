@@ -1,3 +1,8 @@
+import { FilterProvider } from "@/components/FilterContext";
+import { Searcher, searcherSpotlight } from "@/components/Searcher";
+import SideBar from "@/components/SideBar";
+import TaskList from "@/components/TaskList";
+import { ThemeSwitch } from "@/components/ThemeSwitch";
 import {
   AppShell,
   Badge,
@@ -7,20 +12,13 @@ import {
   Container,
   Group,
   MantineProvider,
-  rem,
-  Switch,
   Text,
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
-import { IconMoonStars, IconSearch, IconSun } from "@tabler/icons-react";
+import { IconSearch } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
-import { FilterProvider } from "@/components/FilterContext";
-import { Searcher, searcherSpotlight } from "@/components/Searcher";
-import SideBar from "@/components/SideBar";
-import TaskList from "@/components/TaskList";
 
 const App: React.FC = () => {
-  const [colorScheme, setColorScheme] = useState<"dark" | "light">("dark");
   const [sidebarOpened, setSidebarOpened] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [debouncedIsMobile] = useDebouncedValue(isMobile, 200);
@@ -31,12 +29,8 @@ const App: React.FC = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const toggleColorScheme = () => {
-    setColorScheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
-
   return (
-    <MantineProvider forceColorScheme={colorScheme}>
+    <MantineProvider defaultColorScheme="auto">
       <FilterProvider>
         <AppShell
           header={{ height: 60 }}
@@ -53,7 +47,6 @@ const App: React.FC = () => {
                     opened={sidebarOpened}
                     onClick={() => setSidebarOpened((prev) => !prev)}
                     size="sm"
-                    color={colorScheme === "dark" ? "white" : "black"}
                   />
                   <Button
                     leftSection={
@@ -87,11 +80,7 @@ const App: React.FC = () => {
                     </>
                   }
                   rightSection={
-                    <Badge
-                      color={colorScheme === "dark" ? "dark" : ""}
-                      size="md"
-                      variant="light"
-                      c={colorScheme === "dark" ? "white" : ""}>
+                    <Badge size="md" variant="light">
                       ⌘ + K
                     </Badge>
                   }
@@ -101,14 +90,7 @@ const App: React.FC = () => {
                   <Group justify="space-between" className="w-full"></Group>
                 </Button>
               )}
-              <Switch
-                checked={colorScheme === "dark"}
-                size="md"
-                color="dark.4"
-                onChange={toggleColorScheme}
-                onLabel={<IconSun size={rem(16)} stroke={2.5} color="#ffd43b" />}
-                offLabel={<IconMoonStars size={rem(16)} stroke={2.5} color="#228be6" />}
-              />
+              <ThemeSwitch />
             </Group>
           </AppShell.Header>
 
