@@ -1,4 +1,6 @@
 import { useFilter } from "@/components/FilterContext";
+import TaskForm from "@/components/TaskForm";
+import TaskItem from "@/components/TaskItem";
 import { useProjects } from "@/hooks/useProjects";
 import { useAddTask, useDeleteTask, useEditTask, useTasks } from "@/hooks/useTasks";
 import { useUser } from "@/hooks/useUser";
@@ -6,8 +8,6 @@ import { Task } from "@harbor-task/models";
 import { Button, Container, Group, List, Modal, Space, Title } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import React, { useState } from "react";
-import TaskForm from "./TaskForm";
-import TaskItem from "./TaskItem";
 
 const TaskList: React.FC = () => {
   const [modalState, setModalState] = useState<{

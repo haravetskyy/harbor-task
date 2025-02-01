@@ -1,10 +1,10 @@
-import { Filter } from "@harbor-task/models";
+import { AllowedSection, Filter } from "@harbor-task/models";
 import { createContext, ReactNode, useContext, useMemo, useState } from "react";
 
 interface FilterContextType {
   selectedFilter: Filter;
   setSelectedFilter: (filter: Filter) => void;
-  section?: string;
+  section?: AllowedSection;
   projectId?: string;
 }
 

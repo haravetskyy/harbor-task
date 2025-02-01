@@ -1,29 +1,11 @@
-import { useAddProject, useDeleteProject, useEditProject, useProjects } from "@/hooks/useProjects";
+import { useFilter } from "@/components/FilterContext";
+import { ProjectList } from "@/components/ProjectList";
 import { useUser } from "@/hooks/useUser";
 import getInitials from "@/lib/getInitials";
-import { AllowedSection, Project } from "@harbor-task/models";
-import {
-  Avatar,
-  Button,
-  Container,
-  Divider,
-  Flex,
-  Group,
-  Modal,
-  NavLink,
-  Title,
-} from "@mantine/core";
-import {
-  IconCalendarDot,
-  IconChevronRight,
-  IconGauge,
-  IconHome2,
-  IconPlus,
-} from "@tabler/icons-react";
-import React, { useState } from "react";
-import { useFilter } from "./FilterContext";
-import ProjectForm from "./ProjectForm";
-import ProjectItem from "./ProjectItem";
+import { AllowedSection } from "@harbor-task/models";
+import { Avatar, Container, Divider, Flex, Group, NavLink, Title } from "@mantine/core";
+import { IconCalendarDot, IconChevronRight, IconGauge, IconHome2 } from "@tabler/icons-react";
+import React from "react";
 
 const SECTIONS: { label: AllowedSection; icon: any }[] = [
   { label: "All", icon: <IconHome2 size="1rem" stroke={1.5} /> },
@@ -32,42 +14,10 @@ const SECTIONS: { label: AllowedSection; icon: any }[] = [
 ];
 
 const SideBar: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { setSelectedFilter } = useFilter();
-  const [projectToEdit, setProjectToEdit] = useState<Project | undefined>(undefined);
   const { data: user } = useUser();
-  const { data: projects = [] } = useProjects(user?.id);
-  const addProjectMutation = useAddProject();
-  const editProjectMutation = useEditProject();
-  const deleteProjectMutation = useDeleteProject();
 
   const userFullName = `${user?.firstName} ${user?.lastName}`;
-
-  const handleProjectSave = (project: Project) => {
-    if (projectToEdit) {
-      editProjectMutation.mutate({ userId: user?.id, project });
-    } else {
-      addProjectMutation.mutate({
-        userId: user?.id,
-        project: {
-          name: project.name,
-          emoji: project.emoji,
-          color: project.color,
-          userId: user?.id,
-        },
-      });
-    }
-    toggleModal(false);
-  };
-
-  const handleDeleteProject = (projectId: string) => {
-    deleteProjectMutation.mutate({ userId: user?.id, projectId });
-  };
-
-  const toggleModal = (isOpen: boolean, project: Project | undefined = undefined) => {
-    setIsModalOpen(isOpen);
-    setProjectToEdit(project);
-  };
 
   return (
     <Container className="w-full">
@@ -95,38 +45,7 @@ const SideBar: React.FC = () => {
 
       <Divider mt="sm" />
 
-      <Button
-        size="sm"
-        variant="light"
-        fullWidth
-        mt="xs"
-        onClick={() => toggleModal(true)}
-        rightSection={<IconPlus size="0.8rem" stroke={1.5} />}>
-        Add project
-      </Button>
-
-      <NavLink label="Projects" defaultOpened>
-        {projects.map((project) => (
-          <ProjectItem
-            key={project.id}
-            project={project}
-            onEdit={() => toggleModal(true, project)}
-            onDelete={handleDeleteProject}
-            onClick={() => setSelectedFilter({ type: "project", value: project.id })}
-          />
-        ))}
-      </NavLink>
-
-      <Modal
-        opened={isModalOpen}
-        onClose={() => toggleModal(false)}
-        title={projectToEdit ? "Edit Project" : "Add New Project"}>
-        <ProjectForm
-          onClose={() => toggleModal(false)}
-          onSave={handleProjectSave}
-          initialProject={projectToEdit}
-        />
-      </Modal>
+      <ProjectList />
     </Container>
   );
 };

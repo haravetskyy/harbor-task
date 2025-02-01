@@ -14,10 +14,10 @@ import {
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconMoonStars, IconSearch, IconSun } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
-import { FilterProvider } from "./components/FilterContext";
-import { Searcher, searcherSpotlight } from "./components/Searcher";
-import SideBar from "./components/SideBar";
-import TaskList from "./components/TaskList";
+import { FilterProvider } from "@/components/FilterContext";
+import { Searcher, searcherSpotlight } from "@/components/Searcher";
+import SideBar from "@/components/SideBar";
+import TaskList from "@/components/TaskList";
 
 const App: React.FC = () => {
   const [colorScheme, setColorScheme] = useState<"dark" | "light">("dark");
