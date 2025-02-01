@@ -1,3 +1,4 @@
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { Project } from "@harbor-task/models";
 import {
   ActionIcon,
@@ -7,10 +8,9 @@ import {
   NavLink,
   Text,
   Tooltip,
-  Transition,
-  useMantineTheme,
+  Transition
 } from "@mantine/core";
-import { useMediaQuery, useResizeObserver } from "@mantine/hooks";
+import { useResizeObserver } from "@mantine/hooks";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -22,16 +22,12 @@ interface ProjectProps {
 }
 
 const ProjectItem: React.FC<ProjectProps> = ({ project, onEdit, onDelete, onClick }) => {
-  const theme = useMantineTheme();
   const textRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(true);
   const [isTruncated, setIsTruncated] = useState(false);
-  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm}px)`);
+  const isMobile = useIsMobile();
 
-  useResizeObserver(textRef, (entry) => {
-    const textElement = entry.target as HTMLDivElement;
-    setIsTruncated(textElement.scrollWidth > textElement.clientWidth);
-  });
+  useResizeObserver(textRef);
 
   const calculateTruncation = () => {
     if (textRef.current) {

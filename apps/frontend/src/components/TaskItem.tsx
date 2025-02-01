@@ -1,3 +1,4 @@
+import { useIsMobile } from "@/hooks/useIsMobile";
 import formatDate from "@/lib/formatDate";
 import { getBadge, getFlagColor } from "@/lib/taskUtils";
 import { Project, Task } from "@harbor-task/models";
@@ -29,15 +30,11 @@ interface TaskProps {
 const TaskItem: React.FC<TaskProps> = ({ task, project, onEdit, onDelete, isLast }) => {
   const [mounted, setMounted] = useState(true);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const isMobile = useIsMobile();
 
   const { title, deadline, progress, description, priority } = task;
   const { badgeColor, badgeText } = getBadge(progress);
   const flagColor = getFlagColor(task.priority);
-
-  const handleResize = () => {
-    setIsMobile(window.innerWidth <= 768);
-  };
 
   const handleDelete = () => {
     setMounted(false);
@@ -49,13 +46,6 @@ const TaskItem: React.FC<TaskProps> = ({ task, project, onEdit, onDelete, isLast
   const toggleDescriptionExpansion = () => {
     setIsDescriptionExpanded((prev) => !prev);
   };
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   return (
     <Transition mounted={mounted} transition="slide-right" duration={500} timingFunction="ease">
