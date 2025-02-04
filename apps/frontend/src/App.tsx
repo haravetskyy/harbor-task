@@ -1,25 +1,14 @@
 import { FilterProvider } from "@/components/FilterContext";
-import { Searcher, searcherSpotlight } from "@/components/Searcher";
+import { Searcher } from "@/components/Searcher";
 import SideBar from "@/components/SideBar";
 import TaskList from "@/components/TaskList";
-import { ThemeSwitch } from "@/components/ThemeSwitch";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import {
-  AppShell,
-  Badge,
-  Burger,
-  Button,
-  Container,
-  Group,
-  MantineProvider,
-  Text,
-} from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
-import React, { useState } from "react";
+import { TopBar } from "@/components/TopBar";
+import { AppShell, MantineProvider } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import React from "react";
 
 const App: React.FC = () => {
-  const [sidebarOpened, setSidebarOpened] = useState(false);
-  const isMobile = useIsMobile();
+  const [opened, handlers] = useDisclosure();
 
   return (
     <MantineProvider defaultColorScheme="auto">
@@ -29,41 +18,10 @@ const App: React.FC = () => {
           navbar={{
             width: "22rem",
             breakpoint: "sm",
-            collapsed: { mobile: !sidebarOpened },
+            collapsed: { mobile: !opened },
           }}>
           <AppShell.Header>
-            <Group justify="space-between" align="center" py="xs" px="md" className="h-full">
-              <Group align="center">
-                {isMobile && (
-                  <Burger
-                    opened={sidebarOpened}
-                    onClick={() => setSidebarOpened((prev) => !prev)}
-                    size="sm"
-                  />
-                )}
-                <Button
-                  leftSection={
-                    <>
-                      <Group align="center">
-                        <IconSearch size="1rem" stroke={1.5} />
-                        <Text fw={400} size="sm" c="dimmed">
-                          Search
-                        </Text>
-                      </Group>
-                    </>
-                  }
-                  rightSection={
-                    <Badge size="md" variant="light">
-                      ⌘ + K
-                    </Badge>
-                  }
-                  onClick={searcherSpotlight.open}
-                  justify="space-between"
-                  variant="default"
-                />
-              </Group>
-              <ThemeSwitch />
-            </Group>
+            <TopBar toggleSidebar={handlers.toggle} isCollapsed={!opened} />
           </AppShell.Header>
 
           <AppShell.Navbar>
@@ -71,9 +29,7 @@ const App: React.FC = () => {
           </AppShell.Navbar>
 
           <AppShell.Main>
-            <Container className="w-full md:w-3/4" p={isMobile && 0}>
-              <TaskList />
-            </Container>
+            <TaskList />
             <Searcher />
           </AppShell.Main>
         </AppShell>

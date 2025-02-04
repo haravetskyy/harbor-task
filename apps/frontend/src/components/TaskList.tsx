@@ -56,7 +56,7 @@ const TaskList: React.FC = () => {
   };
 
   return (
-    <Container size="full" className="pt-4 md:pt-16">
+    <Container size="full" className="pt-4 md:pt-16 w-full md:w-3/4">
       <Group>
         <Title order={3} size="h2" mr={24}>
           {filterValue}
