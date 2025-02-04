@@ -4,18 +4,12 @@
   "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",
   "private": true,
   "scripts": {
-    "prisma:generate": "prisma generate",
     "data:seed": "tsx scripts/seedData.ts",
     "data:delete": "tsx scripts/clearData.ts",
+    "prisma:generate": "prisma generate",
     "prisma:dev:deploy": "prisma migrate deploy",
     "db:dev:rm": "docker compose rm dev-db -s -f -v",
     "db:dev:up": "docker compose up dev-db -d",
-    "db:dev:restart": "pnpm db:dev:rm && pnpm db:dev:up && sleep 1 && pnpm prisma:dev:deploy",
-    "prisma:test:deploy": "dotenv -e .env.test -- prisma migrate deploy",
-    "db:test:rm": "docker compose rm test-db -s -f -v",
-    "db:test:up": "docker compose up test-db -d",
-    "db:test:restart": "pnpm db:test:rm && pnpm db:test:up && sleep 1 && pnpm prisma:test:deploy",
-    "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start:dev": "echo 'Starting backend...' && nest start --watch",
@@ -34,13 +28,6 @@
     "@nestjs/mapped-types": "^2.0.6",
     "@nestjs/passport": "^8.1.0",
     "@nestjs/platform-express": "^8.0.0",
-    "argon2": "^0.28.3",
-    "class-transformer": "^0.5.1",
-    "passport": "^0.5.2",
-    "passport-jwt": "^4.0.0",
-    "reflect-metadata": "^0.1.13",
-    "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
@@ -71,22 +58,5 @@
     "tsconfig-paths": "^3.10.1",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
   }
 }
