@@ -1,4 +1,3 @@
-import { useIsMobile } from "@/hooks/useIsMobile";
 import { Project } from "@harbor-task/models";
 import {
   ActionIcon,
@@ -8,36 +7,33 @@ import {
   NavLink,
   Text,
   Tooltip,
-  Transition
+  Transition,
+  useMantineColorScheme,
+  useMantineTheme,
 } from "@mantine/core";
-import { useResizeObserver } from "@mantine/hooks";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 
 interface ProjectProps {
   project: Project;
   onEdit?: (project: Project) => void;
   onDelete?: (projectId: string) => void;
   onClick?: (project: Project) => void;
+  activeItem: string;
+  setActiveItem: (id: string) => void;
 }
 
-const ProjectItem: React.FC<ProjectProps> = ({ project, onEdit, onDelete, onClick }) => {
-  const textRef = useRef<HTMLDivElement>(null);
+const ProjectItem: React.FC<ProjectProps> = ({
+  project,
+  onEdit,
+  onDelete,
+  onClick,
+  activeItem,
+  setActiveItem,
+}) => {
   const [mounted, setMounted] = useState(true);
-  const [isTruncated, setIsTruncated] = useState(false);
-  const isMobile = useIsMobile();
-
-  useResizeObserver(textRef);
-
-  const calculateTruncation = () => {
-    if (textRef.current) {
-      setIsTruncated(textRef.current.scrollWidth > textRef.current.clientWidth);
-    }
-  };
-
-  useEffect(() => {
-    calculateTruncation();
-  }, []);
+  const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
 
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -52,22 +48,28 @@ const ProjectItem: React.FC<ProjectProps> = ({ project, onEdit, onDelete, onClic
 
   const handleClick = () => {
     onClick?.(project);
+    setActiveItem(project.id);
   };
+
+  const isActive = activeItem === project.id;
+  const backgroundColor = isActive
+    ? colorScheme === "dark"
+      ? "#24394b"
+      : theme.colors.blue[0]
+    : colorScheme === "dark"
+      ? theme.colors.dark[6]
+      : theme.colors.gray[0];
 
   return (
     <Transition mounted={mounted} transition="slide-right" duration={500} timingFunction="ease">
       {(styles) => (
         <NavLink
           style={styles}
+          active={activeItem === project.id}
           label={
-            <Tooltip label={project.name} disabled={!isTruncated} position="right">
-              <Text
-                size="sm"
-                ref={textRef}
-                className="overflow-hidden whitespace-nowrap text-ellipsis">
-                {project.name}
-              </Text>
-            </Tooltip>
+            <Text className="truncate" size="sm">
+              {project.name}
+            </Text>
           }
           className="group"
           leftSection={
@@ -79,9 +81,10 @@ const ProjectItem: React.FC<ProjectProps> = ({ project, onEdit, onDelete, onClic
             <Flex
               align="center"
               gap="sm"
-              className={`transition-opacity duration-200 ${
-                isMobile ? "" : "opacity-0 group-hover:opacity-100"
-              }`}>
+              className="pl-2 absolute right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 "
+              style={{
+                backgroundColor: backgroundColor,
+              }}>
               <Tooltip label="Edit Project">
                 <ActionIcon variant="light" onClick={handleEdit}>
                   <IconPencil size="1rem" />

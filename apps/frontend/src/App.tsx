@@ -1,8 +1,8 @@
-import { FilterProvider } from "@/components/FilterContext";
-import { Searcher } from "@/components/Searcher";
-import SideBar from "@/components/SideBar";
+import FilterProvider from "@/components/FilterContext";
+import Searcher from "@/components/Searcher";
+import Sidebar from "@/components/Sidebar";
 import TaskList from "@/components/TaskList";
-import { TopBar } from "@/components/TopBar";
+import Topbar from "@/components/Topbar";
 import { AppShell, MantineProvider } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import React from "react";
@@ -21,11 +21,11 @@ const App: React.FC = () => {
             collapsed: { mobile: !opened },
           }}>
           <AppShell.Header>
-            <TopBar toggleSidebar={handlers.toggle} isCollapsed={!opened} />
+            <Topbar toggleSidebar={handlers.toggle} isCollapsed={!opened} />
           </AppShell.Header>
 
           <AppShell.Navbar>
-            <SideBar />
+            <Sidebar />
           </AppShell.Navbar>
 
           <AppShell.Main>

@@ -10,7 +10,7 @@ interface FilterContextType {
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
 
-export const FilterProvider = ({ children }: { children: ReactNode }) => {
+const FilterProvider = ({ children }: { children: ReactNode }) => {
   const [selectedFilter, setSelectedFilter] = useState<Filter>({
     type: "section",
     value: "All",
@@ -36,3 +36,5 @@ export const useFilter = () => {
   if (!context) throw new Error("useFilter must be used within FilterProvider");
   return context;
 };
+
+export default FilterProvider;

@@ -8,12 +8,18 @@ import { Button, Modal, NavLink } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { useState } from "react";
 
-export const ProjectList: React.FC = () => {
-  const { data: user } = useUser();
-  const { data: projects = [] } = useProjects(user?.id);
-  const { setSelectedFilter } = useFilter();
+interface ProjectListProps {
+  activeItem: string;
+  setActiveItem: (id: string) => void;
+}
+
+const ProjectList: React.FC<ProjectListProps> = ({ activeItem, setActiveItem }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectToEdit, setProjectToEdit] = useState<Project | undefined>(undefined);
+
+  const { setSelectedFilter } = useFilter();
+  const { data: user } = useUser();
+  const { data: projects = [] } = useProjects(user?.id);
   const deleteProjectMutation = useDeleteProject();
   const addProjectMutation = useAddProject();
   const editProjectMutation = useEditProject();
@@ -56,10 +62,12 @@ export const ProjectList: React.FC = () => {
         Add project
       </Button>
 
-      <NavLink label="Projects" defaultOpened>
+      <NavLink label="Projects" childrenOffset={0} defaultOpened>
         {projects.map((project) => (
           <ProjectItem
             key={project.id}
+            activeItem={activeItem}
+            setActiveItem={setActiveItem}
             project={project}
             onEdit={() => toggleModal(true, project)}
             onDelete={handleDeleteProject}
@@ -81,3 +89,5 @@ export const ProjectList: React.FC = () => {
     </>
   );
 };
+
+export default ProjectList;

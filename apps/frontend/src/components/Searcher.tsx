@@ -14,7 +14,7 @@ import { useState } from "react";
 
 export const [searcherStore, searcherSpotlight] = createSpotlight();
 
-export const Searcher = () => {
+const Searcher = () => {
   const [query, setQuery] = useState("");
   const { data: user } = useUser();
 
@@ -69,3 +69,5 @@ export const Searcher = () => {
     />
   );
 };
+
+export default Searcher;

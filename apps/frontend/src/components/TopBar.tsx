@@ -1,15 +1,15 @@
-import { Burger, Text, Button, Group, Badge } from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
-import { ThemeSwitch } from "@/components/ThemeSwitch";
 import { searcherSpotlight } from "@/components/Searcher";
+import ThemeSwitch from "@/components/ThemeSwitch";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { Badge, Burger, Button, Group, Text } from "@mantine/core";
+import { IconSearch } from "@tabler/icons-react";
 
-interface TopBarProps {
+interface TopbarProps {
   toggleSidebar: () => void;
   isCollapsed: boolean;
 }
 
-export const TopBar: React.FC<TopBarProps> = ({ toggleSidebar, isCollapsed }) => {
+const Topbar: React.FC<TopbarProps> = ({ toggleSidebar, isCollapsed }) => {
   const isMobile = useIsMobile();
 
   return (
@@ -43,3 +43,5 @@ export const TopBar: React.FC<TopBarProps> = ({ toggleSidebar, isCollapsed }) =>
     </Group>
   );
 };
+
+export default Topbar;
