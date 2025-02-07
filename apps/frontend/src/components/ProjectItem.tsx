@@ -1,3 +1,4 @@
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { Project } from "@harbor-task/models";
 import {
   ActionIcon,
@@ -34,6 +35,7 @@ const ProjectItem: React.FC<ProjectProps> = ({
   const [mounted, setMounted] = useState(true);
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
+  const isMobile = useIsMobile();
 
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -81,10 +83,18 @@ const ProjectItem: React.FC<ProjectProps> = ({
             <Flex
               align="center"
               gap="sm"
-              className="pl-2 absolute right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 "
-              style={{
-                backgroundColor: backgroundColor,
-              }}>
+              className={
+                isMobile
+                  ? ""
+                  : "pl-2 absolute right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              }
+              style={
+                isMobile
+                  ? {}
+                  : {
+                      backgroundColor: backgroundColor,
+                    }
+              }>
               <Tooltip label="Edit Project">
                 <ActionIcon variant="light" onClick={handleEdit}>
                   <IconPencil size="1rem" />
