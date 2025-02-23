@@ -15,7 +15,6 @@
     "@fontsource/lexend-exa": "^5.1.1",
     "@harbor-task/eslint-config": "workspace:^",
     "@harbor-task/models": "workspace:^",
-    "@harbor-task/prettier-config": "workspace:^",
     "@mantine/carousel": "^7.15.3",
     "@mantine/charts": "^7.15.3",
     "@mantine/code-highlight": "^7.15.3",
