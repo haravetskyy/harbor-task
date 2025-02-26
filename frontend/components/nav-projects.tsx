@@ -18,6 +18,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { Button } from './ui/button';
+import { IconPlus } from '@tabler/icons-react';
 
 export function NavProjects({
   projects,
@@ -32,6 +34,10 @@ export function NavProjects({
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      <Button variant="outline">
+        <IconPlus />
+        Add project
+      </Button>
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map(item => (
