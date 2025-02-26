@@ -1,6 +1,5 @@
 'use client';
 
-import { Frame, Map, PieChart } from 'lucide-react';
 import * as React from 'react';
 
 import { NavMain } from '@/components/nav-main';
@@ -19,7 +18,7 @@ const data = {
   user: {
     name: 'John Doe',
     email: 'johndoe@example.com',
-    avatar: '/avatars/shadcn.jpg',
+    avatar: 'https://avatars.githubusercontent.com/u/56477764?v=4',
   },
 
   navMain: [
@@ -48,17 +47,20 @@ const data = {
     {
       name: 'Design Engineering',
       url: '#',
-      icon: Frame,
+      icon: '🤬',
+      color: '#000000',
     },
     {
       name: 'Sales & Marketing',
       url: '#',
-      icon: PieChart,
+      icon: '🤬',
+      color: '#000000',
     },
     {
       name: 'Travel',
       url: '#',
-      icon: Map,
+      icon: '🤬',
+      color: '#000000',
     },
   ],
 };

@@ -45,7 +45,7 @@ export function Searcher() {
         <CommandInput placeholder="Type a command or search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Suggestions">
+          <CommandGroup heading="Projects">
             <CommandItem>
               <Calendar />
               <span>Calendar</span>
@@ -60,7 +60,7 @@ export function Searcher() {
             </CommandItem>
           </CommandGroup>
           <CommandSeparator />
-          <CommandGroup heading="Settings">
+          <CommandGroup heading="Tasks">
             <CommandItem>
               <User />
               <span>Profile</span>

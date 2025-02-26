@@ -159,6 +159,9 @@ importers:
       '@tabler/icons-react':
         specifier: ^3.28.1
         version: 3.28.1(react@19.0.0)
+      '@types/emoji-js':
+        specifier: ^3.5.2
+        version: 3.5.2
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -2444,6 +2447,9 @@ packages:
 
   '@types/doctrine@0.0.9':
     resolution: {integrity: sha512-eOIHzCUSH7SMfonMG1LsC2f8vxBFtho6NGBznK41R84YzPuvSBzrhEps33IsQiOW9+VL6NQ9DbjQJznk/S4uRA==}
+
+  '@types/emoji-js@3.5.2':
+    resolution: {integrity: sha512-qPR85yjSPk2UEbdjYYNHfcOjVod7DCARSrJlPcL+cwaDFwdnmOFhPyYUvP5GaW0YZEy8mU93ZjTNgsVWz1zzlg==}
 
   '@types/eslint-scope@3.7.7':
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
@@ -9018,6 +9024,8 @@ snapshots:
       '@types/ms': 2.1.0
 
   '@types/doctrine@0.0.9': {}
+
+  '@types/emoji-js@3.5.2': {}
 
   '@types/eslint-scope@3.7.7':
     dependencies:
