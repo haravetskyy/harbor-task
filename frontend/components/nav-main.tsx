@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/sidebar';
 import { type TablerIcon } from '@tabler/icons-react';
 import { ChevronRight, type LucideIcon } from 'lucide-react';
-import { Spotlight } from './spotlight';
+import { Searcher } from './searcher';
 
 export function NavMain({
   items,
@@ -31,7 +31,7 @@ export function NavMain({
   return (
     <SidebarGroup>
       <SidebarMenu>
-        <Spotlight/>
+        <Searcher />
         {items.map(item => (
           <Collapsible
             key={item.title}

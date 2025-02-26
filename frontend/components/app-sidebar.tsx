@@ -13,13 +13,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import {
-  IconCalendarEventFilled,
-  IconCalendarWeek,
-  IconHome,
-  IconSearch,
-  IconTag,
-} from '@tabler/icons-react';
+import { IconCalendarEventFilled, IconCalendarWeek, IconHome, IconTag } from '@tabler/icons-react';
 
 const data = {
   user: {
@@ -29,11 +23,6 @@ const data = {
   },
 
   navMain: [
-    {
-      title: 'Search',
-      url: '#',
-      icon: IconSearch,
-    },
     {
       title: 'All',
       url: '#',
