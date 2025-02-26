@@ -11,6 +11,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@harbor-task/models": "workspace:^",
     "@radix-ui/react-avatar": "^1.1.3",
     "@radix-ui/react-collapsible": "^1.1.3",
     "@radix-ui/react-dialog": "^1.1.6",
@@ -20,6 +21,7 @@
     "@radix-ui/react-switch": "^1.1.3",
     "@radix-ui/react-tooltip": "^1.1.8",
     "@tabler/icons-react": "^3.28.1",
+    "@tanstack/react-query": "^5.65.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",

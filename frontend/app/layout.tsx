@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
-import './globals.css';
 import { ThemeProvider } from 'next-themes';
+import './globals.css';
+import ReactQueryProvider from '../components/react-query-provider';
 
 export const metadata: Metadata = {
   title: 'Harbor Task',
@@ -15,9 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-        </ThemeProvider>
+        <ReactQueryProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+          </ThemeProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

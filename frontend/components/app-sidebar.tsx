@@ -13,10 +13,11 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 import { IconCalendarEventFilled, IconCalendarWeek, IconHome, IconTag } from '@tabler/icons-react';
+import { useUser } from '../hooks/use-user';
 
 const data = {
   user: {
-    name: 'John Doe',
+    name: 'Yuriy Haravetskyy',
     email: 'johndoe@example.com',
     avatar: 'https://avatars.githubusercontent.com/u/56477764?v=4',
   },
@@ -66,10 +67,18 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: user } = useUser();
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
-        <NavUser user={data.user} />
+        <NavUser
+          user={{
+            name: `${user?.firstName} ${user?.lastName}`,
+            email: 'johndoe@example.com',
+            avatar: 'https://avatars.githubusercontent.com/u/56477764?v=4',
+          }}
+        />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
