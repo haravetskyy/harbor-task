@@ -10,8 +10,7 @@ import {
 } from '@/components/ui/breadcrumb';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Separator } from '@radix-ui/react-separator';
-import { IconPlus } from '@tabler/icons-react';
-import { Button } from '../components/ui/button';
+import { TaskForm } from '../components/task-form';
 
 export default function Home() {
   return (
@@ -37,10 +36,7 @@ export default function Home() {
           <ThemeToggle />
         </header>
         <main className="px-4">
-          <Button variant="link" className="mr-0 mt-2 w-min group">
-            <IconPlus className="group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black rounded-[50%] transition-all duration-300 " />
-            Add task
-          </Button>
+          <TaskForm />
         </main>
       </SidebarInset>
     </SidebarProvider>
