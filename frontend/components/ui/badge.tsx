@@ -1,6 +1,7 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
+import { convertToRGBA } from '@/lib/convert-to-rgba';
 import { cn } from '@/lib/utils';
 
 const badgeVariants = cva(
@@ -26,10 +27,18 @@ const badgeVariants = cva(
 
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {}
+    VariantProps<typeof badgeVariants> {
+  color?: string;
+}
 
-function Badge({ className, variant, ...props }: BadgeProps) {
-  return <div className={cn(badgeVariants({ variant }), className)} {...props} />;
+function Badge({ className, variant, color, ...props }: BadgeProps) {
+  return (
+    <div
+      {...(color && { style: { backgroundColor: convertToRGBA(color, 0.5) } })}
+      className={cn(badgeVariants({ variant }), className)}
+      {...props}
+    />
+  );
 }
 
 export { Badge, badgeVariants };

@@ -1,7 +1,5 @@
 'use client';
 
-import * as React from 'react';
-
 import { NavMain } from '@/components/nav-main';
 import { NavProjects } from '@/components/nav-projects';
 import { NavUser } from '@/components/nav-user';
@@ -13,6 +11,7 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 import { Calendar1, CalendarDays, House, Tag } from 'lucide-react';
+import * as React from 'react';
 
 const data = {
   navMain: [
@@ -67,7 +66,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavProjects />
       </SidebarContent>
       <SidebarFooter></SidebarFooter>
       <SidebarRail />

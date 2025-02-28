@@ -1,6 +1,6 @@
 'use client';
 
-import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
 
 import {
   DropdownMenu,
@@ -17,20 +17,36 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { useProjects } from '../hooks/use-projects';
+import { useUser } from '../hooks/use-user';
 import { ProjectForm } from './project-form';
 import { Badge } from './ui/badge';
+import { Button } from './ui/button';
+import { Skeleton } from './ui/skeleton';
 
-export function NavProjects({
-  projects,
-}: {
-  projects: {
-    name: string;
-    url: string;
-    icon: string;
-    color: string;
-  }[];
-}) {
+export function NavProjects() {
   const { isMobile } = useSidebar();
+  const { data: user } = useUser();
+  const { data: projects = [], isLoading } = useProjects(user?.id);
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-2 p-2">
+        <Button variant="outline">
+          <Plus />
+          Add project
+        </Button>
+        <div className="flex flex-col gap-2 w-full p-2">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <div className="flex items-center gap-2" key={index}>
+              <Skeleton className="h-6 w-6 rounded-full" />
+              <Skeleton className="h-3 w-3/4" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -38,14 +54,14 @@ export function NavProjects({
 
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map(item => (
-          <SidebarMenuItem key={item.name}>
+        {projects.map(project => (
+          <SidebarMenuItem key={project.name}>
             <SidebarMenuButton asChild>
-              <a href={item.url}>
-                <Badge variant="circle" className={`bg-[${item.color || '#fffffff'}]`}>
-                  {item.icon}
+              <a href="#">
+                <Badge variant="circle" color={project.color}>
+                  {project.emoji}
                 </Badge>
-                <span>{item.name}</span>
+                <span>{project.name}</span>
               </a>
             </SidebarMenuButton>
             <DropdownMenu>
