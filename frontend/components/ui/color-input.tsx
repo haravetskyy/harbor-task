@@ -2,7 +2,6 @@
 
 import { Button, ButtonProps } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
 import React from 'react';
 import { HexColorPicker } from 'react-colorful';
 import { Input } from './input';
@@ -36,7 +35,7 @@ const ColorInput = ({
         <PopoverTrigger asChild disabled={disabled} onBlur={onBlur}>
           <Button
             {...props}
-            className={cn('block rounded-r-none border-r-0', className)}
+            className="block rounded-r-none border-r-0"
             name={name}
             onClick={() => {
               setOpen(true);

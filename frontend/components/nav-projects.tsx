@@ -1,12 +1,11 @@
 'use client';
 
-import { Folder, Forward, MoreHorizontal, Trash2 } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
@@ -18,6 +17,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { IconPencil, IconTrash } from '@tabler/icons-react';
 import { ProjectForm } from './project-form';
 import { Badge } from './ui/badge';
 
@@ -61,16 +61,11 @@ export function NavProjects({
                 side={isMobile ? 'bottom' : 'right'}
                 align={isMobile ? 'end' : 'start'}>
                 <DropdownMenuItem>
-                  <Folder className="text-neutral-500 dark:text-neutral-400" />
-                  <span>View Project</span>
+                  <IconPencil className="text-neutral-500 dark:text-neutral-400" />
+                  <span>Change Project</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Forward className="text-neutral-500 dark:text-neutral-400" />
-                  <span>Share Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Trash2 className="text-neutral-500 dark:text-neutral-400" />
+                  <IconTrash className="text-neutral-500 dark:text-neutral-400" />
                   <span>Delete Project</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
