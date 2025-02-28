@@ -13,15 +13,8 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 import { Calendar1, CalendarDays, House, Tag } from 'lucide-react';
-import { useUser } from '../hooks/use-user';
 
 const data = {
-  user: {
-    name: 'Yuriy Haravetskyy',
-    email: 'johndoe@example.com',
-    avatar: 'https://avatars.githubusercontent.com/u/56477764?v=4',
-  },
-
   navMain: [
     {
       title: 'All',
@@ -67,18 +60,10 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { data: user } = useUser();
-
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
-        <NavUser
-          user={{
-            name: `${user?.firstName} ${user?.lastName}`,
-            email: 'johndoe@example.com',
-            avatar: 'https://avatars.githubusercontent.com/u/56477764?v=4',
-          }}
-        />
+        <NavUser />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
