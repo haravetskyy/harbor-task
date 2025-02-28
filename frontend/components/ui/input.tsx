@@ -29,7 +29,7 @@ export interface NumberInputProps extends Omit<NumericFormatProps, 'value' | 'on
   defaultValue?: number;
   min?: number;
   max?: number;
-  value?: number; // Controlled value
+  value?: number;
   suffix?: string;
   prefix?: string;
   onValueChange?: (value: number | undefined) => void;

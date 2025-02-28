@@ -20,7 +20,7 @@ import {
 import { Label } from '@radix-ui/react-dropdown-menu';
 import { IconPlus } from '@tabler/icons-react';
 import React from 'react';
-import { ColorPicker } from './ui/color-picker';
+import { ColorInput } from './ui/color-input';
 import { Input } from './ui/input';
 
 export function ProjectForm() {
@@ -56,7 +56,7 @@ export function ProjectForm() {
         </Select>
 
         <Label>Color</Label>
-        <ColorPicker
+        <ColorInput
           onChange={value => {
             setColor(value);
           }}

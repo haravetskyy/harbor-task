@@ -1,25 +1,29 @@
 'use client';
 
-import type { ButtonProps } from '@/components/ui/button';
-import { Button } from '@/components/ui/button';
+import { Button, ButtonProps } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { useForwardedRef } from '@/lib/use-forwarded-ref';
 import { cn } from '@/lib/utils';
-import React, { forwardRef } from 'react';
+import React from 'react';
 import { HexColorPicker } from 'react-colorful';
 import { Input } from './input';
 
-interface ColorPickerProps {
+interface ColorInputProps {
   value: string;
+  ref?: React.Ref<HTMLInputElement>;
   onChange: (value: string) => void;
   onBlur?: () => void;
 }
 
-const ColorPicker = forwardRef<
-  HTMLInputElement,
-  Omit<ButtonProps, 'value' | 'onChange' | 'onBlur'> & ColorPickerProps
->(({ disabled, value, onChange, onBlur, name, className, ...props }, forwardedRef) => {
-  const ref = useForwardedRef(forwardedRef);
+const ColorInput = ({
+  disabled,
+  value,
+  onChange,
+  onBlur,
+  name,
+  className,
+  ref,
+  ...props
+}: Omit<ButtonProps, 'value' | 'onChange' | 'onBlur'> & ColorInputProps) => {
   const [open, setOpen] = React.useState(false);
 
   const parsedValue = React.useMemo(() => {
@@ -48,7 +52,6 @@ const ColorPicker = forwardRef<
           maxLength={7}
           onFocus={e => {
             setOpen(true);
-            e.preventDefault();
           }}
           onChange={e => {
             onChange(e?.currentTarget?.value);
@@ -68,7 +71,7 @@ const ColorPicker = forwardRef<
       </PopoverContent>
     </Popover>
   );
-});
-ColorPicker.displayName = 'ColorPicker';
+};
+ColorInput.displayName = 'ColorInput';
 
-export { ColorPicker };
+export { ColorInput };

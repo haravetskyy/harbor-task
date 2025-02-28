@@ -48,19 +48,19 @@ const data = {
     {
       name: 'Design Engineering',
       url: '#',
-      icon: '🤬',
+      icon: '🛠️',
       color: '#000000',
     },
     {
       name: 'Sales & Marketing',
       url: '#',
-      icon: '🤬',
+      icon: '💻',
       color: '#000000',
     },
     {
       name: 'Travel',
       url: '#',
-      icon: '🤬',
+      icon: '📷',
       color: '#000000',
     },
   ],
