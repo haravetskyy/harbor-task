@@ -10,7 +10,6 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
-import { type TablerIcon } from '@tabler/icons-react';
 import { ChevronRight, type LucideIcon } from 'lucide-react';
 import { Searcher } from './searcher';
 
@@ -20,7 +19,7 @@ export function NavMain({
   items: {
     title: string;
     url: string;
-    icon?: LucideIcon | TablerIcon;
+    icon?: LucideIcon;
     isActive?: boolean;
     items?: {
       title: string;

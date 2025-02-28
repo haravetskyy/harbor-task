@@ -12,7 +12,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { IconCalendarEventFilled, IconCalendarWeek, IconHome, IconTag } from '@tabler/icons-react';
+import { Calendar1, CalendarDays, House, Tag } from 'lucide-react';
 import { useUser } from '../hooks/use-user';
 
 const data = {
@@ -26,22 +26,22 @@ const data = {
     {
       title: 'All',
       url: '#',
-      icon: IconHome,
+      icon: House,
     },
     {
       title: 'Today',
       url: '#',
-      icon: IconCalendarEventFilled,
+      icon: Calendar1,
     },
     {
       title: 'Upcoming',
       url: '#',
-      icon: IconCalendarWeek,
+      icon: CalendarDays,
     },
     {
       title: 'Tags',
       url: '#',
-      icon: IconTag,
+      icon: Tag,
     },
   ],
   projects: [

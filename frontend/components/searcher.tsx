@@ -1,6 +1,6 @@
 'use client';
 
-import { Calculator, Calendar, CreditCard, Settings, Smile, User } from 'lucide-react';
+import { Calculator, Calendar, CreditCard, Search, Settings, Smile, User } from 'lucide-react';
 import * as React from 'react';
 
 import {
@@ -13,7 +13,6 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from '@/components/ui/command';
-import { IconSearch } from '@tabler/icons-react';
 import { Button } from './ui/button';
 
 export function Searcher() {
@@ -34,7 +33,7 @@ export function Searcher() {
   return (
     <>
       <Button onClick={() => setOpen(open => !open)} variant="outline" className="p-2">
-        <IconSearch />
+        <Search />
         Search
         <kbd className="ml-auto justify-self-end pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
           <span className="text-sm">⌘</span>K

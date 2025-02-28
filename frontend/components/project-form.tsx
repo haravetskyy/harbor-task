@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Label } from '@radix-ui/react-dropdown-menu';
-import { IconPlus } from '@tabler/icons-react';
+import { Plus } from 'lucide-react';
 import React from 'react';
 import { ColorInput } from './ui/color-input';
 import { Input } from './ui/input';
@@ -30,7 +30,7 @@ export function ProjectForm() {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline">
-          <IconPlus />
+          <Plus />
           Add project
         </Button>
       </DialogTrigger>

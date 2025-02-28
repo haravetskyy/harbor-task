@@ -10,9 +10,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@radix-ui/react-dropdown-menu';
-import { IconPlus } from '@tabler/icons-react';
 import { addDays, format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, Plus } from 'lucide-react';
 import * as React from 'react';
 import { Input, NumberInput } from './ui/input';
 import { Textarea } from './ui/textarea';
@@ -33,7 +32,7 @@ export function TaskForm() {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="link" className="mr-0 mt-2 w-min group">
-          <IconPlus className="group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black rounded-[50%] transition-all duration-300 " />
+          <Plus className="group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black rounded-[50%] transition-all duration-300 " />
           Add task
         </Button>
       </DialogTrigger>
