@@ -3,11 +3,12 @@
 import { useProjects } from '@/hooks/use-projects';
 import { useTasks } from '@/hooks/use-tasks';
 import { useUser } from '@/hooks/use-user';
-import { CalendarClock, Flag, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { CalendarClock, Flag, MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
 import { formatDate } from '../lib/format-date';
 import { useFilter } from './filter-context';
 import { TaskForm } from './task-form';
 import { Badge } from './ui/badge';
+import { Button } from './ui/button';
 import { Checkbox } from './ui/checkbox';
 import {
   DropdownMenu,
@@ -16,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { SidebarMenuAction, useSidebar } from './ui/sidebar';
+import { Skeleton } from './ui/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 const getFlagColor = (priority: number | undefined): string | undefined => {
@@ -37,14 +39,45 @@ const TaskList = () => {
   const { selectedFilter } = useFilter();
   const { data: user } = useUser();
   const { data: projects = [] } = useProjects(user?.id);
-  const { data: tasks = [] } = useTasks(user?.id, selectedFilter.value);
+  const { data: tasks = [], isLoading } = useTasks(user?.id, selectedFilter.value);
+
+  if (isLoading) {
+    return (
+      <section className="flex flex-col w-full max-w-screen-lg">
+        <Button variant="link" className="mr-0 mt-2 w-min group">
+          <Plus className="group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black rounded-[50%] transition-all duration-300 " />
+          Add task
+        </Button>
+        <div className="flex flex-col gap-4 w-full p-2">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <div className="flex flex-col gap-2" key={index}>
+              <div className="flex items-center gap-2 w-full">
+                <Skeleton className="h-5 w-5 rounded-full" />
+                <Skeleton className="h-3 w-full" />
+              </div>
+              <div className="ml-7 flex flex-col gap-2">
+                <Skeleton className="h-2 w-full" />
+                <Skeleton className="h-2 w-full" />
+              </div>
+              <div className="ml-7 flex flex-row gap-2">
+                <Skeleton className="h-4 w-10" />
+                <Skeleton className="h-4 w-6" />
+                <Skeleton className="h-4 w-4 rounded-full" />
+                <Skeleton className="h-4 w-4 rounded-full" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section className="flex flex-col  max-w-screen-lg">
+    <section className="flex flex-col max-w-screen-lg">
       <TaskForm />
 
       {tasks.map(task => {
-        const project = projects.find(proj => proj.id === task.projectId);
+        const project = projects.find(project => project.id === task.projectId);
 
         return (
           <div
