@@ -34,7 +34,7 @@ export interface BadgeProps
 function Badge({ className, variant, color, ...props }: BadgeProps) {
   return (
     <div
-      {...(color && { style: { backgroundColor: convertToRGBA(color, 0.5) } })}
+      {...(color && { style: { backgroundColor: convertToRGBA(color, 0.2) } })}
       className={cn(badgeVariants({ variant }), className)}
       {...props}
     />

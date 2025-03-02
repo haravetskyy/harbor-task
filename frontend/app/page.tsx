@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/breadcrumb';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Separator } from '@radix-ui/react-separator';
-import { TaskForm } from '../components/task-form';
+import TaskList from '../components/task-list';
 
 export default function Home() {
   return (
@@ -36,7 +36,7 @@ export default function Home() {
           <ThemeToggle />
         </header>
         <main className="px-4">
-          <TaskForm />
+          <TaskList />
         </main>
       </SidebarInset>
     </SidebarProvider>
