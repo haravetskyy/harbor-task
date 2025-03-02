@@ -73,7 +73,7 @@ const TaskList = () => {
   }
 
   return (
-    <section className="flex flex-col max-w-screen-lg">
+    <section className="flex flex-col max-w-screen-lg gap-2">
       <TaskForm />
 
       {tasks.map(task => {
@@ -81,7 +81,7 @@ const TaskList = () => {
 
         return (
           <div
-            className="p-4 flex gap-2 items-start border-gray-200 dark:border-gray-400 border-solid border-b-[1px] w-full"
+            className="p-4 flex gap-2 items-start dark:bg-neutral-900 dark:rounded-xl border-gray-200 dark:border-neutral-900 border-solid border-b-[1px] w-full"
             key={task.id}>
             <Checkbox className="rounded-[50%] mt-1" />
 
@@ -90,13 +90,13 @@ const TaskList = () => {
               <p className="text-sm text-muted-foreground line-clamp-3">{task.description}</p>
               <div className="flex flex-row items-center gap-2 text-red-400">
                 {task.deadline && (
-                  <Badge variant="outline" className="flex flex-row items-center py-1 gap-2">
+                  <Badge variant="outline" className="flex flex-row items-center py-1 gap-2 bg-background">
                     <CalendarClock size={18} />
                     <p className="text-xs">{formatDate(task.deadline)}</p>
                   </Badge>
                 )}
                 {task.progress && (
-                  <Badge variant="outline" className="py-[0.325rem]">
+                  <Badge variant="outline" className="py-[0.325rem] bg-background">
                     {task.progress}%
                   </Badge>
                 )}
