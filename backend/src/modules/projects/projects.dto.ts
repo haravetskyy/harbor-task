@@ -1,8 +1,8 @@
 import { createZodDto } from '@abitia/zod-dto';
-import { ProjectSchema } from '@harbor-task/models';
+import { projectSchema } from '@harbor-task/models';
 import { z } from 'zod';
 
-export const CreateProjectSchema = ProjectSchema.omit({ id: true }).extend({
+export const CreateProjectSchema = projectSchema.omit({ id: true }).extend({
   userId: z.string().uuid(),
 });
 

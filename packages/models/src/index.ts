@@ -1,15 +1,16 @@
+export { MAX_PROJECT_NAME_LENGTH, projectSchema } from './project.model';
 export type { Project } from './project.model';
-export { ProjectSchema, MAX_PROJECT_NAME_LENGTH } from './project.model';
 
-export type { Filter, AllowedSection } from './filter.model';
-export { FilterSchema } from './filter.model';
+export { filterSchema } from './filter.model';
+export type { AllowedSection, Filter } from './filter.model';
 
-export type { Task } from './task.model';
 export {
-  TaskSchema,
-  MAX_TASK_TITLE_LENGTH,
+  addTaskSchema,
   MAX_TASK_DESCRIPTION_LENGTH,
+  MAX_TASK_TITLE_LENGTH,
+  taskSchema,
 } from './task.model';
+export type { Task } from './task.model';
 
+export { userSchema } from './user.model';
 export type { User } from './user.model';
-export { UserSchema } from './user.model';

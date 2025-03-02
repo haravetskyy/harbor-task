@@ -1,7 +1,7 @@
 import { createZodDto } from '@abitia/zod-dto';
-import { UserSchema } from '@harbor-task/models';
+import { userSchema } from '@harbor-task/models';
 
-export const CreateUserSchema = UserSchema.omit({ id: true });
+export const CreateUserSchema = userSchema.omit({ id: true });
 
 export class CreateUserDto extends createZodDto(CreateUserSchema) {}
 

@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const MAX_PROJECT_NAME_LENGTH = 60;
 
-export const ProjectSchema = z.object({
+export const projectSchema = z.object({
   id: z.string().uuid(),
   name: z.string().max(MAX_PROJECT_NAME_LENGTH).nonempty(),
   emoji: z.string().emoji(),
@@ -14,4 +14,4 @@ export const ProjectSchema = z.object({
     }),
 });
 
-export type Project = z.infer<typeof ProjectSchema>;
+export type Project = z.infer<typeof projectSchema>;
