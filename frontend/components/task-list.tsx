@@ -1,5 +1,6 @@
 'use client';
 
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { formatDate } from '@/lib/format-date';
 import {
   DropdownMenu,
@@ -13,6 +14,20 @@ import { Badge } from './ui/badge';
 import { Checkbox } from './ui/checkbox';
 import { SidebarMenuAction, useSidebar } from './ui/sidebar';
 
+const getFlagColor = (priority: number | undefined): string | undefined => {
+  if (typeof priority === undefined) {
+    return;
+  }
+
+  const priorityColors: Record<number, string> = {
+    1: '#00c951', // green-500
+    2: '#efb100', // yellow-500
+    3: '#fd9a00', // amber-500
+    4: '#fb2c36', // red-500
+  };
+  return priority ? priorityColors[priority] : 'gray';
+};
+
 const data = [
   {
     id: '3891749827349792',
@@ -24,6 +39,7 @@ const data = [
     priority: 3,
     project: {
       id: '1a12a52f-8bf2-4724-9c3f-7f9037182d49',
+      name: 'Marketing Campaign',
       color: '#33FF57',
       emoji: '📈',
     },
@@ -34,11 +50,11 @@ const TaskList = () => {
   const { isMobile } = useSidebar();
 
   return (
-    <section className='flex flex-col gap-2'>
+    <section className="flex flex-col gap-2">
       <TaskForm />
 
       {data.map(task => (
-        <div className="p-4 flex gap-2 items-start">
+        <div className="p-4 flex gap-2 items-start" key={task.id}>
           <Checkbox className="rounded-[50%] mt-1" />
 
           <div className="flex flex-col items-start justify-start gap-1">
@@ -57,11 +73,34 @@ const TaskList = () => {
                 </Badge>
               )}
               {task.project && (
-                <Badge variant="circle" color={task.project.color}>
-                  {task.project.emoji}
-                </Badge>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Badge variant="circle" color={task.project.color}>
+                      {task.project.emoji}
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{task.project.name}</p>
+                  </TooltipContent>
+                </Tooltip>
               )}
-              <Flag className="w-5 fill-red-400" />
+
+              {task.priority && (
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Flag
+                      className="w-5"
+                      style={{
+                        fill: getFlagColor(task.priority),
+                        stroke: getFlagColor(task.priority),
+                      }}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Priority: {task.priority}/4</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
             </div>
           </div>
 

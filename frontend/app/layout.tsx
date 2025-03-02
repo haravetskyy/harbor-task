@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { ThemeProvider } from 'next-themes';
-import './globals.css';
 import ReactQueryProvider from '../components/react-query-provider';
+import { TooltipProvider } from '../components/ui/tooltip';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Harbor Task',
@@ -18,7 +19,7 @@ export default function RootLayout({
       <body className="antialiased">
         <ReactQueryProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
+            <TooltipProvider>{children}</TooltipProvider>
           </ThemeProvider>
         </ReactQueryProvider>
       </body>

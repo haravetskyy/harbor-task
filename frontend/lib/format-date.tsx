@@ -20,7 +20,7 @@ export const formatDate = (input: Date | string): string => {
   if (diffDays === 1) return 'Tomorrow';
   if (diffDays === -1) return 'Yesterday';
 
-  if (diffDays < 7) {
+  if (diffDays < 7 && diffDays > 0) {
     return formatWithOptions({ weekday: 'long' });
   }
 
