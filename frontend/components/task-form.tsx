@@ -13,7 +13,7 @@ import { Label } from '@radix-ui/react-dropdown-menu';
 import { addDays, format } from 'date-fns';
 import { CalendarIcon, Plus } from 'lucide-react';
 import * as React from 'react';
-import { Input, NumberInput } from './ui/input';
+import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 
 import { Calendar } from '@/components/ui/calendar';
@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import { NumberInput } from './ui/number-input';
 
 export function TaskForm() {
   return (

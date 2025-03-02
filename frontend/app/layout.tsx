@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { ThemeProvider } from 'next-themes';
+import FilterProvider from '../components/filter-context';
 import ReactQueryProvider from '../components/react-query-provider';
 import { TooltipProvider } from '../components/ui/tooltip';
 import './globals.css';
@@ -18,9 +19,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
         <ReactQueryProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <TooltipProvider>{children}</TooltipProvider>
-          </ThemeProvider>
+          <FilterProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <TooltipProvider>{children}</TooltipProvider>
+            </ThemeProvider>
+          </FilterProvider>
         </ReactQueryProvider>
       </body>
     </html>

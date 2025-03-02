@@ -35,7 +35,7 @@ export default function Home() {
           </div>
           <ThemeToggle />
         </header>
-        <main className="px-4">
+        <main className="px-4 flex flex-col items-center">
           <TaskList />
         </main>
       </SidebarInset>
