@@ -37,11 +37,11 @@ const getFlagColor = (priority: number | undefined): string | undefined => {
 const TaskList = () => {
   const { isMobile } = useSidebar();
   const { selectedFilter } = useFilter();
-  const { data: user } = useUser();
+  const { data: user, isLoading: isUserLoading } = useUser();
   const { data: projects = [] } = useProjects(user?.id);
-  const { data: tasks = [], isLoading } = useTasks(user?.id, selectedFilter.value);
+  const { data: tasks = [], isLoading: isTasksLoading } = useTasks(user?.id, selectedFilter.value);
 
-  if (isLoading) {
+  if (!user || isUserLoading || isTasksLoading) {
     return (
       <section className="flex flex-col w-full max-w-screen-lg">
         <Button variant="link" className="mr-0 mt-2 w-min group">
@@ -50,22 +50,7 @@ const TaskList = () => {
         </Button>
         <div className="flex flex-col gap-4 w-full p-2">
           {Array.from({ length: 6 }).map((_, index) => (
-            <div className="flex flex-col gap-2" key={index}>
-              <div className="flex items-center gap-2 w-full">
-                <Skeleton className="h-5 w-5 rounded-full" />
-                <Skeleton className="h-3 w-full" />
-              </div>
-              <div className="ml-7 flex flex-col gap-2">
-                <Skeleton className="h-2 w-full" />
-                <Skeleton className="h-2 w-full" />
-              </div>
-              <div className="ml-7 flex flex-row gap-2">
-                <Skeleton className="h-4 w-10" />
-                <Skeleton className="h-4 w-6" />
-                <Skeleton className="h-4 w-4 rounded-full" />
-                <Skeleton className="h-4 w-4 rounded-full" />
-              </div>
-            </div>
+            <Skeleton className="h-24 w-full" key={index} />
           ))}
         </div>
       </section>
@@ -81,7 +66,7 @@ const TaskList = () => {
 
         return (
           <div
-            className="p-4 flex gap-2 items-start dark:bg-neutral-900 dark:rounded-xl border-gray-200 dark:border-neutral-900 border-solid border-b-[1px] w-full"
+            className="p-4 flex gap-2 items-start dark:bg-neutral-900 rounded-xl border-border dark:border-neutral-900 border-solid border-[1px] w-full"
             key={task.id}>
             <Checkbox className="rounded-[50%] mt-1" />
 
@@ -90,7 +75,9 @@ const TaskList = () => {
               <p className="text-sm text-muted-foreground line-clamp-3">{task.description}</p>
               <div className="flex flex-row items-center gap-2 text-red-400">
                 {task.deadline && (
-                  <Badge variant="outline" className="flex flex-row items-center py-1 gap-2 bg-background">
+                  <Badge
+                    variant="outline"
+                    className="flex flex-row items-center py-1 gap-2 bg-background">
                     <CalendarClock size={18} />
                     <p className="text-xs">{formatDate(task.deadline)}</p>
                   </Badge>
