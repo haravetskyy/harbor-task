@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { PopoverContent } from '@/components/ui/popover';
 import {
   Select,
   SelectContent,
@@ -16,61 +17,47 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Task } from '@harbor-task/models';
+import { addTaskSchema, AddTaskValues, Task } from '@harbor-task/models';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus } from 'lucide-react';
+import { format } from 'date-fns';
+import { CalendarIcon, Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { useProjects } from '../hooks/use-projects';
 import { useAddTask } from '../hooks/use-tasks';
 import { useUser } from '../hooks/use-user';
+import { cn } from '../lib/utils';
 import { Badge } from './ui/badge';
+import { Calendar } from './ui/calendar';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 import { Input } from './ui/input';
+import { Popover, PopoverTrigger } from './ui/popover';
 import { Skeleton } from './ui/skeleton';
 import { Textarea } from './ui/textarea';
 
 export function TaskForm() {
   const { data: user, isLoading: isUserLoading } = useUser();
-  const addTaskMutation = useAddTask();
   const { data: projects } = useProjects(user?.id);
+  const addTaskMutation = useAddTask();
+
+  const form = useForm<AddTaskValues>({
+    resolver: zodResolver(addTaskSchema),
+    defaultValues: {
+      title: '',
+      description: '',
+      deadline: new Date(),
+      priority: 1,
+      progress: 0,
+      projectId: undefined,
+    },
+  });
 
   if (!user || !projects || isUserLoading) {
     return <Skeleton className="h-6 w-6 rounded-full" />;
   }
 
-  const schema = z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    priority: z.string().optional(),
-    progress: z.string().optional(),
-    projectId: z.string().optional(),
-    deadline: z.string().optional(),
-  });
-
-  const form = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      title: '',
-      description: '',
-      deadline: 'October 13, 2014 11:13:00',
-      priority: '1',
-      progress: '0',
-      projectId: '',
-    },
-  });
-
-  const onSubmit = (values: z.infer<typeof schema>) => {
-    console.log('Form submitted with values:', values);
-
-    const { title, description, deadline, priority, progress, projectId } = values;
-
+  const onSubmit = (values: AddTaskValues) => {
     const newTask: Omit<Task, 'id'> = {
-      title,
-      description,
-      deadline: new Date(deadline),
-      priority: parseInt(priority),
-      progress: parseInt(progress),
+      ...values,
       userId: user.id,
     };
 
@@ -123,12 +110,31 @@ export function TaskForm() {
               control={form.control}
               name="deadline"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-col">
                   <FormLabel>Deadline</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={'outline'}
+                          className={cn(
+                            'pl-3 text-left font-normal',
+                            !field.value && 'text-muted-foreground',
+                          )}>
+                          {field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={date => date < new Date()}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </FormItem>
               )}
             />
@@ -140,7 +146,18 @@ export function TaskForm() {
                 <FormItem>
                   <FormLabel>Priority</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <Input
+                      type="number"
+                      min={1}
+                      max={4}
+                      step={1}
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={e => {
+                        const value = e.target.value;
+                        field.onChange(value === '' ? undefined : Number(value));
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -154,7 +171,18 @@ export function TaskForm() {
                 <FormItem>
                   <FormLabel>Progress</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <Input
+                      type="number"
+                      min={0}
+                      max={100}
+                      step={25}
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={e => {
+                        const value = e.target.value;
+                        field.onChange(value === '' ? undefined : Number(value));
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -166,11 +194,11 @@ export function TaskForm() {
               name="projectId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>No project chosen</FormLabel>
+                  <FormLabel>Project</FormLabel>
                   <FormControl>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Theme" />
+                        <SelectValue placeholder="No project chosen" />
                       </SelectTrigger>
                       <SelectContent>
                         {projects.map(project => (

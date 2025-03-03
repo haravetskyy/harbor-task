@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { ThemeProvider } from 'next-themes';
 import FilterProvider from '../components/filter-context';
 import ReactQueryProvider from '../components/react-query-provider';
+import { Toaster } from '../components/ui/sonner';
 import { TooltipProvider } from '../components/ui/tooltip';
 import './globals.css';
 
@@ -21,7 +22,10 @@ export default function RootLayout({
         <ReactQueryProvider>
           <FilterProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              <TooltipProvider>{children}</TooltipProvider>
+              <TooltipProvider>
+                {children}
+                <Toaster />
+              </TooltipProvider>
             </ThemeProvider>
           </FilterProvider>
         </ReactQueryProvider>

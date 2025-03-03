@@ -26,21 +26,24 @@ import { Skeleton } from './ui/skeleton';
 
 export function NavProjects() {
   const { isMobile } = useSidebar();
-  const { data: user } = useUser();
-  const { data: projects = [], isLoading } = useProjects(user?.id);
+  const { data: user, isLoading: isUserLoading } = useUser();
+  const { data: projects = [], isLoading: isProjectsLoading } = useProjects(user?.id);
 
-  if (isLoading) {
+  if (!user || isUserLoading || isProjectsLoading) {
     return (
-      <div className="flex flex-col gap-2 p-2">
-        <Button variant="outline">
-          <Plus />
-          Add project
-        </Button>
+      <div className="flex flex-col p-2">
+        <div className="flex flex-col gap-0">
+          <Button variant="outline" className="w-full">
+            <Plus />
+            Add project
+          </Button>
+          <SidebarGroupLabel>Projects</SidebarGroupLabel>
+        </div>
         <div className="flex flex-col gap-2 w-full p-2">
           {Array.from({ length: 5 }).map((_, index) => (
             <div className="flex items-center gap-2" key={index}>
               <Skeleton className="h-6 w-6 rounded-full" />
-              <Skeleton className="h-3 w-3/4" />
+              <Skeleton className="h-3 w-5/6" />
             </div>
           ))}
         </div>

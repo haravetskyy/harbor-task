@@ -29,7 +29,7 @@ const getFlagColor = (priority: number | undefined): string | undefined => {
     1: '#00c951', // green-500
     2: '#efb100', // yellow-500
     3: '#fd9a00', // amber-500
-    4: '#fb2c36', // red-500
+    4: '#c10007', // red-700
   };
   return priority ? priorityColors[priority] : 'gray';
 };
@@ -62,7 +62,7 @@ const TaskList = () => {
       <TaskForm />
 
       {tasks.map(task => {
-        const project = projects.find(project => project.id === task.projectId);
+        const project = projects.find(project => project.id === task.projectId) || undefined;
 
         return (
           <div
@@ -71,8 +71,8 @@ const TaskList = () => {
             <Checkbox className="rounded-[50%] mt-1" />
 
             <div className="flex flex-col items-start justify-start gap-1">
-              <h2 className="text-md">{task.title}</h2>
-              <p className="text-sm text-muted-foreground line-clamp-3">{task.description}</p>
+              <h2 className="text-sm">{task.title}</h2>
+              <p className="text-xs text-muted-foreground line-clamp-3">{task.description}</p>
               <div className="flex flex-row items-center gap-2 text-red-400">
                 {task.deadline && (
                   <Badge

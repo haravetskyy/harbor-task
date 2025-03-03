@@ -1,11 +1,10 @@
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import * as React from 'react';
 import { forwardRef, useCallback, useEffect, useState } from 'react';
 import { NumericFormat, NumericFormatProps } from 'react-number-format';
 import { Button } from './button';
 import { Input } from './input';
 
-interface NumberInputProps extends Omit<NumericFormatProps, 'value' | 'onValueChange'> {
+export interface NumberInputProps extends Omit<NumericFormatProps, 'value' | 'onValueChange'> {
   stepper?: number;
   thousandSeparator?: string;
   placeholder?: string;
@@ -20,7 +19,7 @@ interface NumberInputProps extends Omit<NumericFormatProps, 'value' | 'onValueCh
   decimalScale?: number;
 }
 
-const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
+export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
   (
     {
       stepper,
@@ -50,6 +49,24 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         prev === undefined ? -(stepper ?? 1) : Math.max(prev - (stepper ?? 1), min),
       );
     }, [stepper, min]);
+
+    useEffect(() => {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (document.activeElement === (ref as React.RefObject<HTMLInputElement>).current) {
+          if (e.key === 'ArrowUp') {
+            handleIncrement();
+          } else if (e.key === 'ArrowDown') {
+            handleDecrement();
+          }
+        }
+      };
+
+      window.addEventListener('keydown', handleKeyDown);
+
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }, [handleIncrement, handleDecrement, ref]);
 
     useEffect(() => {
       if (controlledValue !== undefined) {
@@ -94,7 +111,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           prefix={prefix}
           customInput={Input}
           placeholder={placeholder}
-          className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none rounded-r-none relative h-full"
+          className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none rounded-r-none relative m-0"
           getInputRef={ref}
           {...props}
         />
@@ -102,24 +119,22 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         <div className="flex flex-col">
           <Button
             aria-label="Increase value"
-            className="px-2 h-5 rounded-l-none rounded-br-none border-input border-l-0 border-b-[0.5px] focus-visible:relative"
+            className="px-2 h-[1.125rem] rounded-l-none rounded-br-none border-input border-l-0 border-b-[0.5px] focus-visible:relative"
             variant="outline"
             onClick={handleIncrement}
             disabled={value === max}>
-            <ChevronUp size={15} />
+            <ChevronUp size={12} />
           </Button>
           <Button
             aria-label="Decrease value"
-            className="px-2 h-5 rounded-l-none rounded-tr-none border-input border-l-0 border-t-[0.5px] focus-visible:relative"
+            className="px-2 h-[1.125rem] rounded-l-none rounded-tr-none border-input border-l-0 border-t-[0.5px] focus-visible:relative"
             variant="outline"
             onClick={handleDecrement}
             disabled={value === min}>
-            <ChevronDown size={15} />
+            <ChevronDown size={12} />
           </Button>
         </div>
       </div>
     );
   },
 );
-
-export { NumberInput };

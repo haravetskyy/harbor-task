@@ -25,7 +25,7 @@ export function NavUser() {
   const { isMobile } = useSidebar();
   const { data: user, isLoading } = useUser();
 
-  if (isLoading) {
+  if (!user || isLoading) {
     return (
       <div className="flex gap-2 p-2">
         <div>
@@ -37,10 +37,6 @@ export function NavUser() {
         </div>
       </div>
     );
-  }
-
-  if (!user) {
-    throw new Error('User data is required but missing.');
   }
 
   return (
