@@ -30,10 +30,10 @@ const fetchFilteredTasks = async ({
   return response.json();
 };
 
-const addTask = async ({ userId, task }: { userId: string; task: Omit<Task, 'id'> }) => {
-  const payload = { ...task, userId };
+const addTask = async (task: Omit<Task, 'id'>) => {
+  const payload = { ...task };
 
-  const response = await fetch(`${apiUrl}/users/${userId}/tasks`, {
+  const response = await fetch(`${apiUrl}/users/${task.userId}/tasks`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -79,8 +79,8 @@ export const useAddTask = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ userId, task }: { userId: string; task: Omit<Task, 'id'> }) => {
-      return addTask({ userId, task });
+    mutationFn: async (task: Omit<Task, 'id'>) => {
+      return addTask(task);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
