@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -17,7 +18,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { addTaskSchema, AddTaskValues, Task } from '@harbor-task/models';
+import {
+  addTaskSchema,
+  AddTaskValues,
+  MAX_TASK_DESCRIPTION_LENGTH,
+  MAX_TASK_TITLE_LENGTH,
+  Task,
+} from '@harbor-task/models';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon, Plus } from 'lucide-react';
@@ -49,6 +56,7 @@ export function TaskForm() {
       progress: 0,
       projectId: undefined,
     },
+    mode: 'onChange',
   });
 
   if (!user || !projects || isUserLoading) {
@@ -83,7 +91,17 @@ export function TaskForm() {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel
+                    className={cn(
+                      'flex flex-row justify-between',
+                      form.formState.errors.description && 'text-red-500 dark:text-red-800',
+                    )}>
+                    <div className="flex flex-row gap-1">
+                      Title
+                      <span className="text-red-500 dark:text-red-800">*</span>
+                    </div>
+                    {field.value.length}/{MAX_TASK_TITLE_LENGTH}
+                  </FormLabel>
                   <FormControl>
                     <Input type="text" {...field} />
                   </FormControl>
@@ -97,7 +115,17 @@ export function TaskForm() {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel
+                    className={cn(
+                      'flex flex-row justify-between',
+                      form.formState.errors.description && 'text-red-500 dark:text-red-800',
+                    )}>
+                    <div className="flex flex-row gap-1">
+                      Description
+                      <span className="text-red-500 dark:text-red-800">*</span>
+                    </div>
+                    {field.value?.length}/{MAX_TASK_DESCRIPTION_LENGTH}
+                  </FormLabel>
                   <FormControl>
                     <Textarea {...field} />
                   </FormControl>
@@ -218,7 +246,11 @@ export function TaskForm() {
             />
 
             <DialogFooter>
-              <Button type="submit">Save changes</Button>
+              <DialogClose asChild>
+                <Button disabled={!form.formState.isValid} type="submit">
+                  Save changes
+                </Button>
+              </DialogClose>
             </DialogFooter>
           </form>
         </Form>

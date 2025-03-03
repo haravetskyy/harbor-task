@@ -43,14 +43,14 @@ const TaskList = () => {
 
   if (!user || isUserLoading || isTasksLoading) {
     return (
-      <section className="flex flex-col w-full max-w-screen-lg">
+      <section className="flex flex-col w-full gap-2 max-w-screen-lg">
         <Button variant="link" className="mr-0 mt-2 w-min group">
           <Plus className="group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black rounded-[50%] transition-all duration-300 " />
           Add task
         </Button>
-        <div className="flex flex-col gap-4 w-full p-2">
+        <div className="flex flex-col gap-4 w-full">
           {Array.from({ length: 6 }).map((_, index) => (
-            <Skeleton className="h-24 w-full" key={index} />
+            <Skeleton className="h-24 w-full rounded-xl" key={index} />
           ))}
         </div>
       </section>
