@@ -16,7 +16,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useProjects } from '../hooks/use-projects';
+import { useDeleteProject, useProjects } from '../hooks/use-projects';
 import { useUser } from '../hooks/use-user';
 import { ProjectForm } from './project-form';
 import { Badge } from './ui/badge';
@@ -27,6 +27,7 @@ export function NavProjects() {
   const { isMobile } = useSidebar();
   const { data: user, isLoading: isUserLoading } = useUser();
   const { data: projects = [], isLoading: isProjectsLoading } = useProjects(user?.id);
+  const deleteProjectMutation = useDeleteProject();
 
   if (!user || isUserLoading || isProjectsLoading) {
     return (
@@ -81,7 +82,10 @@ export function NavProjects() {
                   <Pencil className="text-neutral-500 dark:text-neutral-400" />
                   <span>Change Project</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    deleteProjectMutation.mutate({ userId: user.id, projectId: project.id })
+                  }>
                   <Trash2 className="text-neutral-500 dark:text-neutral-400" />
                   <span>Delete Project</span>
                 </DropdownMenuItem>
