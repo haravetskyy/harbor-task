@@ -1,5 +1,5 @@
-export { MAX_PROJECT_NAME_LENGTH, projectSchema } from './project.model';
-export type { Project } from './project.model';
+export { addProjectSchema, MAX_PROJECT_NAME_LENGTH, projectSchema } from './project.model';
+export type { AddProjectValues, Project } from './project.model';
 
 export { filterSchema } from './filter.model';
 export type { AllowedSection, Filter } from './filter.model';
