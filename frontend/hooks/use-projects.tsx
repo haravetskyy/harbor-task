@@ -16,14 +16,8 @@ const fetchSearchedProjects = async (userId: string, query: string): Promise<Pro
   return data.projects || [];
 };
 
-const addProject = async ({
-  userId,
-  project,
-}: {
-  userId: string;
-  project: Omit<Project, 'id'>;
-}) => {
-  const response = await fetch(`${apiUrl}/users/${userId}/projects`, {
+const addProject = async (project: Omit<Project, 'id'>) => {
+  const response = await fetch(`${apiUrl}/users/${project.userId}/projects`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(project),
@@ -62,7 +56,7 @@ export const useProjects = (userId: string | undefined, query?: string) => {
 export const useAddProject = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<Project, Error, { userId: string; project: Omit<Project, 'id'> }>({
+  return useMutation({
     mutationFn: addProject,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });

@@ -1,7 +1,5 @@
 'use client';
 
-import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +15,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useProjects } from '../hooks/use-projects';
 import { useUser } from '../hooks/use-user';
 import { ProjectForm } from './project-form';
