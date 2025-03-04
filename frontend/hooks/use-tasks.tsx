@@ -79,9 +79,7 @@ export const useAddTask = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (task: Omit<Task, 'id'>) => {
-      return addTask(task);
-    },
+    mutationFn: addTask,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },

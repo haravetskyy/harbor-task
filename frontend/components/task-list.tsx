@@ -82,7 +82,7 @@ const TaskList = () => {
                     <p className="text-xs">{formatDate(task.deadline)}</p>
                   </Badge>
                 )}
-                {task.progress && (
+                {task.progress !== undefined && (
                   <Badge variant="outline" className="py-[0.325rem] bg-background">
                     {task.progress}%
                   </Badge>

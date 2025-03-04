@@ -70,6 +70,7 @@ export function TaskForm() {
     };
 
     addTaskMutation.mutate(newTask);
+    form.reset();
   };
 
   return (
