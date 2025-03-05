@@ -18,7 +18,7 @@ import {
 import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useDeleteProject, useProjects } from '../hooks/use-projects';
 import { useUser } from '../hooks/use-user';
-import { ProjectForm } from './project-form';
+import { AddProject } from './add-project';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Skeleton } from './ui/skeleton';
@@ -53,7 +53,7 @@ export function NavProjects() {
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <ProjectForm />
+      <AddProject />
 
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
