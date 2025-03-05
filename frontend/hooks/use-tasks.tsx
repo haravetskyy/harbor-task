@@ -99,9 +99,9 @@ export const useEditTask = () => {
 
 export const useDeleteTask = () => {
   const queryClient = useQueryClient();
-
-  return useMutation<{ taskId: string }, Error, { userId: string; taskId: string }>({
-    mutationFn: deleteTask,
+  return useMutation({
+    mutationFn: ({ taskId, userId }: { taskId: string; userId: string }) =>
+      deleteTask({ taskId, userId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },

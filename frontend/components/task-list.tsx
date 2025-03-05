@@ -1,9 +1,10 @@
 'use client';
 
 import { useProjects } from '@/hooks/use-projects';
-import { useTasks } from '@/hooks/use-tasks';
+import { useDeleteTask, useTasks } from '@/hooks/use-tasks';
 import { useUser } from '@/hooks/use-user';
 import { CalendarClock, Flag, MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
+import React from 'react';
 import { formatDate } from '../lib/format-date';
 import { useFilter } from './filter-context';
 import { TaskForm } from './task-form';
@@ -40,6 +41,8 @@ const TaskList = () => {
   const { data: user, isLoading: isUserLoading } = useUser();
   const { data: projects = [] } = useProjects(user?.id);
   const { data: tasks = [], isLoading: isTasksLoading } = useTasks(user?.id, selectedFilter.value);
+  const deleteTaskMutation = useDeleteTask();
+  const [deletingTaskId, setDeletingTaskId] = React.useState<string | null>(null);
 
   if (!user || isUserLoading || isTasksLoading) {
     return (
@@ -57,18 +60,38 @@ const TaskList = () => {
     );
   }
 
+  const handleDelete = (taskId: string) => {
+    setDeletingTaskId(taskId);
+    setTimeout(() => {
+      deleteTaskMutation.mutate(
+        { taskId, userId: user.id },
+        {
+          onError: () => {
+            setDeletingTaskId(null);
+          },
+          onSettled: () => {
+            setDeletingTaskId(null);
+          },
+        },
+      );
+    }, 500);
+  };
+
   return (
     <section className="flex flex-col max-w-screen-lg gap-2">
       <TaskForm />
 
       {tasks.map(task => {
         const project = projects.find(project => project.id === task.projectId) || undefined;
+        const isDeleting = deletingTaskId === task.id;
 
         return (
           <div
-            className="p-4 flex gap-2 items-start dark:bg-neutral-900 rounded-xl border-border dark:border-neutral-900 border-solid border-[1px] w-full"
+            className={`flex w-full items-start gap-2 rounded-xl border border-solid border-border p-4 dark:border-neutral-900 dark:bg-neutral-900 ${
+              isDeleting && 'animate-slide-fade-left'
+            }`}
             key={task.id}>
-            <Checkbox className="rounded-[50%] mt-1" />
+            <Checkbox className="rounded-[50%] mt-1" onClick={() => handleDelete(task.id)} />
 
             <div className="flex flex-col items-start justify-start gap-1">
               <h2 className="text-sm">{task.title}</h2>
