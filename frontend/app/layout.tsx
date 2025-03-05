@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { ThemeProvider } from 'next-themes';
-import FilterProvider from '../components/filter-context';
+import FilterProvider from '../components/contexts/filter-context';
 import ReactQueryProvider from '../components/react-query-provider';
 import { Toaster } from '../components/ui/sonner';
 import { TooltipProvider } from '../components/ui/tooltip';

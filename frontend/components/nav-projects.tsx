@@ -19,6 +19,7 @@ import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useDeleteProject, useProjects } from '../hooks/use-projects';
 import { useUser } from '../hooks/use-user';
 import { AddProject } from './add-project';
+import { useFilter } from './contexts/filter-context';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Skeleton } from './ui/skeleton';
@@ -27,6 +28,7 @@ export function NavProjects() {
   const { isMobile } = useSidebar();
   const { data: user, isLoading: isUserLoading } = useUser();
   const { data: projects = [], isLoading: isProjectsLoading } = useProjects(user?.id);
+  const { setSelectedFilter } = useFilter();
   const deleteProjectMutation = useDeleteProject();
 
   if (!user || isUserLoading || isProjectsLoading) {
@@ -59,7 +61,11 @@ export function NavProjects() {
       <SidebarMenu>
         {projects.map(project => (
           <SidebarMenuItem key={project.name}>
-            <SidebarMenuButton asChild>
+            <SidebarMenuButton
+              asChild
+              onClick={() => {
+                setSelectedFilter({ type: 'project', value: project.id });
+              }}>
               <a href="#">
                 <Badge variant="circle" color={project.color}>
                   {project.emoji}
