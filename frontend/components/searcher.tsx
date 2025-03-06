@@ -1,6 +1,6 @@
 'use client';
 
-import { Calculator, Calendar, CreditCard, Search, Settings, Smile, User } from 'lucide-react';
+import { Flag, Search } from 'lucide-react';
 import * as React from 'react';
 
 import {
@@ -11,12 +11,20 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-  CommandShortcut,
 } from '@/components/ui/command';
+import { useProjects } from '../hooks/use-projects';
+import { useTasks } from '../hooks/use-tasks';
+import { useUser } from '../hooks/use-user';
+import { getFlagColor } from './task-list';
+import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 
 export function Searcher() {
   const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState('');
+  const { data: user } = useUser();
+  const { data: projects } = useProjects(user?.id, query);
+  const { data: tasks } = useTasks(user?.id, query);
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -44,37 +52,31 @@ export function Searcher() {
         <CommandInput placeholder="Type a command or search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
+
           <CommandGroup heading="Projects">
-            <CommandItem>
-              <Calendar />
-              <span>Calendar</span>
-            </CommandItem>
-            <CommandItem>
-              <Smile />
-              <span>Search Emoji</span>
-            </CommandItem>
-            <CommandItem>
-              <Calculator />
-              <span>Calculator</span>
-            </CommandItem>
+            {projects?.map(project => (
+              <CommandItem key={project.id}>
+                <Badge variant="circle" color={project.color}>
+                  {project.emoji}
+                </Badge>
+                <span>{project.name}</span>
+              </CommandItem>
+            ))}
           </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading="Tasks">
-            <CommandItem>
-              <User />
-              <span>Profile</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <CreditCard />
-              <span>Billing</span>
-              <CommandShortcut>⌘B</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <Settings />
-              <span>Settings</span>
-              <CommandShortcut>⌘S</CommandShortcut>
-            </CommandItem>
+            {tasks?.map(task => (
+              <CommandItem key={task.id}>
+                <Flag
+                  className="w-5"
+                  style={{
+                    fill: getFlagColor(task.priority),
+                    stroke: getFlagColor(task.priority),
+                  }}
+                />
+                <span>{task.title}</span>
+              </CommandItem>
+            ))}
           </CommandGroup>
         </CommandList>
       </CommandDialog>

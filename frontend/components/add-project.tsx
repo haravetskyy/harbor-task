@@ -103,8 +103,6 @@ const ProjectForm = () => {
   }
 
   const onSubmit = (values: AddProjectValues) => {
-    console.log(values);
-
     const newProject: Omit<Project, 'id'> = {
       ...values,
       userId: user.id,

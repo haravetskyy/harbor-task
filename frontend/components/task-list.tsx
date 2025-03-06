@@ -21,7 +21,7 @@ import { SidebarMenuAction, useSidebar } from './ui/sidebar';
 import { Skeleton } from './ui/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
-const getFlagColor = (priority: number | undefined): string | undefined => {
+export const getFlagColor = (priority: number | undefined): string | undefined => {
   if (typeof priority === undefined) {
     return;
   }
