@@ -87,7 +87,7 @@ const TaskList = () => {
 
         return (
           <div
-            className={`flex w-full items-start gap-2 rounded-xl border border-solid border-border p-4 dark:border-neutral-900 dark:bg-neutral-900 ${
+            className={`flex w-full items-start gap-2 rounded-xl border border-solid border-border p-4 dark:bg-neutral-900 ${
               isDeleting && 'animate-slide-fade-left'
             }`}
             key={task.id}>
