@@ -69,7 +69,7 @@ export const useTasks = (userId: string | undefined, filterValue?: string, query
       query
         ? fetchSearchedTasks(userId!, query)
         : fetchFilteredTasks({ userId: userId!, filterValue: filterValue! }),
-    enabled: !!userId,
+    enabled: !!userId && (query ? query.length > 0 : true),
     staleTime: 5 * 60 * 1000,
     retry: 1,
   });

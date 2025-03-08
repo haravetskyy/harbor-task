@@ -48,7 +48,7 @@ export const useProjects = (userId: string | undefined, query?: string) => {
   return useQuery({
     queryKey: query ? ['search', 'projects', userId, query] : ['projects', userId],
     queryFn: () => (query ? fetchSearchedProjects(userId!, query) : fetchProjects(userId!)),
-    enabled: !!userId,
+    enabled: !!userId && (query ? query.length > 0 : true),
     staleTime: 5 * 60 * 1000,
   });
 };

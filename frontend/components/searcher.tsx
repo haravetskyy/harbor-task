@@ -1,8 +1,5 @@
 'use client';
 
-import { Flag, Search } from 'lucide-react';
-import * as React from 'react';
-
 import {
   CommandDialog,
   CommandEmpty,
@@ -10,8 +7,10 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
 } from '@/components/ui/command';
+import { Flag, Search } from 'lucide-react';
+import * as React from 'react';
+import { useDebounce } from 'use-debounce';
 import { useProjects } from '../hooks/use-projects';
 import { useTasks } from '../hooks/use-tasks';
 import { useUser } from '../hooks/use-user';
@@ -23,8 +22,11 @@ export function Searcher() {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState('');
   const { data: user } = useUser();
-  const { data: projects } = useProjects(user?.id, query);
-  const { data: tasks } = useTasks(user?.id, query);
+
+  const [debouncedQuery] = useDebounce(query, 300);
+
+  const { data: tasks = [], isLoading: tasksLoading } = useTasks(user?.id, 'All', debouncedQuery);
+  const { data: projects = [], isLoading: projectsLoading } = useProjects(user?.id, debouncedQuery);
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -38,6 +40,14 @@ export function Searcher() {
     return () => document.removeEventListener('keydown', down);
   }, []);
 
+  React.useEffect(() => {
+    if (!open) {
+      setQuery('');
+    }
+  }, [open]);
+
+  const isLoading = tasksLoading || projectsLoading;
+
   return (
     <>
       <Button onClick={() => setOpen(open => !open)} variant="outline" className="p-2">
@@ -49,35 +59,60 @@ export function Searcher() {
       </Button>
 
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
+        <CommandInput
+          placeholder="Type a command or search..."
+          value={query}
+          onValueChange={setQuery}
+        />
         <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
+          {tasks.length === 0 && projects.length === 0 && debouncedQuery && !isLoading && (
+            <CommandEmpty>No results found.</CommandEmpty>
+          )}
 
-          <CommandGroup heading="Projects">
-            {projects?.map(project => (
-              <CommandItem key={project.id}>
-                <Badge variant="circle" color={project.color}>
-                  {project.emoji}
-                </Badge>
-                <span>{project.name}</span>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Tasks">
-            {tasks?.map(task => (
-              <CommandItem key={task.id}>
-                <Flag
-                  className="w-5"
-                  style={{
-                    fill: getFlagColor(task.priority),
-                    stroke: getFlagColor(task.priority),
-                  }}
-                />
-                <span>{task.title}</span>
-              </CommandItem>
-            ))}
-          </CommandGroup>
+          {(tasks.length > 0 || projects.length > 0 || !debouncedQuery) && (
+            <>
+              {projects.length > 0 && (
+                <CommandGroup heading="Projects">
+                  {projects.map(project => (
+                    <CommandItem
+                      key={project.id}
+                      value={project.name}
+                      onSelect={() => {
+                        console.log('Selected project:', project);
+                        setOpen(false);
+                      }}>
+                      <Badge variant="circle" color={project.color}>
+                        {project.emoji}
+                      </Badge>
+                      {project.name}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              )}
+              {tasks.length > 0 && (
+                <CommandGroup heading="Tasks">
+                  {tasks.map(task => (
+                    <CommandItem
+                      key={task.id}
+                      value={task.title}
+                      onSelect={() => {
+                        console.log('Selected task:', task);
+                        setOpen(false);
+                      }}>
+                      <Flag
+                        className="w-5"
+                        style={{
+                          fill: getFlagColor(task.priority),
+                          stroke: getFlagColor(task.priority),
+                        }}
+                      />
+                      {task.title}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              )}
+            </>
+          )}
         </CommandList>
       </CommandDialog>
     </>
