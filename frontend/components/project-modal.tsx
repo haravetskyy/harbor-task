@@ -8,7 +8,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import {
   Drawer,
@@ -16,7 +15,6 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from '@/components/ui/drawer';
 import {
   Select,
@@ -28,14 +26,15 @@ import {
 import {
   addProjectSchema,
   AddProjectValues,
+  editProjectSchema,
+  EditProjectValues,
   MAX_PROJECT_NAME_LENGTH,
   Project,
 } from '@harbor-task/models';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useMediaQuery } from '../hooks/use-media-query';
-import { useAddProject, useProjects } from '../hooks/use-projects';
+import { useAddProject, useEditProject, useProjects } from '../hooks/use-projects';
 import { useUser } from '../hooks/use-user';
 import { cn } from '../lib/utils';
 import { ColorInput } from './ui/color-input';
@@ -43,58 +42,71 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from './ui/input';
 import { Skeleton } from './ui/skeleton';
 
-export function ProjectModal() {
+export function ProjectModal({
+  isOpen,
+  onOpenChange,
+  mode,
+  project,
+}: {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  mode: 'Add' | 'Edit';
+  project?: Project;
+}) {
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   if (isDesktop) {
     return (
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="outline">
-            <Plus />
-            Add project
-          </Button>
-        </DialogTrigger>
+      <Dialog open={isOpen} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add project</DialogTitle>
+            <DialogTitle>{mode} project</DialogTitle>
           </DialogHeader>
-          <ProjectForm />
+          <ProjectForm mode={mode} project={project} />
         </DialogContent>
       </Dialog>
     );
   }
 
   return (
-    <Drawer>
-      <DrawerTrigger asChild>
-        <Button variant="outline">
-          <Plus />
-          Add project
-        </Button>
-      </DrawerTrigger>
+    <Drawer open={isOpen} onOpenChange={onOpenChange}>
       <DrawerContent className="p-4">
         <DrawerHeader className="px-0">
-          <DrawerTitle>Add project</DrawerTitle>
+          <DrawerTitle>{mode} project</DrawerTitle>
         </DrawerHeader>
-        <ProjectForm />
+        <ProjectForm mode={mode} project={project} />
       </DrawerContent>
     </Drawer>
   );
 }
 
-const ProjectForm = () => {
+interface ProjectFormProps {
+  project?: Project;
+  mode: 'Add' | 'Edit';
+}
+
+const ProjectForm = ({ project, mode }: ProjectFormProps) => {
   const { data: user, isLoading: isUserLoading } = useUser();
   const { data: projects } = useProjects(user?.id);
   const addProjectMutation = useAddProject();
+  const editProjectMutation = useEditProject();
 
-  const form = useForm<AddProjectValues>({
-    resolver: zodResolver(addProjectSchema),
-    defaultValues: {
-      name: '',
-      emoji: '',
-      color: '#ffffff',
-    },
+  const schema = mode === 'Edit' ? editProjectSchema : addProjectSchema;
+
+  const form = useForm<AddProjectValues | EditProjectValues>({
+    resolver: zodResolver(schema),
+    defaultValues:
+      mode === 'Edit' && project
+        ? {
+            name: project.name,
+            emoji: project.emoji,
+            color: project.color,
+          }
+        : {
+            name: '',
+            emoji: '',
+            color: '#ffffff',
+          },
     mode: 'onChange',
   });
 
@@ -102,14 +114,25 @@ const ProjectForm = () => {
     return <Skeleton className="h-6 w-6 rounded-full" />;
   }
 
-  const onSubmit = (values: AddProjectValues) => {
-    const newProject: Omit<Project, 'id'> = {
-      ...values,
-      userId: user.id,
-    };
+  const onSubmit = (values: AddProjectValues | EditProjectValues) => {
+    if (mode === 'Edit' && project) {
+      const editedProject: Partial<Project> = {
+        id: project.id,
+        ...values,
+        userId: user.id,
+      };
 
-    addProjectMutation.mutate(newProject);
-    form.reset();
+      editProjectMutation.mutate(editedProject);
+      form.reset();
+    } else {
+      const newProject: Omit<Project, 'id'> = {
+        ...(values as AddProjectValues),
+        userId: user.id,
+      };
+
+      addProjectMutation.mutate(newProject);
+      form.reset();
+    }
   };
 
   return (
@@ -129,7 +152,7 @@ const ProjectForm = () => {
                   Name
                   <span className="text-red-500 dark:text-red-800">*</span>
                 </div>
-                {field.value.length}/{MAX_PROJECT_NAME_LENGTH}
+                {(field.value || '').length}/{MAX_PROJECT_NAME_LENGTH}
               </FormLabel>
               <FormControl>
                 <Input type="text" {...field} />
@@ -168,7 +191,7 @@ const ProjectForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Color</FormLabel>
-              <ColorInput {...field} />
+              <ColorInput {...field} value={field.value || "#ffffff"}/>
               <FormMessage />
             </FormItem>
           )}

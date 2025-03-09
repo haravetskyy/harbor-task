@@ -15,7 +15,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { Project } from '@harbor-task/models';
 import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
+import React from 'react';
 import { useDeleteProject, useProjects } from '../hooks/use-projects';
 import { useUser } from '../hooks/use-user';
 import { useFilter } from './contexts/filter-context';
@@ -30,12 +32,15 @@ export function NavProjects() {
   const { data: projects = [], isLoading: isProjectsLoading } = useProjects(user?.id);
   const { setSelectedFilter } = useFilter();
   const deleteProjectMutation = useDeleteProject();
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [modalMode, setModalMode] = React.useState<'Add' | 'Edit'>('Add');
+  const [modalProject, setModalProject] = React.useState<Project | undefined>(undefined);
 
   if (!user || isUserLoading || isProjectsLoading) {
     return (
       <div className="flex flex-col p-2">
         <div className="flex flex-col gap-0">
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" disabled className="w-full">
             <Plus />
             Add project
           </Button>
@@ -55,7 +60,16 @@ export function NavProjects() {
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <ProjectModal />
+      <Button
+        variant="outline"
+        onClick={() => {
+          setModalOpen(true);
+          setModalMode('Add');
+        }}>
+        <Plus />
+        Add project
+      </Button>
+      <ProjectModal isOpen={modalOpen} onOpenChange={setModalOpen} mode={modalMode} project={modalProject} />
 
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
@@ -84,7 +98,12 @@ export function NavProjects() {
                 className="w-48 rounded-lg"
                 side={isMobile ? 'bottom' : 'right'}
                 align={isMobile ? 'end' : 'start'}>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setModalOpen(true);
+                    setModalMode('Edit');
+                    setModalProject(project);
+                  }}>
                   <Pencil className="text-neutral-500 dark:text-neutral-400" />
                   <span>Edit Project</span>
                 </DropdownMenuItem>

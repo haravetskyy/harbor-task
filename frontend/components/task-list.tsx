@@ -3,21 +3,15 @@
 import { useProjects } from '@/hooks/use-projects';
 import { useDeleteTask, useTasks } from '@/hooks/use-tasks';
 import { useUser } from '@/hooks/use-user';
-import { CalendarClock, Flag, MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
+import { formatDate } from '@/lib/format-date';
+import { CalendarClock, Flag, Plus } from 'lucide-react';
 import React from 'react';
-import { formatDate } from '../lib/format-date';
 import { useFilter } from './contexts/filter-context';
 import { TaskModal } from './task-modal';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Checkbox } from './ui/checkbox';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from './ui/dropdown-menu';
-import { SidebarMenuAction, useSidebar } from './ui/sidebar';
+import { useSidebar } from './ui/sidebar';
 import { Skeleton } from './ui/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
@@ -47,7 +41,7 @@ const TaskList = () => {
   if (!user || isUserLoading || isTasksLoading) {
     return (
       <section className="flex flex-col w-full gap-2 max-w-screen-lg">
-        <Button variant="link" className="mr-0 mt-2 w-min group">
+        <Button variant="link" disabled className="mr-0 mt-2 w-min group">
           <Plus className="group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black rounded-[50%] transition-all duration-300 " />
           Add task
         </Button>
@@ -141,28 +135,6 @@ const TaskList = () => {
                 )}
               </div>
             </div>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuAction className="relative" showOnHover>
-                  <MoreHorizontal />
-                  <span className="sr-only">More</span>
-                </SidebarMenuAction>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-48 rounded-lg"
-                side={isMobile ? 'bottom' : 'right'}
-                align={isMobile ? 'end' : 'start'}>
-                <DropdownMenuItem>
-                  <Pencil className="text-neutral-500 dark:text-neutral-400" />
-                  <span>Change Task</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Trash2 className="text-neutral-500 dark:text-neutral-400" />
-                  <span>Delete Task</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
         );
       })}
