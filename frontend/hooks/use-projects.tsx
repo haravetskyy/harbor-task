@@ -26,8 +26,8 @@ const addProject = async (project: Omit<Project, 'id'>) => {
   return response.json() as Promise<Project>;
 };
 
-const editProject = async ({ userId, project }: { userId: string; project: Partial<Project> }) => {
-  const response = await fetch(`${apiUrl}/users/${userId}/projects/${project.id}`, {
+const editProject = async (project: Partial<Project>) => {
+  const response = await fetch(`${apiUrl}/users/${project.userId}/projects/${project.id}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(project),
@@ -67,7 +67,7 @@ export const useAddProject = () => {
 export const useEditProject = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<Project, Error, { userId: string; project: Partial<Project> }>({
+  return useMutation({
     mutationFn: editProject,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
