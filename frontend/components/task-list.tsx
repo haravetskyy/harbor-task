@@ -6,8 +6,8 @@ import { useUser } from '@/hooks/use-user';
 import { CalendarClock, Flag, MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
 import React from 'react';
 import { formatDate } from '../lib/format-date';
-import { AddTask } from './add-task';
 import { useFilter } from './contexts/filter-context';
+import { TaskModal } from './task-modal';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Checkbox } from './ui/checkbox';
@@ -79,7 +79,7 @@ const TaskList = () => {
   1;
   return (
     <section className="flex flex-col w-full max-w-screen-lg gap-2">
-      <AddTask />
+      <TaskModal />
 
       {tasks.map(task => {
         const project = projects.find(project => project.id === task.projectId) || undefined;

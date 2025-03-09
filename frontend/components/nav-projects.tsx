@@ -18,8 +18,8 @@ import {
 import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useDeleteProject, useProjects } from '../hooks/use-projects';
 import { useUser } from '../hooks/use-user';
-import { AddProject } from './add-project';
 import { useFilter } from './contexts/filter-context';
+import { ProjectModal } from './project-modal';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Skeleton } from './ui/skeleton';
@@ -55,7 +55,7 @@ export function NavProjects() {
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <AddProject />
+      <ProjectModal />
 
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
@@ -86,7 +86,7 @@ export function NavProjects() {
                 align={isMobile ? 'end' : 'start'}>
                 <DropdownMenuItem>
                   <Pencil className="text-neutral-500 dark:text-neutral-400" />
-                  <span>Change Project</span>
+                  <span>Edit Project</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() =>

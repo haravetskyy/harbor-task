@@ -43,7 +43,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from './ui/input';
 import { Skeleton } from './ui/skeleton';
 
-export function AddProject() {
+export function ProjectModal() {
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   if (isDesktop) {
@@ -148,7 +148,7 @@ const ProjectForm = () => {
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a verified email to display" />
+                    <SelectValue placeholder="Select emoji" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

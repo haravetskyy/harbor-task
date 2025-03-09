@@ -43,7 +43,7 @@ import { Popover, PopoverTrigger } from './ui/popover';
 import { Skeleton } from './ui/skeleton';
 import { Textarea } from './ui/textarea';
 
-export function AddTask() {
+export function TaskModal() {
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   if (isDesktop) {
