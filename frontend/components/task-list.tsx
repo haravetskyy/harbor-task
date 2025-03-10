@@ -7,6 +7,7 @@ import { formatDate } from '@/lib/format-date';
 import { CalendarClock, Flag, Plus } from 'lucide-react';
 import React from 'react';
 import { useFilter } from './contexts/filter-context';
+import Task from './task';
 import { TaskModal } from './task-modal';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
@@ -74,6 +75,7 @@ const TaskList = () => {
   return (
     <section className="flex flex-col w-full max-w-screen-lg gap-2">
       <TaskModal />
+      <Task />
 
       {tasks.map(task => {
         const project = projects.find(project => project.id === task.projectId) || undefined;
