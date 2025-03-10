@@ -5,6 +5,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -32,6 +33,7 @@ import {
   Project,
 } from '@harbor-task/models';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useMediaQuery } from '../hooks/use-media-query';
 import { useAddProject, useEditProject, useProjects } from '../hooks/use-projects';
@@ -42,39 +44,73 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from './ui/input';
 import { Skeleton } from './ui/skeleton';
 
-export function ProjectModal({
-  isOpen,
-  onOpenChange,
-  mode,
-  project,
-}: {
+interface ProjectModalState {
   isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
   mode: 'Add' | 'Edit';
   project?: Project;
-}) {
+}
+
+const defaultModalState: ProjectModalState = {
+  isOpen: false,
+  mode: 'Add',
+  project: undefined,
+};
+
+export const useProjectModal = () => {
+  return useQuery({
+    queryKey: ['projectModalState'],
+    queryFn: () => defaultModalState,
+    initialData: defaultModalState,
+  });
+};
+
+export const useUpdateProjectModal = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (newState: Partial<ProjectModalState>) => {
+      const currentState =
+        queryClient.getQueryData<ProjectModalState>(['projectModalState']) || defaultModalState;
+      return Promise.resolve({ ...currentState, ...newState });
+    },
+    onSuccess: updatedState => {
+      queryClient.setQueryData(['projectModalState'], updatedState);
+    },
+  });
+};
+
+export function ProjectModal() {
   const isDesktop = useMediaQuery('(min-width: 768px)');
+
+  const { data: modalState } = useProjectModal();
+  const updateModalState = useUpdateProjectModal();
 
   if (isDesktop) {
     return (
-      <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <Dialog
+        open={modalState.isOpen}
+        onOpenChange={() => updateModalState.mutate({ isOpen: !modalState.isOpen })}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>{mode} project</DialogTitle>
+            <DialogTitle>{modalState.mode} project</DialogTitle>
           </DialogHeader>
-          <ProjectForm mode={mode} project={project} />
+          <DialogDescription className="hidden">
+            Form for adding and editing project
+          </DialogDescription>
+          <ProjectForm mode={modalState.mode} project={modalState.project} />
         </DialogContent>
       </Dialog>
     );
   }
 
   return (
-    <Drawer open={isOpen} onOpenChange={onOpenChange}>
+    <Drawer
+      open={modalState.isOpen}
+      onOpenChange={() => updateModalState.mutate({ isOpen: !modalState.isOpen })}>
       <DrawerContent className="p-4">
         <DrawerHeader className="px-0">
-          <DrawerTitle>{mode} project</DrawerTitle>
+          <DrawerTitle>{modalState.mode} project</DrawerTitle>
         </DrawerHeader>
-        <ProjectForm mode={mode} project={project} />
+        <ProjectForm mode={modalState.mode} project={modalState.project} />
       </DrawerContent>
     </Drawer>
   );
@@ -191,7 +227,7 @@ const ProjectForm = ({ project, mode }: ProjectFormProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Color</FormLabel>
-              <ColorInput {...field} value={field.value || "#ffffff"}/>
+              <ColorInput {...field} value={field.value || '#ffffff'} />
               <FormMessage />
             </FormItem>
           )}

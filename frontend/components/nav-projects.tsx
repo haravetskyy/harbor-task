@@ -15,13 +15,11 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { Project } from '@harbor-task/models';
 import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
-import React from 'react';
 import { useDeleteProject, useProjects } from '../hooks/use-projects';
 import { useUser } from '../hooks/use-user';
 import { useFilter } from './contexts/filter-context';
-import { ProjectModal } from './project-modal';
+import { ProjectModal, useUpdateProjectModal } from './project-modal';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Skeleton } from './ui/skeleton';
@@ -32,9 +30,7 @@ export function NavProjects() {
   const { data: projects = [], isLoading: isProjectsLoading } = useProjects(user?.id);
   const { setSelectedFilter } = useFilter();
   const deleteProjectMutation = useDeleteProject();
-  const [modalOpen, setModalOpen] = React.useState(false);
-  const [modalMode, setModalMode] = React.useState<'Add' | 'Edit'>('Add');
-  const [modalProject, setModalProject] = React.useState<Project | undefined>(undefined);
+  const updateModalState = useUpdateProjectModal();
 
   if (!user || isUserLoading || isProjectsLoading) {
     return (
@@ -63,13 +59,12 @@ export function NavProjects() {
       <Button
         variant="outline"
         onClick={() => {
-          setModalOpen(true);
-          setModalMode('Add');
+          updateModalState.mutate({ isOpen: true, mode: 'Add', project: undefined });
         }}>
         <Plus />
         Add project
       </Button>
-      <ProjectModal isOpen={modalOpen} onOpenChange={setModalOpen} mode={modalMode} project={modalProject} />
+      <ProjectModal />
 
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
@@ -99,11 +94,7 @@ export function NavProjects() {
                 side={isMobile ? 'bottom' : 'right'}
                 align={isMobile ? 'end' : 'start'}>
                 <DropdownMenuItem
-                  onClick={() => {
-                    setModalOpen(true);
-                    setModalMode('Edit');
-                    setModalProject(project);
-                  }}>
+                  onClick={() => updateModalState.mutate({ isOpen: true, mode: 'Edit', project })}>
                   <Pencil className="text-neutral-500 dark:text-neutral-400" />
                   <span>Edit Project</span>
                 </DropdownMenuItem>
