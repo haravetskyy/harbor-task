@@ -1,7 +1,5 @@
-import { Task } from '@harbor-task/models';
+import { Project, Task } from '@harbor-task/models';
 import { CalendarClock, Flag } from 'lucide-react';
-import { useProjects } from '../hooks/use-projects';
-import { useUser } from '../hooks/use-user';
 import { formatDate } from '../lib/format-date';
 import { getFlagColor } from './task-list';
 import { Badge } from './ui/badge';
@@ -12,7 +10,6 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from './ui/breadcrumb';
-import { Button } from './ui/button';
 import {
   Credenza,
   CredenzaContent,
@@ -37,17 +34,19 @@ export const getPriorityText = (priority: number | undefined): string | undefine
   return priority ? priorityTexts[priority] : 'Unknown';
 };
 
-const TaskItem = (task: Task) => {
-  const { data: user, isLoading: isUserLoading } = useUser();
-  const { data: projects = [] } = useProjects(user?.id);
-  const project = projects.find(project => project?.id === task.projectId) || undefined;
-
+const TaskWindow = ({
+  children,
+  task,
+  project,
+}: {
+  children: React.ReactNode;
+  task: Task;
+  project?: Project;
+}) => {
   return (
-    <Credenza>
-      <CredenzaTrigger asChild>
-        <Button>Trigger task</Button>
-      </CredenzaTrigger>
-      <CredenzaContent className="p-4 flex gap-2 h-[90%] md:min-h-[50%] md:h-min md:min-w-[60%]">
+    <Credenza key={task.id}>
+      <CredenzaTrigger asChild>{children}</CredenzaTrigger>
+      <CredenzaContent className="p-4 flex md:justify-between gap-4 h-[90%] md:min-h-[50%] md:h-min md:min-w-[50%]">
         <div className="flex flex-col md:gap-2">
           <CredenzaHeader className="px-0">
             <Breadcrumb>
@@ -67,7 +66,7 @@ const TaskItem = (task: Task) => {
             <CredenzaDescription>{task.description}</CredenzaDescription>
           </section>
         </div>
-        <section className="flex flex-col gap-2 md:mt-6 md:min-w-max">
+        <section className="flex flex-col gap-2 md:mt-6 md:min-w-max md:max-w-[33%] md:border-l md:border-border md:pl-4">
           <section className="flex gap-1 flex-col">
             <p className="text-sm text-muted-foreground">Project</p>
             <div className="flex gap-2 items-center">
@@ -113,4 +112,4 @@ const TaskItem = (task: Task) => {
   );
 };
 
-export default TaskItem;
+export default TaskWindow;

@@ -7,8 +7,8 @@ import { formatDate } from '@/lib/format-date';
 import { CalendarClock, Flag, Plus } from 'lucide-react';
 import React from 'react';
 import { useFilter } from './contexts/filter-context';
-import TaskItem from './task';
 import { TaskModal } from './task-modal';
+import TaskWindow from './task-window';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Checkbox } from './ui/checkbox';
@@ -81,17 +81,23 @@ const TaskList = () => {
         const isDeleting = deletingTaskId === task.id;
 
         return (
-          <div key={task.id}>
+          <TaskWindow task={task} project={project} key={task.id}>
             <div
               className={`flex w-full items-start gap-2 rounded-xl border border-solid border-border p-4 dark:bg-neutral-900 ${
                 isDeleting && 'animate-slide-fade-left'
               }`}>
-              <Checkbox className="rounded-[50%] mt-1" onClick={() => handleDelete(task.id)} />
+              <Checkbox
+                className="rounded-[50%] mt-1"
+                onClick={e => {
+                  e.preventDefault();
+                  handleDelete(task.id);
+                }}
+              />
 
               <div className="flex flex-col items-start justify-start gap-1">
-                <h2 className="text-sm">{task.title}</h2>
+                <h2 className="text-sm cursor-pointer">{task.title}</h2>
                 <p className="text-xs text-muted-foreground line-clamp-3">{task.description}</p>
-                <div className="flex flex-row items-center gap-2 text-red-400">
+                <div className="flex flex-row items-center gap-2">
                   {task.deadline && (
                     <Badge
                       variant="outline"
@@ -137,9 +143,7 @@ const TaskList = () => {
                 </div>
               </div>
             </div>
-
-            <TaskItem {...task} />
-          </div>
+          </TaskWindow>
         );
       })}
     </section>
