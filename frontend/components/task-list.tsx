@@ -7,7 +7,7 @@ import { formatDate } from '@/lib/format-date';
 import { CalendarClock, Flag, Plus } from 'lucide-react';
 import React from 'react';
 import { useFilter } from './contexts/filter-context';
-import Task from './task';
+import TaskItem from './task';
 import { TaskModal } from './task-modal';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
@@ -75,68 +75,70 @@ const TaskList = () => {
   return (
     <section className="flex flex-col w-full max-w-screen-lg gap-2">
       <TaskModal />
-      <Task />
 
       {tasks.map(task => {
         const project = projects.find(project => project.id === task.projectId) || undefined;
         const isDeleting = deletingTaskId === task.id;
 
         return (
-          <div
-            className={`flex w-full items-start gap-2 rounded-xl border border-solid border-border p-4 dark:bg-neutral-900 ${
-              isDeleting && 'animate-slide-fade-left'
-            }`}
-            key={task.id}>
-            <Checkbox className="rounded-[50%] mt-1" onClick={() => handleDelete(task.id)} />
+          <div key={task.id}>
+            <div
+              className={`flex w-full items-start gap-2 rounded-xl border border-solid border-border p-4 dark:bg-neutral-900 ${
+                isDeleting && 'animate-slide-fade-left'
+              }`}>
+              <Checkbox className="rounded-[50%] mt-1" onClick={() => handleDelete(task.id)} />
 
-            <div className="flex flex-col items-start justify-start gap-1">
-              <h2 className="text-sm">{task.title}</h2>
-              <p className="text-xs text-muted-foreground line-clamp-3">{task.description}</p>
-              <div className="flex flex-row items-center gap-2 text-red-400">
-                {task.deadline && (
-                  <Badge
-                    variant="outline"
-                    className="flex flex-row items-center py-1 gap-2 bg-background">
-                    <CalendarClock size={18} />
-                    <p className="text-xs">{formatDate(task.deadline)}</p>
-                  </Badge>
-                )}
-                {task.progress !== undefined && (
-                  <Badge variant="outline" className="py-[0.325rem] bg-background">
-                    {task.progress}%
-                  </Badge>
-                )}
-                {project && (
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Badge variant="circle" color={project.color}>
-                        {project.emoji}
-                      </Badge>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{project.name}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                )}
+              <div className="flex flex-col items-start justify-start gap-1">
+                <h2 className="text-sm">{task.title}</h2>
+                <p className="text-xs text-muted-foreground line-clamp-3">{task.description}</p>
+                <div className="flex flex-row items-center gap-2 text-red-400">
+                  {task.deadline && (
+                    <Badge
+                      variant="outline"
+                      className="flex flex-row items-center py-1 gap-2 bg-background">
+                      <CalendarClock size={18} />
+                      <p className="text-xs">{formatDate(task.deadline)}</p>
+                    </Badge>
+                  )}
+                  {task.progress !== undefined && (
+                    <Badge variant="outline" className="py-[0.325rem] bg-background">
+                      {task.progress}%
+                    </Badge>
+                  )}
+                  {project && (
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Badge variant="circle" color={project.color}>
+                          {project.emoji}
+                        </Badge>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{project.name}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
 
-                {task.priority && (
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Flag
-                        className="w-5"
-                        style={{
-                          fill: getFlagColor(task.priority),
-                          stroke: getFlagColor(task.priority),
-                        }}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Priority: {task.priority}/4</p>
-                    </TooltipContent>
-                  </Tooltip>
-                )}
+                  {task.priority && (
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Flag
+                          className="w-5"
+                          style={{
+                            fill: getFlagColor(task.priority),
+                            stroke: getFlagColor(task.priority),
+                          }}
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Priority: {task.priority}/4</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+                </div>
               </div>
             </div>
+
+            <TaskItem {...task} />
           </div>
         );
       })}

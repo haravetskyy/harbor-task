@@ -1,5 +1,8 @@
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { Task } from '@harbor-task/models';
 import { CalendarClock, Flag } from 'lucide-react';
+import { useProjects } from '../hooks/use-projects';
+import { useUser } from '../hooks/use-user';
 import { formatDate } from '../lib/format-date';
 import { getFlagColor } from './task-list';
 import { Badge } from './ui/badge';
@@ -36,24 +39,11 @@ export const getPriorityText = (priority: number | undefined): string | undefine
   return priority ? priorityTexts[priority] : 'Unknown';
 };
 
-const task = {
-  id: '195f340f-00e0-4624-a592-0a207f7d0ac3',
-  title: 'Test Website Redesign feature 1',
-  description:
-    'create refactor document integrate integrate design design plan research refactor plan fix update develop deploy dep.',
-  deadline: '2025-03-08T21:39:41.871Z',
-  progress: 75,
-  priority: 4,
-  project: {
-    id: '9f7d25ee-bb0a-45fc-8f2b-66ebf3988559',
-    name: 'Website Whatever',
-    color: '#c10007',
-    emoji: '🚊',
-  },
-};
-
-const Task = () => {
+const TaskItem = (task: Task) => {
   const isDesktop = useMediaQuery('(min-width: 768px)');
+  const { data: user, isLoading: isUserLoading } = useUser();
+  const { data: projects = [] } = useProjects(user?.id);
+  const project = projects.find(project => project?.id === task.projectId) || undefined;
 
   if (isDesktop) {
     return (
@@ -71,33 +61,35 @@ const Task = () => {
                   </BreadcrumbItem>
                   <BreadcrumbSeparator className="hidden md:block" />
                   <BreadcrumbItem>
-                    <BreadcrumbLink>{task.project.name}</BreadcrumbLink>
+                    <BreadcrumbLink>{project?.name}</BreadcrumbLink>
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
             </DialogHeader>
             <section className="flex flex-col gap-2">
               <DialogTitle>{task.title}</DialogTitle>
-              <DialogDescription>{task.description}</DialogDescription>
+              <DialogDescription className="max-w-[90%]">{task.description}</DialogDescription>
             </section>
           </div>
-          <aside className="mt-6 flex flex-col gap-2">
+          <aside className="mt-6 flex flex-col gap-2 min-w-52">
             <section className="flex gap-1 flex-col">
               <p className="text-sm text-muted-foreground">Project</p>
               <div className="flex gap-2 items-center">
-                <Badge className="w-min" variant="circle" color={task.project.color}>
-                  {task.project.emoji}
+                <Badge className="w-min" variant="circle" color={project?.color}>
+                  {project?.emoji}
                 </Badge>
-                <p className="text-sm">{task.project.name}</p>
+                <p className="text-sm">{project?.name}</p>
               </div>
             </section>
-            <section className="flex gap-1 flex-col">
-              <p className="text-sm text-muted-foreground">Deadline</p>
-              <div className="flex gap-2 items-center">
-                <CalendarClock className="w-5" />
-                <p className="text-sm">{formatDate(task.deadline)}</p>
-              </div>
-            </section>
+            {task.deadline && (
+              <section className="flex gap-1 flex-col">
+                <p className="text-sm text-muted-foreground">Deadline</p>
+                <div className="flex gap-2 items-center">
+                  <CalendarClock className="w-5" />
+                  <p className="text-sm">{formatDate(task.deadline)}</p>
+                </div>
+              </section>
+            )}
             <section className="flex gap-1 flex-col">
               <p className="text-sm text-muted-foreground">Priority</p>
               <div className="flex gap-2 items-center">
@@ -140,7 +132,7 @@ const Task = () => {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbLink>{task.project.name}</BreadcrumbLink>
+                  <BreadcrumbLink>{project?.name}</BreadcrumbLink>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -154,19 +146,21 @@ const Task = () => {
           <section className="flex gap-1 flex-col">
             <p className="text-sm text-muted-foreground">Project</p>
             <div className="flex gap-2 items-center">
-              <Badge className="w-min" variant="circle" color={task.project.color}>
-                {task.project.emoji}
+              <Badge className="w-min" variant="circle" color={project?.color}>
+                {project?.emoji}
               </Badge>
-              <p className="text-sm">{task.project.name}</p>
+              <p className="text-sm">{project?.name}</p>
             </div>
           </section>
-          <section className="flex gap-1 flex-col">
-            <p className="text-sm text-muted-foreground">Deadline</p>
-            <div className="flex gap-2 items-center">
-              <CalendarClock className="w-5" />
-              <p className="text-sm">{formatDate(task.deadline)}</p>
-            </div>
-          </section>
+          {task.deadline && (
+            <section className="flex gap-1 flex-col">
+              <p className="text-sm text-muted-foreground">Deadline</p>
+              <div className="flex gap-2 items-center">
+                <CalendarClock className="w-5" />
+                <p className="text-sm">{formatDate(task.deadline)}</p>
+              </div>
+            </section>
+          )}
           <section className="flex gap-1 flex-col">
             <p className="text-sm text-muted-foreground">Priority</p>
             <div className="flex gap-2 items-center">
@@ -194,4 +188,4 @@ const Task = () => {
   );
 };
 
-export default Task;
+export default TaskItem;
