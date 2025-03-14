@@ -1,22 +1,8 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-} from '@/components/ui/drawer';
+import { DialogClose, DialogFooter } from '@/components/ui/dialog';
+import { DrawerClose } from '@/components/ui/drawer';
 import {
   Select,
   SelectContent,
@@ -35,11 +21,11 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { useMediaQuery } from '../hooks/use-media-query';
 import { useAddProject, useEditProject, useProjects } from '../hooks/use-projects';
 import { useUser } from '../hooks/use-user';
 import { cn } from '../lib/utils';
 import { ColorInput } from './ui/color-input';
+import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from './ui/credenza';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 import { Input } from './ui/input';
 import { Skeleton } from './ui/skeleton';
@@ -79,40 +65,20 @@ export const useUpdateProjectModal = () => {
 };
 
 export function ProjectModal() {
-  const isDesktop = useMediaQuery('(min-width: 768px)');
-
   const { data: modalState } = useProjectModal();
   const updateModalState = useUpdateProjectModal();
 
-  if (isDesktop) {
-    return (
-      <Dialog
-        open={modalState.isOpen}
-        onOpenChange={() => updateModalState.mutate({ isOpen: !modalState.isOpen })}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>{modalState.mode} project</DialogTitle>
-          </DialogHeader>
-          <DialogDescription className="hidden">
-            Form for adding and editing project
-          </DialogDescription>
-          <ProjectForm mode={modalState.mode} project={modalState.project} />
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
   return (
-    <Drawer
+    <Credenza
       open={modalState.isOpen}
       onOpenChange={() => updateModalState.mutate({ isOpen: !modalState.isOpen })}>
-      <DrawerContent className="p-4">
-        <DrawerHeader className="px-0">
-          <DrawerTitle>{modalState.mode} project</DrawerTitle>
-        </DrawerHeader>
+      <CredenzaContent>
+        <CredenzaHeader>
+          <CredenzaTitle>{modalState.mode} project</CredenzaTitle>
+        </CredenzaHeader>
         <ProjectForm mode={modalState.mode} project={modalState.project} />
-      </DrawerContent>
-    </Drawer>
+      </CredenzaContent>
+    </Credenza>
   );
 }
 

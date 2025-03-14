@@ -1,15 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { DialogClose, DialogFooter } from '@/components/ui/dialog';
 import { PopoverContent } from '@/components/ui/popover';
 import {
   Select,
@@ -29,14 +21,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon, Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useMediaQuery } from '../hooks/use-media-query';
 import { useProjects } from '../hooks/use-projects';
 import { useAddTask } from '../hooks/use-tasks';
 import { useUser } from '../hooks/use-user';
 import { cn } from '../lib/utils';
 import { Badge } from './ui/badge';
 import { Calendar } from './ui/calendar';
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from './ui/drawer';
+import {
+  Credenza,
+  CredenzaContent,
+  CredenzaHeader,
+  CredenzaTitle,
+  CredenzaTrigger,
+} from './ui/credenza';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 import { Input } from './ui/input';
 import { Popover, PopoverTrigger } from './ui/popover';
@@ -44,42 +41,21 @@ import { Skeleton } from './ui/skeleton';
 import { Textarea } from './ui/textarea';
 
 export function TaskModal() {
-  const isDesktop = useMediaQuery('(min-width: 768px)');
-
-  if (isDesktop) {
-    return (
-      <Dialog>
-        <DialogTrigger className="flex" asChild>
-          <Button variant="link" className="mr-0 mt-2 w-min group">
-            <Plus className="group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black rounded-[50%] transition-all duration-300 " />
-            Add task
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add project</DialogTitle>
-          </DialogHeader>
-          <TaskForm />
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
   return (
-    <Drawer>
-      <DrawerTrigger asChild>
+    <Credenza>
+      <CredenzaTrigger asChild>
         <Button variant="link" className="mr-0 mt-2 w-min group">
           <Plus className="group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black rounded-[50%] transition-all duration-300 " />
           Add task
         </Button>
-      </DrawerTrigger>
-      <DrawerContent className="p-4">
-        <DrawerHeader className="px-0">
-          <DrawerTitle>Add project</DrawerTitle>
-        </DrawerHeader>
+      </CredenzaTrigger>
+      <CredenzaContent className="p-4">
+        <CredenzaHeader className="px-0">
+          <CredenzaTitle>Add task</CredenzaTitle>
+        </CredenzaHeader>
         <TaskForm />
-      </DrawerContent>
-    </Drawer>
+      </CredenzaContent>
+    </Credenza>
   );
 }
 
