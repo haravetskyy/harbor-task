@@ -15,16 +15,18 @@ import { useProjects } from '../hooks/use-projects';
 import { useTasks } from '../hooks/use-tasks';
 import { useUser } from '../hooks/use-user';
 import { getFlagColor } from './task-list';
+import TaskWindow from './task-window';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 
-export function Searcher() {
-  const [open, setOpen] = React.useState(false);
+export const Searcher = () => {
+  const [dialogOpen, setDialogOpen] = React.useState(false);
   const [query, setQuery] = React.useState('');
-  const { data: user } = useUser();
+  const [selectedTaskId, setSelectedTaskId] = React.useState<string | null>(null);
 
   const [debouncedQuery] = useDebounce(query, 300);
 
+  const { data: user } = useUser();
   const { data: tasks = [], isLoading: tasksLoading } = useTasks(user?.id, 'All', debouncedQuery);
   const { data: projects = [], isLoading: projectsLoading } = useProjects(user?.id, debouncedQuery);
 
@@ -32,7 +34,7 @@ export function Searcher() {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setOpen(open => !open);
+        setDialogOpen(open => !open);
       }
     };
 
@@ -41,28 +43,33 @@ export function Searcher() {
   }, []);
 
   React.useEffect(() => {
-    if (!open) {
+    if (!dialogOpen) {
       setQuery('');
     }
-  }, [open]);
+  }, [dialogOpen]);
 
   const isLoading = tasksLoading || projectsLoading || !user;
+
+  const handleTaskSelect = (taskId: string) => {
+    setSelectedTaskId(taskId);
+    setDialogOpen(false);
+  };
 
   return (
     <>
       <Button
-        onClick={() => setOpen(open => !open)}
+        onClick={() => setDialogOpen(true)}
         variant="outline"
         className="p-2"
         disabled={isLoading}>
         <Search />
         Search
         <kbd className="ml-auto justify-self-end pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-          <span className="text-sm">⌘</span>K
+          Ctrl K
         </kbd>
       </Button>
 
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <CommandInput
           placeholder="Type a command or search..."
           value={query}
@@ -82,8 +89,7 @@ export function Searcher() {
                       key={project.id}
                       value={project.name}
                       onSelect={() => {
-                        console.log('Selected project:', project);
-                        setOpen(false);
+                        setDialogOpen(false);
                       }}>
                       <Badge variant="circle" color={project.color}>
                         {project.emoji}
@@ -99,10 +105,7 @@ export function Searcher() {
                     <CommandItem
                       key={task.id}
                       value={task.title}
-                      onSelect={() => {
-                        console.log('Selected task:', task);
-                        setOpen(false);
-                      }}>
+                      onSelect={() => handleTaskSelect(task.id)}>
                       <Flag
                         className="w-5"
                         style={{
@@ -119,6 +122,21 @@ export function Searcher() {
           )}
         </CommandList>
       </CommandDialog>
+
+      {tasks.map(task => {
+        const project = projects.find(project => project.id === task.projectId);
+        return (
+          <TaskWindow
+            key={task.id}
+            task={task}
+            project={project}
+            open={selectedTaskId === task.id}
+            onOpenChange={isOpen => {
+              if (!isOpen) setSelectedTaskId(null);
+            }}
+          />
+        );
+      })}
     </>
   );
-}
+};

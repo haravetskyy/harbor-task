@@ -34,17 +34,17 @@ export const getPriorityText = (priority: number | undefined): string | undefine
   return priority ? priorityTexts[priority] : 'Unknown';
 };
 
-const TaskWindow = ({
-  children,
-  task,
-  project,
-}: {
-  children: React.ReactNode;
+interface TaskWindowProps {
+  children?: React.ReactNode;
   task: Task;
   project?: Project;
-}) => {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowProps) => {
   return (
-    <Credenza key={task.id}>
+    <Credenza open={open} onOpenChange={onOpenChange}>
       <CredenzaTrigger asChild>{children}</CredenzaTrigger>
       <CredenzaContent className="p-4 flex md:justify-between gap-4 h-[90%] md:min-h-[50%] md:h-min md:min-w-[50%]">
         <div className="flex flex-col md:gap-2">
