@@ -51,13 +51,21 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
           <CredenzaHeader className="px-0">
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="#">Projects</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink>{project?.name}</BreadcrumbLink>
-                </BreadcrumbItem>
+                {task.projectId ? (
+                  <>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink href="#">Projects</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbLink>{project?.name}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                  </>
+                ) : (
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="#">All Tasks</BreadcrumbLink>
+                  </BreadcrumbItem>
+                )}
               </BreadcrumbList>
             </Breadcrumb>
           </CredenzaHeader>
@@ -67,15 +75,17 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
           </section>
         </div>
         <section className="flex flex-col gap-2 md:mt-6 md:min-w-max md:max-w-[33%] md:border-l md:border-border md:pl-4">
-          <section className="flex gap-1 flex-col">
-            <p className="text-sm text-muted-foreground">Project</p>
-            <div className="flex gap-2 items-center">
-              <Badge className="w-min" variant="circle" color={project?.color}>
-                {project?.emoji}
-              </Badge>
-              <p className="text-sm">{project?.name}</p>
-            </div>
-          </section>
+          {task.projectId && (
+            <section className="flex gap-1 flex-col">
+              <p className="text-sm text-muted-foreground">Project</p>
+              <div className="flex gap-2 items-center">
+                <Badge className="w-min" variant="circle" color={project?.color}>
+                  {project?.emoji}
+                </Badge>
+                <p className="text-sm">{project?.name}</p>
+              </div>
+            </section>
+          )}
           {task.deadline && (
             <section className="flex gap-1 flex-col">
               <p className="text-sm text-muted-foreground">Deadline</p>
