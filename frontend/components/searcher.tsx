@@ -14,6 +14,7 @@ import { useDebounce } from 'use-debounce';
 import { useProjects } from '../hooks/use-projects';
 import { useTasks } from '../hooks/use-tasks';
 import { useUser } from '../hooks/use-user';
+import { useFilter } from './contexts/filter-context';
 import { getFlagColor } from './task-list';
 import TaskWindow from './task-window';
 import { Badge } from './ui/badge';
@@ -29,6 +30,7 @@ export const Searcher = () => {
   const { data: user } = useUser();
   const { data: tasks = [], isLoading: tasksLoading } = useTasks(user?.id, 'All', debouncedQuery);
   const { data: projects = [], isLoading: projectsLoading } = useProjects(user?.id, debouncedQuery);
+  const { setSelectedFilter } = useFilter();
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -90,6 +92,7 @@ export const Searcher = () => {
                       value={project.name}
                       onSelect={() => {
                         setDialogOpen(false);
+                        setSelectedFilter({ type: 'project', value: project.id });
                       }}>
                       <Badge variant="circle" color={project.color}>
                         {project.emoji}
