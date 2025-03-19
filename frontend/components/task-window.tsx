@@ -1,5 +1,6 @@
 import { Project, Task } from '@harbor-task/models';
 import { CalendarClock, Flag } from 'lucide-react';
+import React from 'react';
 import { formatDate } from '../lib/format-date';
 import { getFlagColor } from './task-list';
 import { Badge } from './ui/badge';
@@ -18,9 +19,10 @@ import {
   CredenzaTitle,
   CredenzaTrigger,
 } from './ui/credenza';
+import { Textarea } from './ui/textarea';
 
 export const getPriorityText = (priority: number | undefined): string | undefined => {
-  if (typeof priority === undefined) {
+  if (!priority) {
     return;
   }
 
@@ -31,7 +33,7 @@ export const getPriorityText = (priority: number | undefined): string | undefine
     4: 'Critical',
   } as const;
 
-  return priority ? priorityTexts[priority] : 'Unknown';
+  return priorityTexts[priority];
 };
 
 interface TaskWindowProps {
@@ -43,11 +45,14 @@ interface TaskWindowProps {
 }
 
 const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowProps) => {
+  const [titleHidden, setTitleHidden] = React.useState(false);
+  const [descriptionHidden, setDescriptionHidden] = React.useState(false);
+
   return (
     <Credenza open={open} onOpenChange={onOpenChange}>
       <CredenzaTrigger asChild>{children}</CredenzaTrigger>
       <CredenzaContent className="p-4 flex md:justify-between gap-4 h-[90%] md:min-h-[50%] md:h-min md:min-w-[50%]">
-        <div className="flex flex-col md:gap-2">
+        <div className="flex flex-col md:gap-2 w-full">
           <CredenzaHeader className="px-0">
             <Breadcrumb>
               <BreadcrumbList>
@@ -69,9 +74,34 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
               </BreadcrumbList>
             </Breadcrumb>
           </CredenzaHeader>
-          <section className="flex flex-col gap-2">
-            <CredenzaTitle>{task.title}</CredenzaTitle>
-            <CredenzaDescription>{task.description}</CredenzaDescription>
+          <section className="flex flex-col gap-2 w-full">
+            <CredenzaTitle
+              className={titleHidden ? 'hidden' : 'px-3 py-2'}
+              onClick={() => {
+                setTitleHidden(true);
+              }}>
+              {task.title}
+            </CredenzaTitle>
+            <Textarea
+              className={
+                titleHidden
+                  ? '!text-lg font-semibold !leading-none tracking-tight resize-none w-full'
+                  : 'hidden'
+              }
+              autoSize>
+              {task.title}
+            </Textarea>
+            <CredenzaDescription
+              className={descriptionHidden ? 'hidden' : 'px-3 py-2'}
+              onClick={() => {
+                setDescriptionHidden(true);
+              }}>
+              {task.description}
+            </CredenzaDescription>
+            <Textarea
+              className={descriptionHidden ? 'resize-none w-full' : 'hidden'}
+              defaultValue={task.description}
+              autoSize></Textarea>
           </section>
         </div>
         <section className="flex flex-col gap-2 md:mt-6 md:min-w-max md:max-w-[33%] md:border-l md:border-border md:pl-4">
