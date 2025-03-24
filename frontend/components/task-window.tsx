@@ -1,3 +1,6 @@
+import { useProjects } from '@/hooks/use-projects';
+import { useUser } from '@/hooks/use-user';
+import { cn } from '@/lib/utils';
 import { Project, Task } from '@harbor-task/models';
 import { CalendarClock, Flag } from 'lucide-react';
 import React from 'react';
@@ -11,6 +14,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from './ui/breadcrumb';
+import { Button } from './ui/button';
 import {
   Credenza,
   CredenzaContent,
@@ -19,6 +23,10 @@ import {
   CredenzaTitle,
   CredenzaTrigger,
 } from './ui/credenza';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Popover, PopoverTrigger } from './ui/popover';
+import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select';
 import { Textarea } from './ui/textarea';
 
 export const getPriorityText = (priority: number | undefined): string | undefined => {
@@ -45,8 +53,8 @@ interface TaskWindowProps {
 }
 
 const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowProps) => {
-  const [titleHidden, setTitleHidden] = React.useState(false);
-  const [descriptionHidden, setDescriptionHidden] = React.useState(false);
+  const { data: user, isLoading: isUserLoading } = useUser();
+  const { data: projects } = useProjects(user?.id);
 
   return (
     <Credenza open={open} onOpenChange={onOpenChange}>
@@ -75,77 +83,104 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
             </Breadcrumb>
           </CredenzaHeader>
           <section className="flex flex-col gap-2 w-full">
-            <CredenzaTitle
-              className={titleHidden ? 'hidden' : 'px-3 py-2'}
-              onClick={() => {
-                setTitleHidden(true);
-              }}>
-              {task.title}
+            <CredenzaTitle>
+              <Textarea
+                className="!text-lg font-semibold !leading-none tracking-tight resize-none w-full"
+                autoSize>
+                {task.title}
+              </Textarea>
             </CredenzaTitle>
-            <Textarea
-              className={
-                titleHidden
-                  ? '!text-lg font-semibold !leading-none tracking-tight resize-none w-full'
-                  : 'hidden'
-              }
-              autoSize>
-              {task.title}
-            </Textarea>
-            <CredenzaDescription
-              className={descriptionHidden ? 'hidden' : 'px-3 py-2'}
-              onClick={() => {
-                setDescriptionHidden(true);
-              }}>
-              {task.description}
+            <CredenzaDescription>
+              <Textarea
+                className="resize-none w-full"
+                defaultValue={task.description}
+                autoSize></Textarea>
             </CredenzaDescription>
-            <Textarea
-              className={descriptionHidden ? 'resize-none w-full' : 'hidden'}
-              defaultValue={task.description}
-              autoSize></Textarea>
           </section>
         </div>
-        <section className="flex flex-col gap-2 md:mt-6 md:min-w-max md:max-w-[33%] md:border-l md:border-border md:pl-4">
+        <section className="flex flex-col gap-2 md:mt-6 md:w-max md:max-w-[33%] md:border-l md:border-border md:pl-4">
           {task.projectId && (
-            <section className="flex gap-1 flex-col">
+            <>
               <p className="text-sm text-muted-foreground">Project</p>
-              <div className="flex gap-2 items-center">
-                <Badge className="w-min" variant="circle" color={project?.color}>
-                  {project?.emoji}
-                </Badge>
-                <p className="text-sm">{project?.name}</p>
-              </div>
-            </section>
+              <Select>
+                <SelectTrigger>
+                  <div className="flex gap-2 items-center line-clamp-1 mr-1">
+                    <Badge className="w-min" variant="circle" color={project?.color}>
+                      {project?.emoji}
+                    </Badge>
+                    <p className="text-sm line-clamp-1">{project?.name}</p>
+                  </div>
+                </SelectTrigger>
+                <SelectContent>
+                  {projects?.map(project => (
+                    <SelectItem key={project.id} value={project.id}>
+                      <Badge variant="circle" color={project.color} className="mr-2">
+                        {project.emoji}
+                      </Badge>
+                      {project.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </>
           )}
           {task.deadline && (
-            <section className="flex gap-1 flex-col">
+            <>
               <p className="text-sm text-muted-foreground">Deadline</p>
-              <div className="flex gap-2 items-center">
-                <CalendarClock className="w-5" />
-                <p className="text-sm">{formatDate(task.deadline)}</p>
-              </div>
-            </section>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className={cn('justify-start text-left font-normal')}>
+                    <CalendarClock className=" h-4 w-4 opacity-50" />
+                    <span>{formatDate(task.deadline)}</span>
+                  </Button>
+                </PopoverTrigger>
+              </Popover>
+            </>
           )}
-          <section className="flex gap-1 flex-col">
-            <p className="text-sm text-muted-foreground">Priority</p>
-            <div className="flex gap-2 items-center">
-              <Flag
-                className="w-5"
-                style={{
-                  fill: getFlagColor(task.priority),
-                  stroke: getFlagColor(task.priority),
-                }}
+
+          <div className="grid w-full max-w-sm items-center gap-1.5">
+            <Label htmlFor="priority" className="text-sm text-muted-foreground">
+              Priority
+            </Label>
+            <div className="relative">
+              <div className="absolute left-4 top-1.5 h-4 w-4 text-muted-foreground">
+                <Flag
+                  className="w-4"
+                  style={{
+                    fill: getFlagColor(task.priority),
+                    stroke: getFlagColor(task.priority),
+                  }}
+                />
+              </div>
+              <Input
+                id="priority"
+                type="number"
+                min={1}
+                max={4}
+                step={1}
+                value={1}
+                className="w-full rounded-lg bg-background pl-10"
               />
-              <p className="text-sm">
-                {getPriorityText(task.priority)} ({task.priority}/4)
-              </p>
             </div>
-          </section>
-          <section className="flex gap-1 flex-col">
-            <p className="text-sm text-muted-foreground">Progress</p>
-            <div className="flex gap-2 items-center">
-              <p className="text-sm">{task.progress} %</p>
+          </div>
+
+          <div className="grid w-full max-w-sm items-center gap-1.5">
+            <Label htmlFor="progress" className="text-sm text-muted-foreground">
+              Progress
+            </Label>
+            <div className="relative">
+              <div className="absolute left-4 top-1.5  text-muted-foreground">%</div>
+              <Input
+                type="number"
+                id="progress"
+                min={0}
+                max={100}
+                step={25}
+                value={0}
+                className="w-full rounded-lg bg-background pl-10"
+              />
             </div>
-          </section>
+          </div>
         </section>
       </CredenzaContent>
     </Credenza>
