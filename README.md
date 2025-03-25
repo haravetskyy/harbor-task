@@ -1,4 +1,4 @@
-# Harbor Task <img src="./apps/frontend/public/harbor-task.svg" alt="Logo" width="30" style="vertical-align: middle;" align="right">
+# Harbor Task <img src="./frontend/app/favicon.ico" alt="Logo" width="30" style="vertical-align: middle;" align="right">
 
 A full-stack project consisting of a **frontend** (Next.js + shadcn/ui), a **backend** (Nest.js), and a **PostgreSQL** database.
 
