@@ -25,7 +25,13 @@ import { useAddProject, useEditProject, useProjects } from '../hooks/use-project
 import { useUser } from '../hooks/use-user';
 import { cn } from '../lib/utils';
 import { ColorInput } from './ui/color-input';
-import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from './ui/credenza';
+import {
+  Credenza,
+  CredenzaBody,
+  CredenzaContent,
+  CredenzaHeader,
+  CredenzaTitle,
+} from './ui/credenza';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 import { Input } from './ui/input';
 import { Skeleton } from './ui/skeleton';
@@ -76,7 +82,9 @@ export function ProjectModal() {
         <CredenzaHeader>
           <CredenzaTitle>{modalState.mode} project</CredenzaTitle>
         </CredenzaHeader>
-        <ProjectForm mode={modalState.mode} project={modalState.project} />
+        <CredenzaBody>
+          <ProjectForm mode={modalState.mode} project={modalState.project} />
+        </CredenzaBody>
       </CredenzaContent>
     </Credenza>
   );

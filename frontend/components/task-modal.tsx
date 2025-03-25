@@ -4,18 +4,18 @@ import { Button } from '@/components/ui/button';
 import { DialogClose, DialogFooter } from '@/components/ui/dialog';
 import { PopoverContent } from '@/components/ui/popover';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from '@/components/ui/select';
 import {
-  addTaskSchema,
-  AddTaskValues,
-  MAX_TASK_DESCRIPTION_LENGTH,
-  MAX_TASK_TITLE_LENGTH,
-  Task,
+    addTaskSchema,
+    AddTaskValues,
+    MAX_TASK_DESCRIPTION_LENGTH,
+    MAX_TASK_TITLE_LENGTH,
+    Task,
 } from '@harbor-task/models';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
@@ -28,11 +28,12 @@ import { cn } from '../lib/utils';
 import { Badge } from './ui/badge';
 import { Calendar } from './ui/calendar';
 import {
-  Credenza,
-  CredenzaContent,
-  CredenzaHeader,
-  CredenzaTitle,
-  CredenzaTrigger,
+    Credenza,
+    CredenzaBody,
+    CredenzaContent,
+    CredenzaHeader,
+    CredenzaTitle,
+    CredenzaTrigger,
 } from './ui/credenza';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 import { Input } from './ui/input';
@@ -53,7 +54,9 @@ export function TaskModal() {
         <CredenzaHeader className="px-0">
           <CredenzaTitle>Add task</CredenzaTitle>
         </CredenzaHeader>
-        <TaskForm />
+        <CredenzaBody>
+          <TaskForm />
+        </CredenzaBody>
       </CredenzaContent>
     </Credenza>
   );

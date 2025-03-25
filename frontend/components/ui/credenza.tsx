@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/drawer';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { cn } from '@/lib/utils';
+import { ScrollArea } from './scroll-area';
 
 interface BaseProps {
   children: React.ReactNode;
@@ -92,7 +93,7 @@ const CredenzaContent = ({ className, children, ...props }: CredenzaProps) => {
 
   return (
     <CredenzaContent className={`${!isDesktop ? 'p-4' : ''} ${className}`} {...props}>
-      {children}
+      {isDesktop ? children : <ScrollArea>{children}</ScrollArea>}
     </CredenzaContent>
   );
 };
