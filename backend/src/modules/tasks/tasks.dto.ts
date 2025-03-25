@@ -1,7 +1,7 @@
 import { createZodDto } from '@abitia/zod-dto';
-import { TaskSchema } from '@harbor-task/models';
+import { taskSchema } from '@harbor-task/models';
 
-export const CreateTaskSchema = TaskSchema.omit({ id: true });
+export const CreateTaskSchema = taskSchema.omit({ id: true });
 
 export class CreateTaskDto extends createZodDto(CreateTaskSchema) {}
 
