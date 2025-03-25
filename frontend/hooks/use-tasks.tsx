@@ -44,8 +44,8 @@ const addTask = async (task: Omit<Task, 'id'>) => {
   return response.json() as Promise<Task>;
 };
 
-const editTask = async ({ userId, task }: { userId: string; task: Partial<Task> }) => {
-  const response = await fetch(`${apiUrl}/users/${userId}/tasks/${task.id}`, {
+const editTask = async (task: Partial<Task>) => {
+  const response = await fetch(`${apiUrl}/users/${task.userId}/tasks/${task.id}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(task),
@@ -89,7 +89,7 @@ export const useAddTask = () => {
 export const useEditTask = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<Task, Error, { userId: string; task: Partial<Task> }>({
+  return useMutation({
     mutationFn: editTask,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });

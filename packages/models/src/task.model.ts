@@ -35,6 +35,10 @@ export const taskSchema = z.object({
 
 export const addTaskSchema = taskSchema.omit({ id: true, userId: true });
 
+export const editTaskSchema = addTaskSchema.partial();
+
 export type Task = z.infer<typeof taskSchema>;
 
 export type AddTaskValues = z.infer<typeof addTaskSchema>;
+
+export type EditTaskValues = z.infer<typeof editTaskSchema>;

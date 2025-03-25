@@ -1,8 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { DialogClose, DialogFooter } from '@/components/ui/dialog';
-import { DrawerClose } from '@/components/ui/drawer';
 import {
   Select,
   SelectContent,
@@ -28,7 +26,9 @@ import { ColorInput } from './ui/color-input';
 import {
   Credenza,
   CredenzaBody,
+  CredenzaClose,
   CredenzaContent,
+  CredenzaFooter,
   CredenzaHeader,
   CredenzaTitle,
 } from './ui/credenza';
@@ -206,15 +206,13 @@ const ProjectForm = ({ project, mode }: ProjectFormProps) => {
             </FormItem>
           )}
         />
-        <DialogFooter>
-          <DialogClose asChild>
-            <DrawerClose asChild>
-              <Button disabled={!form.formState.isValid} type="submit">
-                Save changes
-              </Button>
-            </DrawerClose>
-          </DialogClose>
-        </DialogFooter>
+        <CredenzaFooter>
+          <CredenzaClose asChild>
+            <Button disabled={!form.formState.isValid} type="submit">
+              Save changes
+            </Button>
+          </CredenzaClose>
+        </CredenzaFooter>
       </form>
     </Form>
   );
