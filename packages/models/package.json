@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "start:dev": "echo 'Building models...' && pnpm build && echo 'Success!'",
+    "dev": "echo 'Building models...' && pnpm build && echo 'Success!'",
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist"
   },

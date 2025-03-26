@@ -12,8 +12,8 @@
     "db:dev:up": "docker compose up dev-db -d",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start:dev": "echo 'Starting backend...' && nest start --watch",
-    "start:prod": "node dist/main",
+    "dev": "echo 'Starting backend...' && nest start --watch",
+    "prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
   },
   "dependencies": {

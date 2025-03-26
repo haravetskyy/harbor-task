@@ -4,7 +4,7 @@
   "main": "index.js",
   "prettier": "@haravetskyy/prettier-config",
   "scripts": {
-    "start:dev": "pnpm run -r --parallel --stream start:dev",
+    "dev": "pnpm run -r --parallel --stream dev",
     "install": "pnpm run -r install",
     "db:dev:up": "pnpm --filter @harbor-task/backend db:dev:up",
     "prisma:dev:deploy": "pnpm --filter @harbor-task/backend prisma:dev:deploy",

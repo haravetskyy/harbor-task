@@ -88,7 +88,7 @@ If you want to generate some initial data, run this command.
 ### **5. Start the Application**
 
 ```bash
-pnpm start:dev
+pnpm dev
 ```
 
 Finally, you are good to go :)

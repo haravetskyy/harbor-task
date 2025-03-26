@@ -15,6 +15,7 @@ dist
 /dist-ssr
 tsconfig.build.tsbuildinfo
 .vite
+.next
 
 # Environment variables
 .env
