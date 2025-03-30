@@ -71,7 +71,7 @@ const TaskList = () => {
       );
     }, 500);
   };
-  1;
+
   return (
     <section className="flex flex-col w-full max-w-screen-lg gap-2">
       <TaskModal />
@@ -83,7 +83,7 @@ const TaskList = () => {
         return (
           <TaskWindow task={task} project={project} key={task.id}>
             <div
-              className={`flex w-full items-start gap-2 rounded-xl border border-solid border-border p-4 dark:bg-neutral-900 ${
+              className={`flex w-full items-start gap-2 rounded-xl border border-solid border-border p-4 bg-sidebar dark:bg-neutral-900 ${
                 isDeleting && 'animate-slide-fade-left'
               }`}>
               <Checkbox
