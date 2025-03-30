@@ -20,10 +20,33 @@ import { useUser } from '@/hooks/use-user';
 import { ChevronsUpDown, LogOut, User } from 'lucide-react';
 import { getInitials } from '../lib/get-initials';
 import { Skeleton } from './ui/skeleton';
+import { useRouter } from 'next/navigation';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { data: user, isLoading } = useUser();
+
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_MAGIC_HUT_URL}/api/signout`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        router.push(
+          `${process.env.NEXT_PUBLIC_MAGIC_HUT_URL}/sign-in?redirectUrl=${window.location.origin}`,
+        );
+      } else console.error('Logout failed:', await response.json());
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  };
 
   if (!user || isLoading) {
     return (
@@ -84,9 +107,9 @@ export function NavUser() {
                 <User />
                 Account
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={handleSignOut}>
                 <LogOut />
-                Log out
+                Sign out
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
