@@ -66,7 +66,7 @@ export function NavProjects() {
       </Button>
       <ProjectModal />
 
-      <SidebarGroupLabel>Projects</SidebarGroupLabel>
+      {!projects.length || <SidebarGroupLabel>Projects</SidebarGroupLabel>}
       <SidebarMenu>
         {projects.map(project => (
           <SidebarMenuItem key={project.name}>
