@@ -30,7 +30,7 @@ export function NavUser() {
 
   const handleSignOut = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_MAGIC_HUT_URL}/api/signout`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_MAGIC_HUT_URL}/api/auth/signout`, {
         method: 'POST',
         credentials: 'include',
         headers: {
