@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export function middleware(request: NextRequest) {
-  const isAuthenticated = request.cookies.get('magic-hut.session_token');
+export const middleware = async (request: NextRequest) => {
+  const sessionCookie = request.cookies.get('magic-hut.session_token');
 
-  if (!isAuthenticated) {
+  if (!sessionCookie) {
     const redirectUrl = encodeURIComponent(request.url);
 
     return NextResponse.redirect(
@@ -11,8 +11,22 @@ export function middleware(request: NextRequest) {
     );
   }
 
+  const sessionResponse = await fetch(`${process.env.NEXT_PUBLIC_MAGIC_HUT_URL}api/auth/session`, {
+    method: 'GET',
+    headers: {
+      Cookie: `magic-hut.session-token=${sessionCookie.value}`,
+    },
+  });
+
+  if (!sessionResponse.ok) {
+    const redirectUrl = encodeURIComponent(request.url);
+    return NextResponse.redirect(
+      `${process.env.NEXT_PUBLIC_MAGIC_HUT_URL}/sign-in?redirectUrl=${redirectUrl}`,
+    );
+  }
+
   return NextResponse.next();
-}
+};
 
 export const config = {
   matcher: ['/'],
