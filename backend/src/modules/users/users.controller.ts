@@ -45,18 +45,14 @@ export class UsersController {
 
     const magicHutSession: { session: Session } = await magicHutResponse.json();
 
-    const harborUser = await this.usersService.findOrCreateUser(
-      magicHutSession.session.user.email,
-      magicHutSession.session.user.name,
-      magicHutSession.session.user.image,
-    );
+    const harborUser = await this.usersService.findOrCreateUser(magicHutSession.session.user.id);
 
     return {
       id: harborUser.id,
-      email: harborUser.email,
-      name: harborUser.name,
-      image: harborUser.image,
-      emailVerified: harborUser.emailVerified,
+      magicHutId: harborUser.magicHutId,
+      email: magicHutSession.session.user.email,
+      name: magicHutSession.session.user.name,
+      image: magicHutSession.session.user.image,
       createdAt: harborUser.createdAt,
       updatedAt: harborUser.updatedAt,
     };

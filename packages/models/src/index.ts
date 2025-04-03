@@ -17,6 +17,3 @@ export {
   taskSchema,
 } from './task.model';
 export type { AddTaskValues, EditTaskValues, Task } from './task.model';
-
-export { userSchema } from './user.model';
-export type { User } from './user.model';
