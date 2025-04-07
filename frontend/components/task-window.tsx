@@ -302,16 +302,12 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
                   />
                 )}
               </div>
+              <CredenzaClose asChild>
+                <Button disabled={!form.formState.isValid} type="submit">
+                  Save
+                </Button>
+              </CredenzaClose>
             </section>
-
-            <CredenzaClose asChild>
-              <Button
-                className="w-full sticky bottom-0"
-                disabled={!form.formState.isValid}
-                type="submit">
-                Save
-              </Button>
-            </CredenzaClose>
           </form>
         </CredenzaContent>
       </Form>
