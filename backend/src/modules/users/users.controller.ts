@@ -45,7 +45,11 @@ export class UsersController {
 
     const magicHutSession: { session: Session } = await magicHutResponse.json();
 
-    const harborUser = await this.usersService.findOrCreateUser(magicHutSession.session.user.id);
+    let harborUser = await this.usersService.findUser(magicHutSession.session.user.id);
+
+    if (!harborUser) {
+      harborUser = await this.usersService.createUser(magicHutSession.session.user.id);
+    }
 
     return {
       id: harborUser.id,

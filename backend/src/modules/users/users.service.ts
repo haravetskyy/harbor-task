@@ -5,21 +5,19 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async findOrCreateUser(magicHutId: string) {
-    let user = await this.prisma.users.findUnique({
+  async findUser(magicHutId: string) {
+    return await this.prisma.users.findUnique({
       where: { magicHutId },
     });
+  }
 
-    if (!user) {
-      user = await this.prisma.users.create({
-        data: {
-          magicHutId,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      });
-    }
-
-    return user;
+  async createUser(magicHutId: string) {
+    return await this.prisma.users.create({
+      data: {
+        magicHutId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
   }
 }
