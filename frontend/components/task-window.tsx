@@ -238,7 +238,7 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
                     control={form.control}
                     name="progress"
                     render={({ field }) => (
-                      <FormItem className="grid w-[99%] md:w-full max-w-sm items-center">
+                      <FormItem className="grid w-[99%] md:w-full items-center">
                         <FormLabel htmlFor="progress">Progress</FormLabel>
                         <div className="relative">
                           <div className="absolute left-4 top-1.5  text-muted-foreground">%</div>
@@ -268,7 +268,7 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
                     control={form.control}
                     name="priority"
                     render={({ field }) => (
-                      <FormItem className="grid w-[99%] md:w-full max-w-sm items-center">
+                      <FormItem className="grid w-[99%] md:w-full items-center">
                         <FormLabel htmlFor="priority">Priority</FormLabel>
                         <div className="relative">
                           <div className="absolute left-4 top-1.5  text-muted-foreground">
@@ -302,13 +302,16 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
                   />
                 )}
               </div>
-
-              <CredenzaClose asChild>
-                <Button className="w-full" disabled={!form.formState.isValid} type="submit">
-                  Save
-                </Button>
-              </CredenzaClose>
             </section>
+
+            <CredenzaClose asChild>
+              <Button
+                className="w-full sticky bottom-0"
+                disabled={!form.formState.isValid}
+                type="submit">
+                Save
+              </Button>
+            </CredenzaClose>
           </form>
         </CredenzaContent>
       </Form>
