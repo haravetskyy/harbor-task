@@ -39,9 +39,7 @@ export function NavUser() {
       });
 
       if (response.ok) {
-        router.push(
-          `${process.env.NEXT_PUBLIC_MAGIC_HUT_URL}/sign-in?redirectUrl=${window.location.origin}`,
-        );
+        router.push(`${process.env.NEXT_PUBLIC_MAGIC_HUT_URL}/sign-in`);
       } else console.error('Logout failed:', await response.json());
     } catch (error) {
       console.error('Error during logout:', error);
