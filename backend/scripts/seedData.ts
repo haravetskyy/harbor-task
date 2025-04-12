@@ -1,3 +1,4 @@
+// scripts/seedData.ts
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -34,69 +35,80 @@ function generateRandomDescription(length: number): string {
   return result.join(' ').slice(0, length).trim() + '.';
 }
 
-async function main() {
-  const user = await prisma.users.create({
+async function seed(userId: string) {
+  const user = await prisma.users.findUnique({ where: { id: userId } });
+  if (!user) {
+    const allUsers = await prisma.users.findMany();
+    console.log('All users:', allUsers);
+    throw new Error(`User with ID ${userId} not found`);
+  }
+  console.log(`Using existing user: ${user.name || user.email}`);
+
+  const project = await prisma.projects.create({
     data: {
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      emailVerified: true,
-      image: 'https://avatars.githubusercontent.com/u/56477764?v=4',
+      name: 'Test Project',
+      emoji: '📋',
+      color: '#FF5733',
+      userId,
       createdAt: new Date(),
       updatedAt: new Date(),
     },
   });
 
-  console.log(`Created user: ${user.name}`);
-
-  const projectNames = [
-    'Website Redesign',
-    'Marketing Campaign',
-    'Mobile App Development',
-    'Data Analytics Platform',
-    'E-commerce Integration',
+  const tasks = [
+    // Overdue
+    { title: 'Overdue Task', deadline: new Date('2025-04-10'), count: 4 },
+    { title: 'Overdue Task', deadline: new Date('2025-04-11'), count: 5 },
+    // Today
+    { title: 'Today Task', deadline: new Date('2025-04-12'), count: 3 },
+    // Tomorrow
+    { title: 'Tomorrow Task', deadline: new Date('2025-04-13'), count: 2 },
+    // This Week
+    { title: 'This Week Task', deadline: new Date('2025-04-14'), count: 4 },
+    { title: 'This Week Task', deadline: new Date('2025-04-15'), count: 5 },
+    // Next Week
+    { title: 'Next Week Task', deadline: new Date('2025-04-20'), count: 4 },
+    // May 2025
+    { title: 'May Task', deadline: new Date('2025-05-01'), count: 2 },
+    { title: 'May Task', deadline: new Date('2025-05-15'), count: 3 },
+    // June 2025
+    { title: 'June Task', deadline: new Date('2025-06-10'), count: 2 },
+    // No Deadline
+    { title: 'No Deadline Task', deadline: null, count: 3 },
   ];
 
-  await Promise.all(
-    projectNames.slice(0, Math.floor(Math.random() * 2) + 3).map(async (name, index) => {
-      const project = await prisma.projects.create({
-        data: {
-          name,
-          emoji: ['🌐', '📈', '📱', '📊', '🛒'][index],
-          color: ['#FF5733', '#33FF57', '#3357FF', '#F3FF33', '#FF33A6'][index],
-          userId: user.id,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      });
-
-      console.log(`Created project: ${project.name}`);
-
-      const taskCount = Math.floor(Math.random() * 6) + 5;
-      await Promise.all(
-        Array.from({ length: taskCount }).map(async (_, taskIndex) => {
-          const descriptionLength = Math.floor(Math.random() * (200 - 35 + 1)) + 35;
-          const task = await prisma.tasks.create({
-            data: {
-              title: `${
-                ['Implement', 'Design', 'Fix', 'Test', 'Analyze'][Math.floor(Math.random() * 5)]
-              } ${project.name} feature ${taskIndex + 1}`,
-              description: generateRandomDescription(descriptionLength),
-              deadline: new Date(Date.now() + taskIndex * 1000 * 60 * 60 * 24),
-              progress: Math.floor(Math.random() * 101),
-              priority: Math.floor(Math.random() * 5) + 1,
-              projectId: project.id,
-              userId: user.id,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-          });
-          console.log(`  Created task: ${task.title}`);
+  for (const task of tasks) {
+    await Promise.all(
+      Array.from({ length: task.count }).map((_, i) =>
+        prisma.tasks.create({
+          data: {
+            title: `${task.title} ${i + 1}`,
+            description: generateRandomDescription(50),
+            deadline: task.deadline,
+            progress: Math.floor(Math.random() * 101),
+            priority: Math.floor(Math.random() * 4) + 1,
+            projectId: project.id,
+            userId,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
         }),
-      );
-    }),
-  );
+      ),
+    );
+  }
 
   console.log('Seeding completed successfully!');
+}
+
+async function main() {
+  const userId: string | undefined = process.argv[2];
+
+  if (!userId) {
+    console.error('Please provide a userId as an argument: pnpm data:seed <userId>');
+    process.exit(1);
+  }
+
+  await seed(userId);
 }
 
 main()
