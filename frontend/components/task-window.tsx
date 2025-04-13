@@ -146,53 +146,53 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
                   )}
                 />
 
-                {task.description && (
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem className="w-full flex justify-center">
-                        <FormControl>
-                          <Textarea className="text-sm resize-none md:w-full w-[99%]" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                )}
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem className="w-full flex justify-center">
+                      <FormControl>
+                        <Textarea
+                          placeholder="Your task description goes here"
+                          className="text-sm resize-none md:w-full w-[99%]"
+                          {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
               </section>
             </section>
 
             <section className="flex flex-col gap-2 justify-between md:mt-6 md:w-max md:max-w-[33%] md:border-l md:border-border md:pl-4">
               <div className="flex flex-col gap-2 items-center">
-                {task.projectId && (
-                  <FormField
-                    control={form.control}
-                    name="projectId"
-                    render={({ field }) => (
-                      <FormItem className="w-[99%] md:w-full">
-                        <FormLabel htmlFor="project">Project</FormLabel>
-                        <FormControl>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <SelectTrigger id="project">
-                              <SelectValue placeholder="No project chosen" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {projects.map(project => (
-                                <SelectItem key={project.id} value={project.id}>
-                                  <Badge variant="circle" color={project.color} className="mr-2">
-                                    {project.emoji}
-                                  </Badge>
-                                  {project.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
+                <FormField
+                  control={form.control}
+                  name="projectId"
+                  render={({ field }) => (
+                    <FormItem className="w-[99%] md:w-full">
+                      <FormLabel htmlFor="project">Project</FormLabel>
+                      <FormControl>
+                        <Select onValueChange={field.onChange} value={field.value || ''}>
+                          <SelectTrigger id="project">
+                            <SelectValue placeholder="No project chosen" className="min-w-max" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {projects.map(project => (
+                              <SelectItem key={project.id} value={project.id}>
+                                <Badge variant="circle" color={project.color} className="mr-2">
+                                  {project.emoji}
+                                </Badge>
+                                {project.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 {task.deadline && (
                   <FormField
