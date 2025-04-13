@@ -13,6 +13,7 @@ import {
 import {
   addTaskSchema,
   AddTaskValues,
+  getPlainTextLength,
   MAX_TASK_DESCRIPTION_LENGTH,
   MAX_TASK_TITLE_LENGTH,
   Task,
@@ -135,7 +136,7 @@ const TaskForm = () => {
                   Description
                   <span className="text-red-500 dark:text-red-800">*</span>
                 </div>
-                {field.value?.length}/{MAX_TASK_DESCRIPTION_LENGTH}
+                {getPlainTextLength(field.value || '')}/{MAX_TASK_DESCRIPTION_LENGTH}
               </FormLabel>
               <FormControl>
                 <Tiptap

@@ -12,10 +12,12 @@ export type { AllowedSection, Filter } from './filter.model';
 export {
   addTaskSchema,
   editTaskSchema,
+  getPlainText,
+  getPlainTextLength,
   MAX_TASK_DESCRIPTION_LENGTH,
   MAX_TASK_TITLE_LENGTH,
   taskSchema,
 } from './task.model';
 export type { AddTaskValues, EditTaskValues, Task } from './task.model';
 
-export { userSchema, User } from './user.model';
+export { User, userSchema } from './user.model';
