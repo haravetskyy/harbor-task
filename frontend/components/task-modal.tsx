@@ -39,7 +39,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from './ui/input';
 import { Popover, PopoverTrigger } from './ui/popover';
 import { Skeleton } from './ui/skeleton';
-import { Textarea } from './ui/textarea';
+import Tiptap from './ui/tiptap';
 
 export function TaskModal() {
   return (
@@ -50,8 +50,8 @@ export function TaskModal() {
           Add task
         </Button>
       </CredenzaTrigger>
-      <CredenzaContent className="p-4">
-        <CredenzaHeader className="px-0">
+      <CredenzaContent>
+        <CredenzaHeader>
           <CredenzaTitle>Add task</CredenzaTitle>
         </CredenzaHeader>
         <CredenzaBody>
@@ -125,7 +125,7 @@ const TaskForm = () => {
           control={form.control}
           name="description"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="w-full flex flex-col justify-center">
               <FormLabel
                 className={cn(
                   'flex flex-row justify-between',
@@ -138,9 +138,12 @@ const TaskForm = () => {
                 {field.value?.length}/{MAX_TASK_DESCRIPTION_LENGTH}
               </FormLabel>
               <FormControl>
-                <Textarea {...field} />
+                <Tiptap
+                  className="w-[99%] md:w-full"
+                  content={field.value || ''}
+                  onChange={field.onChange}
+                />
               </FormControl>
-              <FormMessage />
             </FormItem>
           )}
         />

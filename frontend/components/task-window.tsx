@@ -32,6 +32,7 @@ import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Skeleton } from './ui/skeleton';
 import { Textarea } from './ui/textarea';
+import Tiptap from './ui/tiptap';
 
 export const getPriorityText = (priority: number | undefined): string | undefined => {
   if (!priority) {
@@ -152,10 +153,10 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
                   render={({ field }) => (
                     <FormItem className="w-full flex justify-center">
                       <FormControl>
-                        <Textarea
-                          placeholder="Your task description goes here"
-                          className="text-sm resize-none md:w-full w-[99%]"
-                          {...field}
+                        <Tiptap
+                          className="w-[99%] md:w-full"
+                          content={field.value || ''}
+                          onChange={field.onChange}
                         />
                       </FormControl>
                     </FormItem>
