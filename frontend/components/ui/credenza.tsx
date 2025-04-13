@@ -92,7 +92,12 @@ const CredenzaContent = ({ className, children, ...props }: CredenzaProps) => {
   const CredenzaContent = isDesktop ? DialogContent : DrawerContent;
 
   return (
-    <CredenzaContent className={`${!isDesktop ? 'p-4' : ''} ${className}`} {...props}>
+    <CredenzaContent
+      className={cn(
+        !isDesktop ? 'pb-4 md:pb-0 h-[90%] flex flex-col' : '', // Mobile: constrain height, flex for scrolling
+        className,
+      )}
+      {...props}>
       {isDesktop ? children : <ScrollArea>{children}</ScrollArea>}
     </CredenzaContent>
   );
