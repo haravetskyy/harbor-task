@@ -1,12 +1,10 @@
 import { createZodDto } from '@abitia/zod-dto';
-import { taskSchema } from '@harbor-task/models';
+import { addTaskSchema, editTaskSchema, userSchema } from '@harbor-task/models';
 
-export const CreateTaskSchema = taskSchema.omit({ id: true });
+export const CreateTaskSchema = addTaskSchema.extend({
+  userId: userSchema.shape.id,
+});
 
 export class CreateTaskDto extends createZodDto(CreateTaskSchema) {}
 
-export const EditTaskSchema = CreateTaskSchema.omit({
-  userId: true,
-}).partial();
-
-export class EditTaskDto extends createZodDto(EditTaskSchema) {}
+export class EditTaskDto extends createZodDto(editTaskSchema) {}

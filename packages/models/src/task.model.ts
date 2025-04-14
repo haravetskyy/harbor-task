@@ -42,7 +42,7 @@ export const taskSchema = z.object({
     .min(1, { message: 'Priority must be at least 1' })
     .max(4, { message: 'Priority cannot exceed 4' })
     .optional(),
-  projectId: projectSchema.shape.id.optional(),
+  projectId: projectSchema.shape.id.optional().nullable(),
   userId: z.string().uuid({ message: 'User ID must be a valid UUID' }),
 });
 
