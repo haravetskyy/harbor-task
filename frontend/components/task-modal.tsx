@@ -51,7 +51,7 @@ export function TaskModal() {
           Add task
         </Button>
       </CredenzaTrigger>
-      <CredenzaContent>
+      <CredenzaContent className="h-min max-h-[90%]">
         <CredenzaHeader>
           <CredenzaTitle>Add task</CredenzaTitle>
         </CredenzaHeader>

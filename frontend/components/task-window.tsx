@@ -104,7 +104,7 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
     <Credenza open={open} onOpenChange={onOpenChange}>
       <CredenzaTrigger asChild>{children}</CredenzaTrigger>
       <Form {...form}>
-        <CredenzaContent className="p-4 h-[90%] md:min-h-[50%] md:h-min md:min-w-[50%] max-h-[90%]">
+        <CredenzaContent className="p-4 h-min md:min-h-[50%] md:h-min md:min-w-[50%] max-h-[90%]">
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col md:flex-row w-full justify-center md:justify-between gap-4">
@@ -233,7 +233,6 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
                     )}
                   />
                 )}
-
                 {task.progress !== undefined && (
                   <FormField
                     control={form.control}
@@ -263,7 +262,6 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
                     )}
                   />
                 )}
-
                 {task.priority && (
                   <FormField
                     control={form.control}
