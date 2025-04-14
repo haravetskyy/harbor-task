@@ -5,6 +5,7 @@ import { useDeleteTask, useTasks } from '@/hooks/use-tasks';
 import { useUser } from '@/hooks/use-user';
 import { formatDate } from '@/lib/format-date';
 import { groupTasksByDeadline } from '@/lib/task-grouping';
+import parse from 'html-react-parser';
 import { CalendarClock, Flag, Plus } from 'lucide-react';
 import React from 'react';
 import { useFilter } from './contexts/filter-context';
@@ -103,9 +104,12 @@ const TaskList = () => {
                       />
                       <div className="flex flex-col items-start justify-start gap-1">
                         <h2 className="text-sm cursor-pointer">{task.title}</h2>
-                        <p className="text-xs text-muted-foreground line-clamp-3">
-                          {task.description}
-                        </p>
+                        {task.description && (
+                          <div className="prose dark:prose-invert text-xs text-muted-foreground line-clamp-3">
+                            {parse(task.description)}
+                          </div>
+                        )}
+
                         <div className="flex flex-row items-center gap-2">
                           {task.deadline && (
                             <Badge
