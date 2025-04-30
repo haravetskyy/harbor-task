@@ -11,10 +11,9 @@
     "prisma:generate": "pnpm --filter @harbor-task/backend prisma:generate",
     "data:seed": "pnpm --filter @harbor-task/backend data:seed"
   },
-  "keywords": [],
   "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "@haravetskyy/prettier-config": "^1.0.2"
+    "@haravetskyy/prettier-config": "^1.0.5"
   }
 }

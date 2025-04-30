@@ -12,6 +12,7 @@
     "ngrok": "ngrok http --url=scarcely-sterling-mongrel.ngrok-free.app 10000"
   },
   "dependencies": {
+    "@ferrucc-io/emoji-picker": "^0.0.44",
     "@harbor-task/models": "workspace:^",
     "@hookform/resolvers": "^4.1.2",
     "@radix-ui/react-accordion": "^1.2.4",

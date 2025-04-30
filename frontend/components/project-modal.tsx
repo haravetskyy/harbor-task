@@ -1,13 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { EmojiPicker } from '@ferrucc-io/emoji-picker';
 import {
   addProjectSchema,
   AddProjectValues,
@@ -70,7 +64,7 @@ export const useUpdateProjectModal = () => {
   });
 };
 
-export function ProjectModal() {
+export const ProjectModal = () => {
   const { data: modalState } = useProjectModal();
   const updateModalState = useUpdateProjectModal();
 
@@ -88,7 +82,7 @@ export function ProjectModal() {
       </CredenzaContent>
     </Credenza>
   );
-}
+};
 
 interface ProjectFormProps {
   project?: Project;
@@ -178,18 +172,17 @@ const ProjectForm = ({ project, mode }: ProjectFormProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Emoji</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select emoji" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="🛠️">Tools 🛠️</SelectItem>
-                  <SelectItem value="💻">Laptop 💻</SelectItem>
-                  <SelectItem value="📷">Camera 📷</SelectItem>
-                </SelectContent>
-              </Select>
+              <EmojiPicker
+                emojiSize={32}
+                onEmojiSelect={field.onChange}
+                className="w-full max-h-56">
+                <EmojiPicker.Header>
+                  <EmojiPicker.Input placeholder="Search emoji" />
+                </EmojiPicker.Header>
+                <EmojiPicker.Group>
+                  <EmojiPicker.List />
+                </EmojiPicker.Group>
+              </EmojiPicker>
               <FormMessage />
             </FormItem>
           )}
