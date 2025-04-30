@@ -171,11 +171,14 @@ const ProjectForm = ({ project, mode }: ProjectFormProps) => {
           name="emoji"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Emoji</FormLabel>
-              <EmojiPicker
-                emojiSize={32}
-                onEmojiSelect={field.onChange}
-                className="w-full max-h-56">
+              <FormLabel>
+                <div className="flex flex-row gap-1">
+                  Emoji
+                  <span className="text-red-500 dark:text-red-800">*</span>
+                </div>
+              </FormLabel>
+
+              <EmojiPicker onEmojiSelect={field.onChange} className="w-full max-h-56">
                 <EmojiPicker.Header>
                   <EmojiPicker.Input placeholder="Search emoji" />
                 </EmojiPicker.Header>
@@ -193,7 +196,12 @@ const ProjectForm = ({ project, mode }: ProjectFormProps) => {
           name="color"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Color</FormLabel>
+              <FormLabel>
+                <div className="flex flex-row gap-1">
+                  Color
+                  <span className="text-red-500 dark:text-red-800">*</span>
+                </div>
+              </FormLabel>
               <ColorInput {...field} value={field.value || '#ffffff'} />
               <FormMessage />
             </FormItem>
