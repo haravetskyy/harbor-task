@@ -19,7 +19,7 @@ export const middleware = async (request: NextRequest) => {
     return redirectToSignIn(request.url);
   }
 
-  const sessionResponse = await fetch(`${process.env.NEXT_PUBLIC_MAGIC_HUT_URL}api/auth/session`, {
+  const sessionResponse = await fetch(`${process.env.NEXT_PUBLIC_MAGIC_HUT_URL}/api/auth/session`, {
     method: 'GET',
     headers: {
       Cookie: `magic-hut.session-token=${sessionCookie.value}`,
