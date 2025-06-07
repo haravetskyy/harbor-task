@@ -62,11 +62,11 @@ export const Searcher = () => {
       <Button
         onClick={() => setDialogOpen(true)}
         variant="outline"
-        className="p-2 justify-start md:justify-between"
+        className="justify-start p-2 md:justify-between"
         disabled={isLoading}>
         <Search />
         Search
-        <kbd className="hidden ml-auto justify-self-end pointer-events-none md:inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+        <kbd className="bg-muted text-muted-foreground pointer-events-none ml-auto hidden h-5 select-none items-center gap-1 justify-self-end rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 md:inline-flex">
           Ctrl K
         </kbd>
       </Button>

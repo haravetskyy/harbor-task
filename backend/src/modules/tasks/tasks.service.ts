@@ -14,9 +14,7 @@ export class TaskService {
         where: { id: projectId, userId },
       });
       if (!project) {
-        throw new NotFoundException(
-          `Project with ID "${projectId}" does not exist for this user.`,
-        );
+        throw new NotFoundException(`Project with ID "${projectId}" does not exist for this user.`);
       }
     }
 
@@ -77,9 +75,7 @@ export class TaskService {
     });
 
     if (!task) {
-      throw new NotFoundException(
-        `Task with ID "${id}" not found for this user.`,
-      );
+      throw new NotFoundException(`Task with ID "${id}" not found for this user.`);
     }
 
     return task;
@@ -92,9 +88,7 @@ export class TaskService {
       where: { id, userId },
     });
     if (!task) {
-      throw new NotFoundException(
-        `Task with ID "${id}" not found for this user.`,
-      );
+      throw new NotFoundException(`Task with ID "${id}" not found for this user.`);
     }
 
     if (projectId) {
@@ -102,9 +96,7 @@ export class TaskService {
         where: { id: projectId, userId },
       });
       if (!project) {
-        throw new NotFoundException(
-          `Project with ID "${projectId}" does not exist for this user.`,
-        );
+        throw new NotFoundException(`Project with ID "${projectId}" does not exist for this user.`);
       }
     }
 
@@ -123,9 +115,7 @@ export class TaskService {
     });
 
     if (!task) {
-      throw new NotFoundException(
-        `Task with ID "${id}" not found for this user.`,
-      );
+      throw new NotFoundException(`Task with ID "${id}" not found for this user.`);
     }
 
     return this.prisma.tasks.delete({

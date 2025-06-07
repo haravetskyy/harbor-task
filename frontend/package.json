@@ -1,15 +1,15 @@
 {
   "name": "@harbor-task/frontend",
   "version": "1.0.0",
-  "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",
   "private": true,
+  "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",
   "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack -p 10000",
     "build": "next build",
-    "start": "next start",
+    "dev": "next dev --turbopack -p 10000",
     "lint": "next lint",
-    "ngrok": "ngrok http --url=scarcely-sterling-mongrel.ngrok-free.app 10000"
+    "ngrok": "ngrok http --url=scarcely-sterling-mongrel.ngrok-free.app 10000",
+    "start": "next start"
   },
   "dependencies": {
     "@ferrucc-io/emoji-picker": "^0.0.44",

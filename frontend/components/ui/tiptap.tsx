@@ -53,9 +53,9 @@ export default function Tiptap({ content, onChange, className }: TiptapProps) {
   });
 
   return (
-    <div className="w-full flex justify-center items-center flex-col">
+    <div className="flex w-full flex-col items-center justify-center">
       <MenuBar editor={editor} />
-      <EditorContent className="flex justify-center w-full" editor={editor} />
+      <EditorContent className="flex w-full justify-center" editor={editor} />
     </div>
   );
 }

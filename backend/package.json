@@ -1,20 +1,20 @@
 {
   "name": "@harbor-task/backend",
   "version": "0.0.1",
-  "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",
   "private": true,
+  "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",
   "scripts": {
-    "data:seed": "tsx scripts/seedData.ts",
+    "build": "nest build",
     "data:delete": "tsx scripts/clearData.ts",
-    "prisma:generate": "prisma generate",
-    "prisma:dev:deploy": "prisma migrate deploy",
+    "data:seed": "tsx scripts/seedData.ts",
     "db:dev:rm": "docker compose rm dev-db -s -f -v",
     "db:dev:up": "docker compose up dev-db -d",
-    "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "dev": "echo 'Starting backend...' && nest start --watch",
-    "prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "prisma:dev:deploy": "prisma migrate deploy",
+    "prisma:generate": "prisma generate",
+    "prod": "node dist/main"
   },
   "dependencies": {
     "@harbor-task/eslint-config": "workspace:^",

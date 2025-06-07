@@ -52,7 +52,7 @@ export function NavUser() {
         <div>
           <Skeleton className="h-8 w-8 rounded-lg" />
         </div>
-        <div className="flex flex-col gap-2 w-full">
+        <div className="flex w-full flex-col gap-2">
           <Skeleton className="h-3 w-2/3" />
           <Skeleton className="h-3 w-11/12" />
         </div>

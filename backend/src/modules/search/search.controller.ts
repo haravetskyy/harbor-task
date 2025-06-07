@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  Query,
-  Param,
-  HttpCode,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Get, Query, Param, HttpCode, HttpStatus } from '@nestjs/common';
 import { SearchService } from './search.service';
 import { SearchDto } from './search.dto';
 

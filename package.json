@@ -1,19 +1,22 @@
 {
   "name": "harbor-task",
   "version": "1.0.0",
-  "main": "index.js",
-  "prettier": "@haravetskyy/prettier-config",
-  "scripts": {
-    "dev": "pnpm run -r --parallel --stream dev",
-    "install": "pnpm run -r install",
-    "db:dev:up": "pnpm --filter @harbor-task/backend db:dev:up",
-    "prisma:dev:deploy": "pnpm --filter @harbor-task/backend prisma:dev:deploy",
-    "prisma:generate": "pnpm --filter @harbor-task/backend prisma:generate",
-    "data:seed": "pnpm --filter @harbor-task/backend data:seed"
-  },
-  "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",
   "license": "ISC",
-  "dependencies": {
-    "@haravetskyy/prettier-config": "^1.0.5"
+  "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",
+  "main": "index.js",
+  "scripts": {
+    "data:seed": "pnpm --filter @harbor-task/backend data:seed",
+    "db:dev:up": "pnpm --filter @harbor-task/backend db:dev:up",
+    "dev": "pnpm run -r --parallel --stream dev",
+    "format": "prettier . --write",
+    "install": "pnpm run -r install",
+    "prisma:dev:deploy": "pnpm --filter @harbor-task/backend prisma:dev:deploy",
+    "prisma:generate": "pnpm --filter @harbor-task/backend prisma:generate"
+  },
+  "prettier": "@haravetskyy/prettier-config",
+  "devDependencies": {
+    "@haravetskyy/prettier-config": "^1.1.0",
+    "prettier-plugin-packagejson": "^2.5.15",
+    "prettier-plugin-tailwindcss": "^0.6.12"
   }
 }

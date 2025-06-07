@@ -104,12 +104,12 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
     <Credenza open={open} onOpenChange={onOpenChange}>
       <CredenzaTrigger asChild>{children}</CredenzaTrigger>
       <Form {...form}>
-        <CredenzaContent className="p-4 h-min md:min-h-[50%] md:h-min md:min-w-[50%] max-h-[90%]">
+        <CredenzaContent className="h-min max-h-[90%] p-4 md:h-min md:min-h-[50%] md:min-w-[50%]">
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col md:flex-row w-full justify-center md:justify-between gap-4">
-            <section className="flex flex-col md:gap-2 w-full">
-              <CredenzaTitle className="py-2 md:py-0 px-0">
+            className="flex w-full flex-col justify-center gap-4 md:flex-row md:justify-between">
+            <section className="flex w-full flex-col md:gap-2">
+              <CredenzaTitle className="px-0 py-2 md:py-0">
                 <Breadcrumb>
                   <BreadcrumbList>
                     {task.projectId ? (
@@ -131,15 +131,15 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
                 </Breadcrumb>
               </CredenzaTitle>
 
-              <section className="flex flex-col items-center gap-2 w-full">
+              <section className="flex w-full flex-col items-center gap-2">
                 <FormField
                   control={form.control}
                   name="title"
                   render={({ field }) => (
-                    <FormItem className="w-full flex justify-center">
+                    <FormItem className="flex w-full justify-center">
                       <FormControl>
                         <Textarea
-                          className="md:!text-lg font-semibold !leading-none tracking-tight resize-none md:w-full w-[99%]"
+                          className="w-[99%] resize-none font-semibold !leading-none tracking-tight md:w-full md:!text-lg"
                           {...field}
                         />
                       </FormControl>
@@ -151,7 +151,7 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
                   control={form.control}
                   name="description"
                   render={({ field }) => (
-                    <FormItem className="w-full flex justify-center">
+                    <FormItem className="flex w-full justify-center">
                       <FormControl>
                         <Tiptap
                           className="w-[99%] md:w-full"
@@ -165,8 +165,8 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
               </section>
             </section>
 
-            <section className="flex flex-col gap-2 justify-between md:mt-6 md:w-max md:max-w-[33%] md:border-l md:border-border md:pl-4">
-              <div className="flex flex-col gap-2 items-center">
+            <section className="md:border-border flex flex-col justify-between gap-2 md:mt-6 md:w-max md:max-w-[33%] md:border-l md:pl-4">
+              <div className="flex flex-col items-center gap-2">
                 <FormField
                   control={form.control}
                   name="projectId"
@@ -200,7 +200,7 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
                     control={form.control}
                     name="deadline"
                     render={({ field }) => (
-                      <FormItem className="flex flex-col w-full">
+                      <FormItem className="flex w-full flex-col">
                         <FormLabel>Deadline</FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
@@ -238,17 +238,17 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
                     control={form.control}
                     name="progress"
                     render={({ field }) => (
-                      <FormItem className="grid w-[99%] md:w-full items-center">
+                      <FormItem className="grid w-[99%] items-center md:w-full">
                         <FormLabel htmlFor="progress">Progress</FormLabel>
                         <div className="relative">
-                          <div className="absolute left-4 top-1.5  text-muted-foreground">%</div>
+                          <div className="text-muted-foreground absolute left-4 top-1.5">%</div>
                           <Input
                             type="number"
                             id="progress"
                             min={0}
                             max={100}
                             step={1}
-                            className="w-full rounded-lg bg-background pl-10"
+                            className="bg-background w-full rounded-lg pl-10"
                             {...field}
                             value={field.value ?? ''}
                             onChange={e => {
@@ -267,10 +267,10 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
                     control={form.control}
                     name="priority"
                     render={({ field }) => (
-                      <FormItem className="grid w-[99%] md:w-full items-center">
+                      <FormItem className="grid w-[99%] items-center md:w-full">
                         <FormLabel htmlFor="priority">Priority</FormLabel>
                         <div className="relative">
-                          <div className="absolute left-4 top-1.5  text-muted-foreground">
+                          <div className="text-muted-foreground absolute left-4 top-1.5">
                             <Flag
                               className="w-4"
                               style={{
@@ -286,7 +286,7 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
                             min={1}
                             max={4}
                             step={1}
-                            className="w-full rounded-lg bg-background pl-10"
+                            className="bg-background w-full rounded-lg pl-10"
                             {...field}
                             value={field.value ?? ''}
                             onChange={e => {

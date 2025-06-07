@@ -41,7 +41,9 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
     const [value, setValue] = useState<number | undefined>(controlledValue ?? defaultValue);
 
     const handleIncrement = useCallback(() => {
-      setValue(prev => (prev === undefined ? stepper ?? 1 : Math.min(prev + (stepper ?? 1), max)));
+      setValue(prev =>
+        prev === undefined ? (stepper ?? 1) : Math.min(prev + (stepper ?? 1), max),
+      );
     }, [stepper, max]);
 
     const handleDecrement = useCallback(() => {
@@ -111,7 +113,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           prefix={prefix}
           customInput={Input}
           placeholder={placeholder}
-          className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none rounded-r-none relative m-0"
+          className="relative m-0 rounded-r-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
           getInputRef={ref}
           {...props}
         />
@@ -119,7 +121,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         <div className="flex flex-col">
           <Button
             aria-label="Increase value"
-            className="px-2 h-[1.125rem] rounded-l-none rounded-br-none border-input border-l-0 border-b-[0.5px] focus-visible:relative"
+            className="border-input h-[1.125rem] rounded-l-none rounded-br-none border-b-[0.5px] border-l-0 px-2 focus-visible:relative"
             variant="outline"
             onClick={handleIncrement}
             disabled={value === max}>
@@ -127,7 +129,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           </Button>
           <Button
             aria-label="Decrease value"
-            className="px-2 h-[1.125rem] rounded-l-none rounded-tr-none border-input border-l-0 border-t-[0.5px] focus-visible:relative"
+            className="border-input h-[1.125rem] rounded-l-none rounded-tr-none border-l-0 border-t-[0.5px] px-2 focus-visible:relative"
             variant="outline"
             onClick={handleDecrement}
             disabled={value === min}>

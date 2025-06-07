@@ -1,15 +1,15 @@
 {
   "name": "@harbor-task/models",
   "version": "1.0.0",
+  "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "echo 'Building models...' && pnpm build && echo 'Success!'",
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "dev": "echo 'Building models...' && pnpm build && echo 'Success!'"
   },
   "dependencies": {
     "zod": "^3.24.1"
-  },
-  "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>"
+  }
 }

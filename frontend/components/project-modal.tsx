@@ -178,7 +178,7 @@ const ProjectForm = ({ project, mode }: ProjectFormProps) => {
                 </div>
               </FormLabel>
 
-              <EmojiPicker onEmojiSelect={field.onChange} className="w-full max-h-56">
+              <EmojiPicker onEmojiSelect={field.onChange} className="max-h-56 w-full">
                 <EmojiPicker.Header>
                   <EmojiPicker.Input placeholder="Search emoji" />
                 </EmojiPicker.Header>

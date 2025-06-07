@@ -42,7 +42,7 @@ export function NavProjects() {
           </Button>
           <SidebarGroupLabel>Projects</SidebarGroupLabel>
         </div>
-        <div className="flex flex-col gap-2 w-full p-2">
+        <div className="flex w-full flex-col gap-2 p-2">
           {Array.from({ length: 5 }).map((_, index) => (
             <div className="flex items-center gap-2" key={index}>
               <Skeleton className="h-6 w-6 rounded-full" />

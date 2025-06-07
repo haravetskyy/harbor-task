@@ -94,7 +94,7 @@ const CredenzaContent = ({ className, children, ...props }: CredenzaProps) => {
   return (
     <CredenzaContent
       className={cn(
-        !isDesktop ? 'pb-4 md:pb-0 h-[90%] flex flex-col' : '', // Mobile: constrain height, flex for scrolling
+        !isDesktop ? 'flex h-[90%] flex-col pb-4 md:pb-0' : '', // Mobile: constrain height, flex for scrolling
         className,
       )}
       {...props}>

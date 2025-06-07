@@ -46,8 +46,8 @@ export function TaskModal() {
   return (
     <Credenza>
       <CredenzaTrigger asChild>
-        <Button variant="link" className="mr-0 mt-2 w-min group">
-          <Plus className="group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black rounded-[50%] transition-all duration-300 " />
+        <Button variant="link" className="group mr-0 mt-2 w-min">
+          <Plus className="rounded-[50%] transition-all duration-300 group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black" />
           Add task
         </Button>
       </CredenzaTrigger>
@@ -126,7 +126,7 @@ const TaskForm = () => {
           control={form.control}
           name="description"
           render={({ field }) => (
-            <FormItem className="w-full flex flex-col justify-center">
+            <FormItem className="flex w-full flex-col justify-center">
               <FormLabel
                 className={cn(
                   'flex flex-row justify-between',
