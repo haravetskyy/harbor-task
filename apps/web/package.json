@@ -1,5 +1,5 @@
 {
-  "name": "@harbor-task/frontend",
+  "name": "@harbor-task/web",
   "version": "1.0.0",
   "private": true,
   "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",

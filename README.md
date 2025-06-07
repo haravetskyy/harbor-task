@@ -29,8 +29,8 @@ cd harbor-task
 
 The project requires environment variables to function properly. To assist you, `.env.example` files are provided in the following directories:
 
-- `frontend/`
-- `backend/`
+- `apps/web/`
+- `apps/api`
 - `/`
 
 These files serve as templates, listing all necessary variables. You need to copy them to their respective `.env` files and fill them with valid data specific to your setup.
