@@ -18,7 +18,7 @@ importers:
         specifier: ^0.6.12
         version: 0.6.12(prettier@3.5.3)
 
-  apps/backend:
+  apps/api:
     dependencies:
       '@harbor-task/eslint-config':
         specifier: workspace:^
@@ -136,7 +136,7 @@ importers:
         specifier: ^5.7.3
         version: 5.8.3
 
-  apps/frontend:
+  apps/web:
     dependencies:
       '@ferrucc-io/emoji-picker':
         specifier: ^0.0.44

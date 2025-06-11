@@ -5,13 +5,13 @@
   "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",
   "main": "index.js",
   "scripts": {
-    "data:seed": "pnpm --filter @harbor-task/backend data:seed",
-    "db:dev:up": "pnpm --filter @harbor-task/backend db:dev:up",
+    "data:seed": "pnpm --filter @harbor-task/api data:seed",
+    "db:dev:up": "pnpm --filter @harbor-task/api db:dev:up",
     "dev": "pnpm run -r --parallel --stream dev",
     "format": "prettier . --write",
     "install": "pnpm run -r install",
-    "prisma:dev:deploy": "pnpm --filter @harbor-task/backend prisma:dev:deploy",
-    "prisma:generate": "pnpm --filter @harbor-task/backend prisma:generate"
+    "prisma:dev:deploy": "pnpm --filter @harbor-task/api prisma:dev:deploy",
+    "prisma:generate": "pnpm --filter @harbor-task/api prisma:generate"
   },
   "prettier": "@haravetskyy/prettier-config",
   "devDependencies": {
