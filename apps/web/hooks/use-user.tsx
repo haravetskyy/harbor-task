@@ -7,7 +7,9 @@ const fetchUser = async (): Promise<User> => {
   const response = await fetch(`${apiUrl}/users`, {
     credentials: 'include',
   });
+
   if (!response.ok) throw new Error('Failed to fetch user');
+
   return response.json();
 };
 

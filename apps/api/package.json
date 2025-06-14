@@ -1,6 +1,6 @@
 {
   "name": "@harbor-task/api",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",
   "scripts": {
