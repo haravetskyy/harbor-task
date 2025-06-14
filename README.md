@@ -55,26 +55,26 @@ pnpm install
 
 Before starting the full development environment, make sure the Electron app is properly prepared:
 
-# Step 1: Delete node_modules inside apps/desktop (important for avoiding hoist issues)
+### 4.1: Delete node_modules inside apps/desktop (important for avoiding hoist issues)
 
 ```bash
 rm -rf apps/desktop/node_modules
 ```
 
-# Step 2: Install dependencies inside the Electron project using npm
+### 4.2: Install dependencies inside the Electron project using npm
 
 ```bash
 cd apps/desktop
 npm install
 ```
 
-# Step 3: Build the Electron project
+### 4.3: Build the Electron project
 
 ```bash
 npm run build
 ```
 
-# Go back to root
+### 4.4: Go back to root
 
 ```bash
 cd -
