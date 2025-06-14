@@ -1,6 +1,6 @@
 # Harbor Task <img src="./frontend/app/favicon.ico" alt="Logo" width="30" style="vertical-align: middle;" align="right">
 
-A full-stack project consisting of a **frontend** (Next.js + shadcn/ui), a **backend** (Nest.js), and a **PostgreSQL** database.
+A full-stack project consisting of a **frontend** (Next.js + shadcn/ui), a **backend** (Nest.js), a **PostgreSQL** database, and an optional **Electron desktop application**.
 
 ---
 
@@ -30,7 +30,8 @@ cd harbor-task
 The project requires environment variables to function properly. To assist you, `.env.example` files are provided in the following directories:
 
 - `apps/web/`
-- `apps/api/`
+- `apps/api`
+- `apps/desktop`
 - `/`
 
 These files serve as templates, listing all necessary variables. You need to copy them to their respective `.env` files and fill them with valid data specific to your setup.
@@ -45,13 +46,47 @@ Install all required Node.js packages for both the frontend and backend:
 pnpm install
 ```
 
+> [!NOTE]
+> The Electron app (`apps/desktop`) uses `npm` instead of `pnpm` due to compatibility issues with hoisting.
+
 ---
 
-### **4. Run All Essential Scripts**
+### **4. Setup and Build the Electron App**
+
+Before starting the full development environment, make sure the Electron app is properly prepared:
+
+# Step 1: Delete node_modules inside apps/desktop (important for avoiding hoist issues)
+
+```bash
+rm -rf apps/desktop/node_modules
+```
+
+# Step 2: Install dependencies inside the Electron project using npm
+
+```bash
+cd apps/desktop
+npm install
+```
+
+# Step 3: Build the Electron project
+
+```bash
+npm run build
+```
+
+# Go back to root
+
+```bash
+cd -
+```
+
+---
+
+### **5. Run All Essential Scripts**
 
 You need to execute these scripts to ensure everything works correctly.
 
-#### **4.1. Start the Development Database**
+#### **5.1. Start the Development Database**
 
 ```bash
 pnpm db:dev:up
@@ -59,7 +94,7 @@ pnpm db:dev:up
 
 This script initializes and starts the development database.
 
-#### **4.2. Apply Prisma Migrations**
+#### **5.2. Apply Prisma Migrations**
 
 ```bash
 pnpm prisma:dev:deploy
@@ -67,7 +102,7 @@ pnpm prisma:dev:deploy
 
 This command applies the Prisma migrations to the database.
 
-#### **4.3. Generate Prisma Client**
+#### **5.3. Generate Prisma Client**
 
 ```bash
 pnpm prisma:generate
@@ -75,7 +110,7 @@ pnpm prisma:generate
 
 This script generates the Prisma client based on the Prisma schema.
 
-#### **4.4. (Optional) Seed Data**
+#### **5.4. (Optional) Seed Data**
 
 ```bash
 pnpm data:seed
@@ -85,10 +120,14 @@ If you want to generate some initial data, run this command.
 
 ---
 
-### **5. Start the Application**
+### **6. Start the Application**
 
 ```bash
 pnpm dev
 ```
 
-Finally, you are good to go :)
+This will start the web frontend, backend API, and any other services needed for development.
+
+---
+
+Now you are good to go :)
