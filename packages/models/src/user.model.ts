@@ -11,4 +11,8 @@ export const userSchema = z.object({
   tasks: z.array(taskSchema),
 });
 
-export type User = z.infer<typeof userSchema>;
+export type User = z.infer<typeof userSchema> & {
+  email: string;
+  name: string;
+  image?: string;
+};
