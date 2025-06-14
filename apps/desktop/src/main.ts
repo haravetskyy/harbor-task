@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { app, BrowserWindow } from 'electron';
 import { getFallbackPath, getLoaderPath } from './pathResolver.js';
 
@@ -6,7 +7,7 @@ app.on('ready', () => {
   mainWindow.loadURL(getLoaderPath());
   mainWindow.show();
 
-  const loadUrlWithRetry = async (url: string, maxRetries = 2, delayMs = 3000) => {
+  const loadUrlWithRetry = async (url: string, maxRetries = 5, delayMs = 3000) => {
     let retries = 0;
 
     const tryLoad = async () => {
@@ -34,5 +35,6 @@ app.on('ready', () => {
     tryLoad();
   };
 
-  loadUrlWithRetry('http://localhost:10000/');
+  const mainUrl = process.env.MAIN_URL!;
+  loadUrlWithRetry(mainUrl);
 });
