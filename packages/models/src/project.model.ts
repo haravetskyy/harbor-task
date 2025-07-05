@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-export const MAX_PROJECT_NAME_LENGTH = 60;
+const MAX_PROJECT_NAME_LENGTH = 60;
 
-export const projectSchema = z.object({
+const projectSchema = z.object({
   id: z
     .string({ invalid_type_error: 'Project ID must be a string' })
     .uuid({ message: 'Project ID must be a valid UUID' }),
@@ -31,12 +31,16 @@ export const projectSchema = z.object({
     .uuid({ message: 'User ID must be a valid UUID' }),
 });
 
-export const addProjectSchema = projectSchema.omit({ id: true, userId: true });
+const addProjectSchema = projectSchema.omit({ id: true, userId: true });
 
-export const editProjectSchema = addProjectSchema.partial();
+const editProjectSchema = addProjectSchema.partial();
 
-export type Project = z.infer<typeof projectSchema>;
+type Project = z.infer<typeof projectSchema>;
 
-export type AddProjectValues = z.infer<typeof addProjectSchema>;
+type AddProjectValues = z.infer<typeof addProjectSchema>;
 
-export type EditProjectValues = z.infer<typeof editProjectSchema>;
+type EditProjectValues = z.infer<typeof editProjectSchema>;
+
+export {
+  MAX_PROJECT_NAME_LENGTH, projectSchema, addProjectSchema, editProjectSchema, type Project, type AddProjectValues, type EditProjectValues
+}

@@ -3,7 +3,7 @@ import { projectSchema } from './project.model';
 
 const allowedSections = ['All', 'Today', 'Upcoming'] as const;
 
-export type AllowedSection = (typeof allowedSections)[number];
+type AllowedSection = (typeof allowedSections)[number];
 
 const filterSectionSchema = z.object({
   type: z.literal('section'),
@@ -15,6 +15,10 @@ const filterProjectSchema = z.object({
   value: projectSchema.shape.id,
 });
 
-export const filterSchema = z.union([filterSectionSchema, filterProjectSchema]);
+const filterSchema = z.union([filterSectionSchema, filterProjectSchema]);
 
-export type Filter = z.infer<typeof filterSchema>;
+type Filter = z.infer<typeof filterSchema>;
+
+export {
+  allowedSections, type AllowedSection, filterSectionSchema, filterProjectSchema, filterSchema, type Filter
+}

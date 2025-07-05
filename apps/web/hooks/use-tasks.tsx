@@ -1,5 +1,5 @@
 import { apiURL, queryKeys } from '@/config';
-import { Task } from '@harbor-task/models';
+import { AllowedSection, allowedSections, Task } from '@harbor-task/models';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const fetchSearchedTasks = async (userId: string, query: string): Promise<Task[]> => {
@@ -14,11 +14,11 @@ const fetchFilteredTasks = async ({
   filterValue,
 }: {
   userId: string;
-  filterValue: string;
+  filterValue: AllowedSection;
 }): Promise<Task[]> => {
   let url = `${apiURL}/users/${userId}/tasks`;
 
-  if (['All', 'Today', 'Upcoming'].includes(filterValue)) {
+  if (allowedSections.includes(filterValue)) {
     url += `?section=${filterValue}`;
   } else {
     url += `?projectId=${filterValue}`;

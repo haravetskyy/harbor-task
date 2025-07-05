@@ -1,10 +1,10 @@
 import { z } from 'zod';
 import { projectSchema } from './project.model';
 
-export const MAX_TASK_TITLE_LENGTH = 100;
-export const MAX_TASK_DESCRIPTION_LENGTH = 250;
+const MAX_TASK_TITLE_LENGTH = 100;
+const MAX_TASK_DESCRIPTION_LENGTH = 250;
 
-export const getPlainText = (html: string): string => {
+const getPlainTextFromHTML = (html: string): string => {
   if (!html || typeof html !== 'string') return '';
   const text = html
     .replace(/<[^>]+>/g, '')
@@ -15,9 +15,9 @@ export const getPlainText = (html: string): string => {
   return text;
 };
 
-export const getPlainTextLength = (html: string): number => getPlainText(html).length;
+const getPlainTextLengthFromHTML = (html: string): number => getPlainTextFromHTML(html).length;
 
-export const taskSchema = z.object({
+const taskSchema = z.object({
   id: z.string().uuid({ message: 'Task ID must be a valid UUID' }),
   title: z
     .string()
@@ -29,7 +29,7 @@ export const taskSchema = z.object({
   description: z
     .string()
     .optional()
-    .refine(val => !val || getPlainTextLength(val) <= MAX_TASK_DESCRIPTION_LENGTH, {
+    .refine(val => !val || getPlainTextLengthFromHTML(val) <= MAX_TASK_DESCRIPTION_LENGTH, {
       message: `Description text cannot exceed ${MAX_TASK_DESCRIPTION_LENGTH} characters`,
     }),
   progress: z
@@ -46,12 +46,16 @@ export const taskSchema = z.object({
   userId: z.string().uuid({ message: 'User ID must be a valid UUID' }),
 });
 
-export const addTaskSchema = taskSchema.omit({ id: true, userId: true });
+const addTaskSchema = taskSchema.omit({ id: true, userId: true });
 
-export const editTaskSchema = addTaskSchema.partial();
+const editTaskSchema = addTaskSchema.partial();
 
-export type Task = z.infer<typeof taskSchema>;
+type Task = z.infer<typeof taskSchema>;
 
-export type AddTaskValues = z.infer<typeof addTaskSchema>;
+type AddTaskValues = z.infer<typeof addTaskSchema>;
 
-export type EditTaskValues = z.infer<typeof editTaskSchema>;
+type EditTaskValues = z.infer<typeof editTaskSchema>;
+
+export {
+  MAX_TASK_TITLE_LENGTH, MAX_TASK_DESCRIPTION_LENGTH, getPlainTextFromHTML, getPlainTextLengthFromHTML, taskSchema, addTaskSchema, editTaskSchema, type Task, type AddTaskValues, type EditTaskValues
+}
