@@ -1,23 +1,22 @@
+import { apiURL, queryKeys } from '@/config';
 import { Project } from '@harbor-task/models';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
 const fetchProjects = async (userId: string): Promise<Project[]> => {
-  const response = await fetch(`${apiUrl}/users/${userId}/projects`);
+  const response = await fetch(`${apiURL}/users/${userId}/projects`);
   if (!response.ok) throw new Error('Failed to fetch projects');
   return response.json();
 };
 
 const fetchSearchedProjects = async (userId: string, query: string): Promise<Project[]> => {
-  const response = await fetch(`${apiUrl}/users/${userId}/search?query=${query}`);
+  const response = await fetch(`${apiURL}/users/${userId}/search?query=${query}`);
   if (!response.ok) throw new Error('Failed to search projects');
   const data = await response.json();
   return data.projects || [];
 };
 
 const addProject = async (project: Omit<Project, 'id'>) => {
-  const response = await fetch(`${apiUrl}/users/${project.userId}/projects`, {
+  const response = await fetch(`${apiURL}/users/${project.userId}/projects`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(project),
@@ -27,7 +26,7 @@ const addProject = async (project: Omit<Project, 'id'>) => {
 };
 
 const editProject = async (project: Partial<Project>) => {
-  const response = await fetch(`${apiUrl}/users/${project.userId}/projects/${project.id}`, {
+  const response = await fetch(`${apiURL}/users/${project.userId}/projects/${project.id}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(project),
@@ -37,7 +36,7 @@ const editProject = async (project: Partial<Project>) => {
 };
 
 const deleteProject = async ({ userId, projectId }: { userId: string; projectId: string }) => {
-  const response = await fetch(`${apiUrl}/users/${userId}/projects/${projectId}`, {
+  const response = await fetch(`${apiURL}/users/${userId}/projects/${projectId}`, {
     method: 'DELETE',
   });
   if (!response.ok) throw new Error('Failed to delete project');
@@ -46,7 +45,7 @@ const deleteProject = async ({ userId, projectId }: { userId: string; projectId:
 
 export const useProjects = (userId: string | undefined, query?: string) => {
   return useQuery({
-    queryKey: query ? ['search', 'projects', userId, query] : ['projects', userId],
+    queryKey: query ? [queryKeys.search, queryKeys.projects, userId, query] : [queryKeys.projects, userId],
     queryFn: () => (query ? fetchSearchedProjects(userId!, query) : fetchProjects(userId!)),
     enabled: !!userId && (query ? query.length > 0 : true),
     staleTime: 5 * 60 * 1000,
@@ -59,7 +58,7 @@ export const useAddProject = () => {
   return useMutation({
     mutationFn: addProject,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.projects] });
     },
   });
 };
@@ -70,7 +69,7 @@ export const useEditProject = () => {
   return useMutation({
     mutationFn: editProject,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.projects] });
     },
   });
 };
@@ -81,7 +80,7 @@ export const useDeleteProject = () => {
   return useMutation<{ projectId: string }, Error, { userId: string; projectId: string }>({
     mutationFn: deleteProject,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.projects] });
     },
   });
 };

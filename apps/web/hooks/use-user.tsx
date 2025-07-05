@@ -1,10 +1,9 @@
+import { apiURL, queryKeys } from '@/config';
 import { User } from '@harbor-task/models';
 import { useQuery } from '@tanstack/react-query';
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
 const fetchUser = async (): Promise<User> => {
-  const response = await fetch(`${apiUrl}/users`, {
+  const response = await fetch(`${apiURL}/users`, {
     credentials: 'include',
   });
   if (!response.ok) throw new Error('Failed to fetch user');
@@ -13,7 +12,7 @@ const fetchUser = async (): Promise<User> => {
 
 export const useUser = () => {
   return useQuery({
-    queryKey: ['user'],
+    queryKey: [queryKeys.user],
     queryFn: fetchUser,
     staleTime: 10 * 60 * 1000,
   });
