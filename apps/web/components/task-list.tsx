@@ -17,20 +17,7 @@ import { Button } from './ui/button';
 import { Checkbox } from './ui/checkbox';
 import { Skeleton } from './ui/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-
-export const getFlagColor = (priority: number | undefined): string | undefined => {
-  if (typeof priority === undefined) {
-    return;
-  }
-
-  const priorityColors: Record<number, string> = {
-    1: '#00c951', // green-500
-    2: '#efb100', // yellow-500
-    3: '#fd9a00', // amber-500
-    4: '#c10007', // red-700
-  };
-  return priority ? priorityColors[priority] : 'gray';
-};
+import { getFlagColor } from '@/lib/get-flag-color';
 
 const TaskList = () => {
   const { selectedFilter } = useFilter();
@@ -44,9 +31,10 @@ const TaskList = () => {
     return (
       <section className="flex w-full max-w-screen-lg flex-col gap-2">
         <Button variant="link" disabled className="group mr-0 mt-2 w-min">
-          <Plus className="rounded-[50%] transition-all duration-300 group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black" />
+          <Plus className="rounded-full transition-all duration-300 group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black" />
           Add task
         </Button>
+
         <div className="flex w-full flex-col gap-4">
           {Array.from({ length: 6 }).map((_, index) => (
             <Skeleton className="h-24 w-full rounded-xl" key={index} />
@@ -92,9 +80,8 @@ const TaskList = () => {
                 return (
                   <TaskWindow task={task} project={project} key={task.id}>
                     <div
-                      className={`border-border bg-sidebar flex w-full items-start gap-2 rounded-xl border border-solid p-4 dark:bg-neutral-900 ${
-                        isDeleting && 'animate-slide-fade-left'
-                      }`}>
+                      className={`border-border bg-sidebar flex w-full items-start gap-2 rounded-xl border border-solid p-4 dark:bg-neutral-900 ${isDeleting && 'animate-slide-fade-left'
+                        }`}>
                       <Checkbox
                         className="mt-1 rounded-[50%]"
                         onClick={e => {
@@ -102,8 +89,10 @@ const TaskList = () => {
                           handleDelete(task.id);
                         }}
                       />
+
                       <div className="flex flex-col items-start justify-start gap-1">
                         <h2 className="cursor-pointer text-sm">{task.title}</h2>
+
                         {task.description && (
                           <div className="prose dark:prose-invert text-muted-foreground line-clamp-3 text-xs">
                             {parse(task.description)}
@@ -119,11 +108,13 @@ const TaskList = () => {
                               <p className="text-xs">{formatDate(task.deadline)}</p>
                             </Badge>
                           )}
+
                           {task.progress !== undefined && (
                             <Badge variant="outline" className="bg-background py-[0.325rem]">
                               {task.progress}%
                             </Badge>
                           )}
+
                           {project && (
                             <Tooltip>
                               <TooltipTrigger>
@@ -131,22 +122,22 @@ const TaskList = () => {
                                   {project.emoji}
                                 </Badge>
                               </TooltipTrigger>
+
                               <TooltipContent>
                                 <p>{project.name}</p>
                               </TooltipContent>
                             </Tooltip>
                           )}
+
                           {task.priority && (
                             <Tooltip>
                               <TooltipTrigger>
                                 <Flag
-                                  className="w-5"
-                                  style={{
-                                    fill: getFlagColor(task.priority),
-                                    stroke: getFlagColor(task.priority),
-                                  }}
+                                  className='w-5' style={{ stroke: getFlagColor(task.priority), fill: getFlagColor(task.priority) }}
+
                                 />
                               </TooltipTrigger>
+
                               <TooltipContent>
                                 <p>Priority: {task.priority}/4</p>
                               </TooltipContent>
@@ -155,6 +146,7 @@ const TaskList = () => {
                         </div>
                       </div>
                     </div>
+
                   </TaskWindow>
                 );
               })}

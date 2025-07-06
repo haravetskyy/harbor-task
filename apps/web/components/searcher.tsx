@@ -8,6 +8,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
+import { getFlagColor } from '@/lib/get-flag-color';
 import { Flag, Search } from 'lucide-react';
 import * as React from 'react';
 import { useDebounce } from 'use-debounce';
@@ -15,7 +16,6 @@ import { useProjects } from '../hooks/use-projects';
 import { useTasks } from '../hooks/use-tasks';
 import { useUser } from '../hooks/use-user';
 import { useFilter } from './contexts/filter-context';
-import { getFlagColor } from './task-list';
 import TaskWindow from './task-window';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';

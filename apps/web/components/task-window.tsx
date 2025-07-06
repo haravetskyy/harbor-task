@@ -1,6 +1,7 @@
 import { useProjects } from '@/hooks/use-projects';
 import { useEditTask } from '@/hooks/use-tasks';
 import { useUser } from '@/hooks/use-user';
+import { getFlagColor } from '@/lib/get-flag-color';
 import { cn } from '@/lib/utils';
 import { editTaskSchema, EditTaskValues, Project, Task } from '@harbor-task/models';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,7 +9,6 @@ import { format } from 'date-fns';
 import { CalendarIcon, Flag } from 'lucide-react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { getFlagColor } from './task-list';
 import { Badge } from './ui/badge';
 import {
   Breadcrumb,
