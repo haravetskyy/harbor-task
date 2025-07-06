@@ -1,11 +1,11 @@
 import { AppSidebar } from '@/components/app-sidebar';
-import ThemeToggle from '@/components/theme-toggle';
+import { TaskList } from '@/components/task-list';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Separator } from '@radix-ui/react-separator';
 import { RecourcePath } from '../components/recource-path';
-import TaskList from '../components/task-list';
 
-export default function Home() {
+const Home = () => {
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -27,3 +27,5 @@ export default function Home() {
     </SidebarProvider>
   );
 }
+
+export default Home

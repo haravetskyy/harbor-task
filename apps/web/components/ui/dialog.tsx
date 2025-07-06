@@ -1,12 +1,31 @@
 'use client';
 
-import * as React from 'react';
+import { cn } from '@/lib';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
+import * as React from 'react';
 
-import { cn } from '@/lib/utils';
+type DialogComponent = React.ComponentType<DialogPrimitive.DialogProps> & {
+  Trigger: typeof DialogPrimitive.Trigger;
+  Portal: typeof DialogPrimitive.Portal;
+  Close: typeof DialogPrimitive.Close;
+  Overlay: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay> & React.RefAttributes<HTMLDivElement>
+  >;
+  Content: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & React.RefAttributes<HTMLDivElement>
+  >;
+  Header: React.FC<React.HTMLAttributes<HTMLDivElement>>;
+  Footer: React.FC<React.HTMLAttributes<HTMLDivElement>>;
+  Title: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title> & React.RefAttributes<HTMLHeadingElement>
+  >;
+  Description: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description> & React.RefAttributes<HTMLParagraphElement>
+  >;
+};
 
-const Dialog = DialogPrimitive.Root;
+const Dialog = DialogPrimitive.Root as DialogComponent;
 
 const DialogTrigger = DialogPrimitive.Trigger;
 
@@ -89,15 +108,16 @@ const DialogDescription = React.forwardRef<
 ));
 DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
+Dialog.Trigger = DialogTrigger;
+Dialog.Portal = DialogPortal;
+Dialog.Close = DialogClose;
+Dialog.Overlay = DialogOverlay;
+Dialog.Content = DialogContent;
+Dialog.Header = DialogHeader;
+Dialog.Footer = DialogFooter;
+Dialog.Title = DialogTitle;
+Dialog.Description = DialogDescription;
+
 export {
-  Dialog,
-  DialogPortal,
-  DialogOverlay,
-  DialogTrigger,
-  DialogClose,
-  DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription,
+  Dialog, type DialogComponent
 };

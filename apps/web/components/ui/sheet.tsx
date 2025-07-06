@@ -1,13 +1,28 @@
 'use client';
 
-import * as React from 'react';
+import { cn } from '@/lib';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { X } from 'lucide-react';
+import * as React from 'react';
 
-import { cn } from '@/lib/utils';
+interface SheetComponent
+  extends React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof SheetPrimitive.Root> &
+    React.RefAttributes<HTMLDivElement>
+  > {
+  Trigger: typeof SheetTrigger;
+  Close: typeof SheetClose;
+  Portal: typeof SheetPortal;
+  Overlay: typeof SheetOverlay;
+  Content: typeof SheetContent;
+  Header: typeof SheetHeader;
+  Footer: typeof SheetFooter;
+  Title: typeof SheetTitle;
+  Description: typeof SheetDescription;
+}
 
-const Sheet = SheetPrimitive.Root;
+const Sheet = SheetPrimitive.Root as SheetComponent;
 
 const SheetTrigger = SheetPrimitive.Trigger;
 
@@ -51,7 +66,7 @@ const sheetVariants = cva(
 
 interface SheetContentProps
   extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
-    VariantProps<typeof sheetVariants> {}
+  VariantProps<typeof sheetVariants> { }
 
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
@@ -107,15 +122,14 @@ const SheetDescription = React.forwardRef<
 ));
 SheetDescription.displayName = SheetPrimitive.Description.displayName;
 
-export {
-  Sheet,
-  SheetPortal,
-  SheetOverlay,
-  SheetTrigger,
-  SheetClose,
-  SheetContent,
-  SheetHeader,
-  SheetFooter,
-  SheetTitle,
-  SheetDescription,
-};
+Sheet.Trigger = SheetTrigger;
+Sheet.Close = SheetClose;
+Sheet.Portal = SheetPortal;
+Sheet.Overlay = SheetOverlay;
+Sheet.Content = SheetContent;
+Sheet.Header = SheetHeader;
+Sheet.Footer = SheetFooter;
+Sheet.Title = SheetTitle;
+Sheet.Description = SheetDescription;
+
+export { Sheet, type SheetComponent };

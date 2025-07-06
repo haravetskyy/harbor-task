@@ -1,9 +1,16 @@
 'use client';
 
-import * as React from 'react';
+import { cn } from '@/lib';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
+import * as React from 'react';
 
-import { cn } from '@/lib/utils';
+interface AvatarComponent
+  extends React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> & React.RefAttributes<HTMLDivElement>
+  > {
+  Image: typeof AvatarImage;
+  Fallback: typeof AvatarFallback;
+}
 
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
@@ -14,7 +21,7 @@ const Avatar = React.forwardRef<
     className={cn('relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full', className)}
     {...props}
   />
-));
+)) as AvatarComponent;
 Avatar.displayName = AvatarPrimitive.Root.displayName;
 
 const AvatarImage = React.forwardRef<
@@ -44,4 +51,7 @@ const AvatarFallback = React.forwardRef<
 ));
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 
-export { Avatar, AvatarImage, AvatarFallback };
+Avatar.Image = AvatarImage;
+Avatar.Fallback = AvatarFallback;
+
+export { Avatar, type AvatarComponent };

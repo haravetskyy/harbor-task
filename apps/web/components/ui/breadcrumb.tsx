@@ -1,15 +1,30 @@
-import * as React from 'react';
+'use client';
+
+import { cn } from '@/lib';
 import { Slot } from '@radix-ui/react-slot';
 import { ChevronRight, MoreHorizontal } from 'lucide-react';
+import * as React from 'react';
 
-import { cn } from '@/lib/utils';
+interface BreadcrumbComponent
+  extends React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<'nav'> & {
+      separator?: React.ReactNode;
+    } & React.RefAttributes<HTMLElement>
+  > {
+  List: typeof BreadcrumbList;
+  Item: typeof BreadcrumbItem;
+  Link: typeof BreadcrumbLink;
+  Page: typeof BreadcrumbPage;
+  Separator: typeof BreadcrumbSeparator;
+  Ellipsis: typeof BreadcrumbEllipsis;
+}
 
 const Breadcrumb = React.forwardRef<
   HTMLElement,
   React.ComponentPropsWithoutRef<'nav'> & {
     separator?: React.ReactNode;
   }
->(({ ...props }, ref) => <nav ref={ref} aria-label="breadcrumb" {...props} />);
+>(({ ...props }, ref) => <nav ref={ref} aria-label="breadcrumb" {...props} />) as BreadcrumbComponent;
 Breadcrumb.displayName = 'Breadcrumb';
 
 const BreadcrumbList = React.forwardRef<HTMLOListElement, React.ComponentPropsWithoutRef<'ol'>>(
@@ -91,12 +106,11 @@ const BreadcrumbEllipsis = ({ className, ...props }: React.ComponentProps<'span'
 );
 BreadcrumbEllipsis.displayName = 'BreadcrumbElipssis';
 
-export {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-  BreadcrumbEllipsis,
-};
+Breadcrumb.List = BreadcrumbList;
+Breadcrumb.Item = BreadcrumbItem;
+Breadcrumb.Link = BreadcrumbLink;
+Breadcrumb.Page = BreadcrumbPage;
+Breadcrumb.Separator = BreadcrumbSeparator;
+Breadcrumb.Ellipsis = BreadcrumbEllipsis;
+
+export { Breadcrumb, type BreadcrumbComponent };

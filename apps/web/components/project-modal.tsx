@@ -1,6 +1,8 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { useAddProject, useEditProject, useProjects, useUser } from '@/hooks';
+import { cn } from '@/lib';
 import { EmojiPicker } from '@ferrucc-io/emoji-picker';
 import {
   addProjectSchema,
@@ -13,20 +15,9 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { useAddProject, useEditProject, useProjects } from '../hooks/use-projects';
-import { useUser } from '../hooks/use-user';
-import { cn } from '../lib/utils';
 import { ColorInput } from './ui/color-input';
-import {
-  Credenza,
-  CredenzaBody,
-  CredenzaClose,
-  CredenzaContent,
-  CredenzaFooter,
-  CredenzaHeader,
-  CredenzaTitle,
-} from './ui/credenza';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
+import { Credenza } from './ui/credenza';
+import { Form } from './ui/form';
 import { Input } from './ui/input';
 import { Skeleton } from './ui/skeleton';
 
@@ -42,7 +33,7 @@ const defaultModalState: ProjectModalState = {
   project: undefined,
 };
 
-export const useProjectModal = () => {
+const useProjectModal = () => {
   return useQuery({
     queryKey: ['projectModalState'],
     queryFn: () => defaultModalState,
@@ -50,7 +41,7 @@ export const useProjectModal = () => {
   });
 };
 
-export const useUpdateProjectModal = () => {
+const useUpdateProjectModal = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (newState: Partial<ProjectModalState>) => {
@@ -64,7 +55,7 @@ export const useUpdateProjectModal = () => {
   });
 };
 
-export const ProjectModal = () => {
+const ProjectModal = () => {
   const { data: modalState } = useProjectModal();
   const updateModalState = useUpdateProjectModal();
 
@@ -72,14 +63,14 @@ export const ProjectModal = () => {
     <Credenza
       open={modalState.isOpen}
       onOpenChange={() => updateModalState.mutate({ isOpen: !modalState.isOpen })}>
-      <CredenzaContent>
-        <CredenzaHeader>
-          <CredenzaTitle>{modalState.mode} project</CredenzaTitle>
-        </CredenzaHeader>
-        <CredenzaBody>
+      <Credenza.Content>
+        <Credenza.Header>
+          <Credenza.Title>{modalState.mode} project</Credenza.Title>
+        </Credenza.Header>
+        <Credenza.Body>
           <ProjectForm mode={modalState.mode} project={modalState.project} />
-        </CredenzaBody>
-      </CredenzaContent>
+        </Credenza.Body>
+      </Credenza.Content>
     </Credenza>
   );
 };
@@ -102,15 +93,15 @@ const ProjectForm = ({ project, mode }: ProjectFormProps) => {
     defaultValues:
       mode === 'Edit' && project
         ? {
-            name: project.name,
-            emoji: project.emoji,
-            color: project.color,
-          }
+          name: project.name,
+          emoji: project.emoji,
+          color: project.color,
+        }
         : {
-            name: '',
-            emoji: '',
-            color: '#ffffff',
-          },
+          name: '',
+          emoji: '',
+          color: '#ffffff',
+        },
     mode: 'onChange',
   });
 
@@ -142,12 +133,12 @@ const ProjectForm = ({ project, mode }: ProjectFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
+        <Form.Field
           control={form.control}
           name="name"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel
+            <Form.Item>
+              <Form.Label
                 className={cn(
                   'flex flex-row justify-between',
                   form.formState.errors.name && 'text-red-500 dark:text-red-800',
@@ -157,26 +148,26 @@ const ProjectForm = ({ project, mode }: ProjectFormProps) => {
                   <span className="text-red-500 dark:text-red-800">*</span>
                 </div>
                 {(field.value || '').length}/{MAX_PROJECT_NAME_LENGTH}
-              </FormLabel>
-              <FormControl>
+              </Form.Label>
+              <Form.Control>
                 <Input type="text" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+              </Form.Control>
+              <Form.Message />
+            </Form.Item>
           )}
         />
 
-        <FormField
+        <Form.Field
           control={form.control}
           name="emoji"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>
+            <Form.Item>
+              <Form.Label>
                 <div className="flex flex-row gap-1">
                   Emoji
                   <span className="text-red-500 dark:text-red-800">*</span>
                 </div>
-              </FormLabel>
+              </Form.Label>
 
               <EmojiPicker onEmojiSelect={field.onChange} className="max-h-56 w-full">
                 <EmojiPicker.Header>
@@ -186,35 +177,37 @@ const ProjectForm = ({ project, mode }: ProjectFormProps) => {
                   <EmojiPicker.List />
                 </EmojiPicker.Group>
               </EmojiPicker>
-              <FormMessage />
-            </FormItem>
+              <Form.Message />
+            </Form.Item>
           )}
         />
 
-        <FormField
+        <Form.Field
           control={form.control}
           name="color"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>
+            <Form.Item>
+              <Form.Label>
                 <div className="flex flex-row gap-1">
                   Color
                   <span className="text-red-500 dark:text-red-800">*</span>
                 </div>
-              </FormLabel>
+              </Form.Label>
               <ColorInput {...field} value={field.value || '#ffffff'} />
-              <FormMessage />
-            </FormItem>
+              <Form.Message />
+            </Form.Item>
           )}
         />
-        <CredenzaFooter>
-          <CredenzaClose asChild>
+        <Credenza.Footer>
+          <Credenza.Close asChild>
             <Button disabled={!form.formState.isValid} type="submit">
               Save changes
             </Button>
-          </CredenzaClose>
-        </CredenzaFooter>
+          </Credenza.Close>
+        </Credenza.Footer>
       </form>
     </Form>
   );
 };
+
+export { ProjectModal, ProjectForm, useProjectModal, useUpdateProjectModal }

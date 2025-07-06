@@ -1,26 +1,17 @@
 'use client';
 
-import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
+import { Command } from '@/components/ui/command';
+import { useProjects, useTasks, useUser } from '@/hooks';
 import { getPriorityColor } from '@/lib';
 import { Flag, Search } from 'lucide-react';
 import * as React from 'react';
 import { useDebounce } from 'use-debounce';
-import { useProjects } from '../hooks/use-projects';
-import { useTasks } from '../hooks/use-tasks';
-import { useUser } from '../hooks/use-user';
 import { useFilter } from './contexts/filter-context';
-import TaskWindow from './task-window';
+import { TaskWindow } from './task-window';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 
-export const Searcher = () => {
+const Searcher = () => {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [query, setQuery] = React.useState('');
   const [selectedTaskId, setSelectedTaskId] = React.useState<string | null>(null);
@@ -71,23 +62,23 @@ export const Searcher = () => {
         </kbd>
       </Button>
 
-      <CommandDialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <CommandInput
+      <Command.Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <Command.Input
           placeholder="Type a command or search..."
           value={query}
           onValueChange={setQuery}
         />
-        <CommandList>
+        <Command.List>
           {tasks.length === 0 && projects.length === 0 && debouncedQuery && !isLoading && (
-            <CommandEmpty>No results found.</CommandEmpty>
+            <Command.Empty>No results found.</Command.Empty>
           )}
 
           {(tasks.length > 0 || projects.length > 0 || !debouncedQuery) && (
             <>
               {projects.length > 0 && (
-                <CommandGroup heading="Projects">
+                <Command.Group heading="Projects">
                   {projects.map(project => (
-                    <CommandItem
+                    <Command.Item
                       key={project.id}
                       value={project.name}
                       onSelect={() => {
@@ -98,15 +89,15 @@ export const Searcher = () => {
                         {project.emoji}
                       </Badge>
                       {project.name}
-                    </CommandItem>
+                    </Command.Item>
                   ))}
-                </CommandGroup>
+                </Command.Group>
               )}
 
               {tasks.length > 0 && (
-                <CommandGroup heading="Tasks">
+                <Command.Group heading="Tasks">
                   {tasks.map(task => (
-                    <CommandItem
+                    <Command.Item
                       key={task.id}
                       value={task.title}
                       onSelect={() => handleTaskSelect(task.id)}>
@@ -118,14 +109,14 @@ export const Searcher = () => {
                         }}
                       />
                       {task.title}
-                    </CommandItem>
+                    </Command.Item>
                   ))}
-                </CommandGroup>
+                </Command.Group>
               )}
             </>
           )}
-        </CommandList>
-      </CommandDialog>
+        </Command.List>
+      </Command.Dialog>
 
       {tasks.map(task => {
         const project = projects.find(project => project.id === task.projectId);
@@ -145,3 +136,5 @@ export const Searcher = () => {
     </>
   );
 };
+
+export { Searcher };

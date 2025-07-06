@@ -1,30 +1,16 @@
 'use client';
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuAction,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from '@/components/ui/sidebar';
+import { DropdownMenu } from '@/components/ui/dropdown-menu';
+import { Sidebar, useSidebar } from '@/components/ui/sidebar';
+import { useDeleteProject, useProjects, useUser } from '@/hooks';
 import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useDeleteProject, useProjects } from '../hooks/use-projects';
-import { useUser } from '../hooks/use-user';
 import { useFilter } from './contexts/filter-context';
 import { ProjectModal, useUpdateProjectModal } from './project-modal';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Skeleton } from './ui/skeleton';
 
-export function NavProjects() {
+const NavProjects = () => {
   const { isMobile } = useSidebar();
   const { data: user, isLoading: isUserLoading } = useUser();
   const { data: projects = [], isLoading: isProjectsLoading } = useProjects(user?.id);
@@ -40,7 +26,7 @@ export function NavProjects() {
             <Plus />
             Add project
           </Button>
-          <SidebarGroupLabel>Projects</SidebarGroupLabel>
+          <Sidebar.GroupLabel>Projects</Sidebar.GroupLabel>
         </div>
         <div className="flex w-full flex-col gap-2 p-2">
           {Array.from({ length: 5 }).map((_, index) => (
@@ -55,7 +41,7 @@ export function NavProjects() {
   }
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    <Sidebar.Group className="group-data-[collapsible=icon]:hidden">
       <Button
         variant="outline"
         onClick={() => {
@@ -66,11 +52,11 @@ export function NavProjects() {
       </Button>
       <ProjectModal />
 
-      {!projects.length || <SidebarGroupLabel>Projects</SidebarGroupLabel>}
-      <SidebarMenu>
+      {!projects.length || <Sidebar.GroupLabel>Projects</Sidebar.GroupLabel>}
+      <Sidebar.Menu>
         {projects.map(project => (
-          <SidebarMenuItem key={project.name}>
-            <SidebarMenuButton
+          <Sidebar.MenuItem key={project.name}>
+            <Sidebar.MenuButton
               asChild
               onClick={() => {
                 setSelectedFilter({ type: 'project', value: project.id });
@@ -81,35 +67,37 @@ export function NavProjects() {
                 </Badge>
                 <span>{project.name}</span>
               </a>
-            </SidebarMenuButton>
+            </Sidebar.MenuButton>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuAction showOnHover>
+              <DropdownMenu.Trigger asChild>
+                <Sidebar.MenuAction showOnHover>
                   <MoreHorizontal />
                   <span className="sr-only">More</span>
-                </SidebarMenuAction>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
+                </Sidebar.MenuAction>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Content
                 className="w-48 rounded-lg"
                 side={isMobile ? 'bottom' : 'right'}
                 align={isMobile ? 'end' : 'start'}>
-                <DropdownMenuItem
+                <DropdownMenu.Item
                   onClick={() => updateModalState.mutate({ isOpen: true, mode: 'Edit', project })}>
                   <Pencil className="text-neutral-500 dark:text-neutral-400" />
                   <span>Edit Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem
+                </DropdownMenu.Item>
+                <DropdownMenu.Item
                   onClick={() =>
                     deleteProjectMutation.mutate({ userId: user.id, projectId: project.id })
                   }>
                   <Trash2 className="text-neutral-500 dark:text-neutral-400" />
                   <span>Delete Project</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
+                </DropdownMenu.Item>
+              </DropdownMenu.Content>
             </DropdownMenu>
-          </SidebarMenuItem>
+          </Sidebar.MenuItem>
         ))}
-      </SidebarMenu>
-    </SidebarGroup>
+      </Sidebar.Menu>
+    </Sidebar.Group>
   );
 }
+
+export { NavProjects }

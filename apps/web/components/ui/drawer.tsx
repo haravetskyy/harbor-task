@@ -1,16 +1,35 @@
 'use client';
 
+import { cn } from '@/lib';
 import * as React from 'react';
 import { Drawer as DrawerPrimitive } from 'vaul';
 
-import { cn } from '@/lib/utils';
+type DrawerComponent = React.ComponentType<React.ComponentProps<typeof DrawerPrimitive.Root>> & {
+  Trigger: typeof DrawerPrimitive.Trigger;
+  Portal: typeof DrawerPrimitive.Portal;
+  Close: typeof DrawerPrimitive.Close;
+  Overlay: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay> & React.RefAttributes<HTMLDivElement>
+  >;
+  Content: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content> & React.RefAttributes<HTMLDivElement>
+  >;
+  Header: React.FC<React.HTMLAttributes<HTMLDivElement>>;
+  Footer: React.FC<React.HTMLAttributes<HTMLDivElement>>;
+  Title: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Title> & React.RefAttributes<HTMLHeadingElement>
+  >;
+  Description: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Description> & React.RefAttributes<HTMLParagraphElement>
+  >;
+};
 
-const Drawer = ({
+const Drawer = (({
   shouldScaleBackground = true,
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) => (
   <DrawerPrimitive.Root shouldScaleBackground={shouldScaleBackground} {...props} />
-);
+)) as unknown as DrawerComponent;
 Drawer.displayName = 'Drawer';
 
 const DrawerTrigger = DrawerPrimitive.Trigger;
@@ -85,15 +104,17 @@ const DrawerDescription = React.forwardRef<
 ));
 DrawerDescription.displayName = DrawerPrimitive.Description.displayName;
 
+Drawer.Trigger = DrawerTrigger;
+Drawer.Portal = DrawerPortal;
+Drawer.Close = DrawerClose;
+Drawer.Overlay = DrawerOverlay;
+Drawer.Content = DrawerContent;
+Drawer.Header = DrawerHeader;
+Drawer.Footer = DrawerFooter;
+Drawer.Title = DrawerTitle;
+Drawer.Description = DrawerDescription;
+
 export {
   Drawer,
-  DrawerPortal,
-  DrawerOverlay,
-  DrawerTrigger,
-  DrawerClose,
-  DrawerContent,
-  DrawerHeader,
-  DrawerFooter,
-  DrawerTitle,
-  DrawerDescription,
+  type DrawerComponent
 };

@@ -1,8 +1,6 @@
+import { convertToRGBA, cn } from '@/lib';
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
-
-import { convertToRGBA } from '@/lib/convert-to-rgba';
-import { cn } from '@/lib/utils';
 
 const badgeVariants = cva(
   'inline-flex items-center rounded-md border border-neutral-200 px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-950 focus:ring-offset-2 dark:border-neutral-800 dark:focus:ring-neutral-300',
@@ -25,13 +23,13 @@ const badgeVariants = cva(
   },
 );
 
-export interface BadgeProps
+interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {
+  VariantProps<typeof badgeVariants> {
   color?: string;
 }
 
-function Badge({ className, variant, color, ...props }: BadgeProps) {
+const Badge = ({ className, variant, color, ...props }: BadgeProps) => {
   return (
     <div
       {...(color && { style: { backgroundColor: convertToRGBA(color, 0.2) } })}

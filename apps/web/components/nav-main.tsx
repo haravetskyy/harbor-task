@@ -1,12 +1,7 @@
 'use client';
 
-import { Collapsible, CollapsibleTrigger } from '@/components/ui/collapsible';
-import {
-  SidebarGroup,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from '@/components/ui/sidebar';
+import { Collapsible } from '@/components/ui/collapsible';
+import { Sidebar } from '@/components/ui/sidebar';
 import { Calendar1, CalendarDays, House } from 'lucide-react';
 import { useFilter } from './contexts/filter-context';
 import { Searcher } from './searcher';
@@ -29,30 +24,32 @@ const items = [
   },
 ] as const;
 
-export function NavMain() {
+const NavMain = () => {
   const { setSelectedFilter } = useFilter();
 
   return (
-    <SidebarGroup>
-      <SidebarMenu>
+    <Sidebar.Group>
+      <Sidebar.Menu>
         <Searcher />
         {items.map(item => (
           <Collapsible key={item.title} asChild className="group/collapsible">
-            <SidebarMenuItem>
-              <CollapsibleTrigger asChild>
-                <SidebarMenuButton
+            <Sidebar.MenuItem>
+              <Collapsible.Trigger asChild>
+                <Sidebar.MenuButton
                   tooltip={item.title}
                   onClick={() => {
                     setSelectedFilter({ type: 'section', value: item.title });
                   }}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
-                </SidebarMenuButton>
-              </CollapsibleTrigger>
-            </SidebarMenuItem>
+                </Sidebar.MenuButton>
+              </Collapsible.Trigger>
+            </Sidebar.MenuItem>
           </Collapsible>
         ))}
-      </SidebarMenu>
-    </SidebarGroup>
+      </Sidebar.Menu>
+    </Sidebar.Group>
   );
 }
+
+export { NavMain }

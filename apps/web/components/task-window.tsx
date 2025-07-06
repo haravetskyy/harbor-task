@@ -1,6 +1,4 @@
-import { useProjects } from '@/hooks/use-projects';
-import { useEditTask } from '@/hooks/use-tasks';
-import { useUser } from '@/hooks/use-user';
+import { useEditTask, useProjects, useUser } from '@/hooks';
 import { cn, getPriorityColor } from '@/lib';
 import { editTaskSchema, EditTaskValues, Project, Task } from '@harbor-task/models';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,29 +7,17 @@ import { CalendarIcon, Flag } from 'lucide-react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Badge } from './ui/badge';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from './ui/breadcrumb';
+import { Breadcrumb } from './ui/breadcrumb';
 import { Button } from './ui/button';
 import { Calendar } from './ui/calendar';
-import {
-  Credenza,
-  CredenzaClose,
-  CredenzaContent,
-  CredenzaTitle,
-  CredenzaTrigger,
-} from './ui/credenza';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
+import { Credenza } from './ui/credenza';
+import { Form } from './ui/form';
 import { Input } from './ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Popover } from './ui/popover';
+import { Select } from './ui/select';
 import { Skeleton } from './ui/skeleton';
 import { Textarea } from './ui/textarea';
-import Tiptap from './ui/tiptap';
+import { Tiptap } from './ui/tiptap';
 
 interface TaskWindowProps {
   children?: React.ReactNode;
@@ -86,64 +72,64 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
 
   return (
     <Credenza open={open} onOpenChange={onOpenChange}>
-      <CredenzaTrigger asChild>{children}</CredenzaTrigger>
+      <Credenza.Trigger asChild>{children}</Credenza.Trigger>
       <Form {...form}>
-        <CredenzaContent className="h-min max-h-[90%] p-4 md:h-min md:min-h-[50%] md:min-w-[50%]">
+        <Credenza.Content className="h-min max-h-[90%] p-4 md:h-min md:min-h-[50%] md:min-w-[50%]">
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex w-full flex-col justify-center gap-4 md:flex-row md:justify-between">
             <section className="flex w-full flex-col md:gap-2">
-              <CredenzaTitle className="px-0 py-2 md:py-0">
+              <Credenza.Title className="px-0 py-2 md:py-0">
                 <Breadcrumb>
-                  <BreadcrumbList>
+                  <Breadcrumb.List>
                     {task.projectId ? (
                       <>
-                        <BreadcrumbItem>
-                          <BreadcrumbLink href="#">Projects</BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator />
-                        <BreadcrumbItem>
-                          <BreadcrumbLink>{project?.name}</BreadcrumbLink>
-                        </BreadcrumbItem>
+                        <Breadcrumb.Item>
+                          <Breadcrumb.Link href="#">Projects</Breadcrumb.Link>
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Separator />
+                        <Breadcrumb.Item>
+                          <Breadcrumb.Link>{project?.name}</Breadcrumb.Link>
+                        </Breadcrumb.Item>
                       </>
                     ) : (
-                      <BreadcrumbItem>
-                        <BreadcrumbLink href="#">All Tasks</BreadcrumbLink>
-                      </BreadcrumbItem>
+                      <Breadcrumb.Item>
+                        <Breadcrumb.Link href="#">All Tasks</Breadcrumb.Link>
+                      </Breadcrumb.Item>
                     )}
-                  </BreadcrumbList>
+                  </Breadcrumb.List>
                 </Breadcrumb>
-              </CredenzaTitle>
+              </Credenza.Title>
 
               <section className="flex w-full flex-col items-center gap-2">
-                <FormField
+                <Form.Field
                   control={form.control}
                   name="title"
                   render={({ field }) => (
-                    <FormItem className="flex w-full justify-center">
-                      <FormControl>
+                    <Form.Item className="flex w-full justify-center">
+                      <Form.Control>
                         <Textarea
                           className="w-[99%] resize-none font-semibold !leading-none tracking-tight md:w-full md:!text-lg"
                           {...field}
                         />
-                      </FormControl>
-                    </FormItem>
+                      </Form.Control>
+                    </Form.Item>
                   )}
                 />
 
-                <FormField
+                <Form.Field
                   control={form.control}
                   name="description"
                   render={({ field }) => (
-                    <FormItem className="flex w-full justify-center">
-                      <FormControl>
+                    <Form.Item className="flex w-full justify-center">
+                      <Form.Control>
                         <Tiptap
                           className="w-[99%] md:w-full"
                           content={field.value || ''}
                           onChange={field.onChange}
                         />
-                      </FormControl>
-                    </FormItem>
+                      </Form.Control>
+                    </Form.Item>
                   )}
                 />
               </section>
@@ -151,44 +137,44 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
 
             <section className="md:border-border flex flex-col justify-between gap-2 md:mt-6 md:w-max md:max-w-[33%] md:border-l md:pl-4">
               <div className="flex flex-col items-center gap-2">
-                <FormField
+                <Form.Field
                   control={form.control}
                   name="projectId"
                   render={({ field }) => (
-                    <FormItem className="w-[99%] md:w-full">
-                      <FormLabel htmlFor="project">Project</FormLabel>
-                      <FormControl>
+                    <Form.Item className="w-[99%] md:w-full">
+                      <Form.Label>Project</Form.Label>
+                      <Form.Control>
                         <Select onValueChange={field.onChange} value={field.value || ''}>
-                          <SelectTrigger id="project">
-                            <SelectValue placeholder="No project chosen" className="min-w-max" />
-                          </SelectTrigger>
-                          <SelectContent>
+                          <Select.Trigger>
+                            <Select.Value placeholder="No project chosen" className="min-w-max" />
+                          </Select.Trigger>
+                          <Select.Content>
                             {projects.map(project => (
-                              <SelectItem key={project.id} value={project.id}>
+                              <Select.Item key={project.id} value={project.id}>
                                 <Badge variant="circle" color={project.color} className="mr-2">
                                   {project.emoji}
                                 </Badge>
                                 {project.name}
-                              </SelectItem>
+                              </Select.Item>
                             ))}
-                          </SelectContent>
+                          </Select.Content>
                         </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                      </Form.Control>
+                      <Form.Message />
+                    </Form.Item>
                   )}
                 />
 
                 {task.deadline && (
-                  <FormField
+                  <Form.Field
                     control={form.control}
                     name="deadline"
                     render={({ field }) => (
-                      <FormItem className="flex w-full flex-col">
-                        <FormLabel>Deadline</FormLabel>
+                      <Form.Item className="flex w-full flex-col">
+                        <Form.Label>Deadline</Form.Label>
                         <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
+                          <Popover.Trigger asChild>
+                            <Form.Control>
                               <Button
                                 variant={'outline'}
                                 className={cn(
@@ -196,106 +182,109 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
                                   !field.value && 'text-muted-foreground',
                                 )}>
                                 {field.value ? (
-                                  format(field.value, 'PPP')
+                                  format(new Date(field.value), 'PPP')
                                 ) : (
                                   <span>Pick a date</span>
                                 )}
                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                               </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
+                            </Form.Control>
+                          </Popover.Trigger>
+                          <Popover.Content className="w-auto p-0" align="start">
                             <Calendar
                               mode="single"
-                              selected={field.value}
+                              selected={field.value ? new Date(field.value) : undefined}
                               onSelect={field.onChange}
                               disabled={date => date < new Date()}
                             />
-                          </PopoverContent>
+                          </Popover.Content>
                         </Popover>
-                      </FormItem>
+                      </Form.Item>
                     )}
                   />
                 )}
+
                 {task.progress !== undefined && (
-                  <FormField
+                  <Form.Field
                     control={form.control}
                     name="progress"
                     render={({ field }) => (
-                      <FormItem className="grid w-[99%] items-center md:w-full">
-                        <FormLabel htmlFor="progress">Progress</FormLabel>
+                      <Form.Item className="grid w-[99%] items-center md:w-full">
+                        <Form.Label>Progress</Form.Label>
                         <div className="relative">
                           <div className="text-muted-foreground absolute left-4 top-1.5">%</div>
-                          <Input
-                            type="number"
-                            id="progress"
-                            min={0}
-                            max={100}
-                            step={1}
-                            className="bg-background w-full rounded-lg pl-10"
-                            {...field}
-                            value={field.value ?? ''}
-                            onChange={e => {
-                              const value = e.target.value;
-                              field.onChange(value === '' ? undefined : Number(value));
-                            }}
-                          />
+                          <Form.Control>
+                            <Input
+                              type="number"
+                              min={0}
+                              max={100}
+                              step={1}
+                              className="bg-background w-full rounded-lg pl-10"
+                              {...field}
+                              value={field.value ?? ''}
+                              onChange={e => {
+                                const value = e.target.value;
+                                field.onChange(value === '' ? undefined : Number(value));
+                              }}
+                            />
+                          </Form.Control>
                         </div>
-                        <FormMessage />
-                      </FormItem>
+                        <Form.Message />
+                      </Form.Item>
                     )}
                   />
                 )}
+
                 {task.priority && (
-                  <FormField
+                  <Form.Field
                     control={form.control}
                     name="priority"
                     render={({ field }) => (
-                      <FormItem className="grid w-[99%] items-center md:w-full">
-                        <FormLabel htmlFor="priority">Priority</FormLabel>
+                      <Form.Item className="grid w-[99%] items-center md:w-full">
+                        <Form.Label>Priority</Form.Label>
                         <div className="relative">
                           <div className="text-muted-foreground absolute left-4 top-1.5">
                             <Flag
                               className="w-4"
                               style={{
-                                fill: getPriorityColor(task.priority),
-                                stroke: getPriorityColor(task.priority),
+                                fill: getPriorityColor(field.value ?? 0),
+                                stroke: getPriorityColor(field.value ?? 0),
                               }}
                             />
                           </div>
-
-                          <Input
-                            type="number"
-                            id="priority"
-                            min={1}
-                            max={4}
-                            step={1}
-                            className="bg-background w-full rounded-lg pl-10"
-                            {...field}
-                            value={field.value ?? ''}
-                            onChange={e => {
-                              const value = e.target.value;
-                              field.onChange(value === '' ? undefined : Number(value));
-                            }}
-                          />
+                          <Form.Control>
+                            <Input
+                              type="number"
+                              min={1}
+                              max={4}
+                              step={1}
+                              className="bg-background w-full rounded-lg pl-10"
+                              {...field}
+                              value={field.value ?? ''}
+                              onChange={e => {
+                                const value = e.target.value;
+                                field.onChange(value === '' ? undefined : Number(value));
+                              }}
+                            />
+                          </Form.Control>
                         </div>
-                        <FormMessage />
-                      </FormItem>
+                        <Form.Message />
+                      </Form.Item>
                     )}
                   />
                 )}
               </div>
-              <CredenzaClose asChild>
+              <Credenza.Close asChild>
                 <Button disabled={!form.formState.isValid} type="submit">
                   Save
                 </Button>
-              </CredenzaClose>
+              </Credenza.Close>
             </section>
           </form>
-        </CredenzaContent>
+        </Credenza.Content>
       </Form>
     </Credenza>
   );
 };
 
-export default TaskWindow;
+export { TaskWindow };

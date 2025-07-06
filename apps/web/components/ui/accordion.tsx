@@ -1,12 +1,21 @@
 'use client';
 
-import * as React from 'react';
+import { cn } from '@/lib';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { ChevronDown } from 'lucide-react';
+import * as React from 'react';
 
-import { cn } from '@/lib/utils';
+interface AccordionComponent
+  extends React.ForwardRefExoticComponent<
+    AccordionPrimitive.AccordionSingleProps | AccordionPrimitive.AccordionMultipleProps &
+    React.RefAttributes<HTMLDivElement>
+  > {
+  Item: typeof AccordionItem;
+  Trigger: typeof AccordionTrigger;
+  Content: typeof AccordionContent;
+}
 
-const Accordion = AccordionPrimitive.Root;
+const Accordion = AccordionPrimitive.Root as AccordionComponent;
 
 const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
@@ -48,4 +57,8 @@ const AccordionContent = React.forwardRef<
 ));
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;
 
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+Accordion.Item = AccordionItem;
+Accordion.Trigger = AccordionTrigger;
+Accordion.Content = AccordionContent;
+
+export { Accordion, type AccordionComponent };

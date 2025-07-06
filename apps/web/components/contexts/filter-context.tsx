@@ -3,7 +3,7 @@
 import { AllowedSection, Filter } from '@harbor-task/models';
 import { createContext, useContext, useMemo, useState } from 'react';
 
-interface FilterContextType {
+type FilterContextType = {
   selectedFilter: Filter;
   setSelectedFilter: (filter: Filter) => void;
   section?: AllowedSection;
@@ -37,10 +37,10 @@ const FilterProvider = ({
   );
 };
 
-export const useFilter = () => {
+const useFilter = () => {
   const context = useContext(FilterContext);
   if (!context) throw new Error('useFilter must be used within FilterProvider');
   return context;
 };
 
-export default FilterProvider;
+export { FilterProvider, useFilter };

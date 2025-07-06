@@ -1,19 +1,11 @@
 'use client';
 
-import { useProjects } from '../hooks/use-projects';
-import { useUser } from '../hooks/use-user';
+import { useProjects, useUser } from '@/hooks';
 import { useFilter } from './contexts/filter-context';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from './ui/breadcrumb';
+import { Breadcrumb } from './ui/breadcrumb';
 import { Skeleton } from './ui/skeleton';
 
-export const RecourcePath = () => {
+const RecourcePath = () => {
   const { selectedFilter } = useFilter();
   const { data: user, isLoading: isUserLoading } = useUser();
   const { data: projects } = useProjects(user?.id);
@@ -22,7 +14,7 @@ export const RecourcePath = () => {
     return (
       <>
         <Skeleton className="h-4 w-24" />
-        <BreadcrumbSeparator className="hidden md:block" />
+        <Breadcrumb.Separator className="hidden md:block" />
         <Skeleton className="h-4 w-24" />
       </>
     );
@@ -33,26 +25,28 @@ export const RecourcePath = () => {
 
     return (
       <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem className="hidden md:block">
-            <BreadcrumbLink href="#">Projects</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator className="hidden md:block" />
-          <BreadcrumbItem>
-            <BreadcrumbPage>{projectName}</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
+        <Breadcrumb.List>
+          <Breadcrumb.Item className="hidden md:block">
+            <Breadcrumb.Link href="#">Projects</Breadcrumb.Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Separator className="hidden md:block" />
+          <Breadcrumb.Item>
+            <Breadcrumb.Page>{projectName}</Breadcrumb.Page>
+          </Breadcrumb.Item>
+        </Breadcrumb.List>
       </Breadcrumb>
     );
   }
 
   return (
     <Breadcrumb>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbPage>{selectedFilter.value}</BreadcrumbPage>
-        </BreadcrumbItem>
-      </BreadcrumbList>
+      <Breadcrumb.List>
+        <Breadcrumb.Item>
+          <Breadcrumb.Page>{selectedFilter.value}</Breadcrumb.Page>
+        </Breadcrumb.Item>
+      </Breadcrumb.List>
     </Breadcrumb>
   );
 };
+
+export { RecourcePath }

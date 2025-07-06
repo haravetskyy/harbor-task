@@ -1,48 +1,26 @@
 'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from '@/components/ui/sidebar';
-import { useUser } from '@/hooks/use-user';
+import { DropdownMenu } from '@/components/ui/dropdown-menu';
+import { Sidebar, useSidebar, } from '@/components/ui/sidebar';
+import { magichutApi } from '@/config';
+import { useUser } from '@/hooks';
+import { getInitials } from '@/lib';
 import { ChevronsUpDown, LogOut, User } from 'lucide-react';
-import { getInitials } from '../lib/get-initials';
-import { Skeleton } from './ui/skeleton';
 import { useRouter } from 'next/navigation';
+import { Avatar } from './ui/avatar';
+import { Skeleton } from './ui/skeleton';
 
-export function NavUser() {
+const NavUser = () => {
   const { isMobile } = useSidebar();
   const { data: user, isLoading } = useUser();
 
   const router = useRouter();
 
   const handleSignOut = async () => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_MAGIC_HUT_URL}/api/auth/signout`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+    const response = await magichutApi.post('/auth/signout', {}, {});
 
-      if (response.ok) {
-        router.push(`${process.env.NEXT_PUBLIC_MAGIC_HUT_URL}/sign-in`);
-      } else console.error('Logout failed:', await response.json());
-    } catch (error) {
-      console.error('Error during logout:', error);
+    if (response.status >= 200 && response.status < 300) {
+      router.push(`${process.env.NEXT_PUBLIC_MAGIC_HUT_URL}/sign-in`);
     }
   };
 
@@ -61,58 +39,59 @@ export function NavUser() {
   }
 
   return (
-    <SidebarMenu>
-      <SidebarMenuItem>
+    <Sidebar.Menu>
+      <Sidebar.MenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
+          <DropdownMenu.Trigger asChild>
+            <Sidebar.MenuButton
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.image} alt={user.name} />
-                <AvatarFallback className="rounded-lg">{getInitials(user.name)}</AvatarFallback>
+                <Avatar.Image src={user.image} alt={user.name} />
+                <Avatar.Fallback className="rounded-lg">{getInitials(user.name)}</Avatar.Fallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
+            </Sidebar.MenuButton>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
             side={isMobile ? 'bottom' : 'right'}
             align="end"
             sideOffset={4}>
-            <DropdownMenuLabel className="p-0 font-normal">
+            <DropdownMenu.Label className="p-0 font-normal">
               <div
-                className={`${
-                  isMobile && 'hidden'
-                } flex items-center gap-2 px-1 py-1.5 text-left text-sm`}>
+                className={`${isMobile && 'hidden'
+                  } flex items-center gap-2 px-1 py-1.5 text-left text-sm`}>
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.image} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">{getInitials(user.name)}</AvatarFallback>
+                  <Avatar.Image src={user.image} alt={user.name} />
+                  <Avatar.Fallback className="rounded-lg">{getInitials(user.name)}</Avatar.Fallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user.name}</span>
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
               </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator className={isMobile ? 'hidden' : ''} />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
+            </DropdownMenu.Label>
+            <DropdownMenu.Separator className={isMobile ? 'hidden' : ''} />
+            <DropdownMenu.Group>
+              <DropdownMenu.Item>
                 <User />
                 Account
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleSignOut}>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item onClick={handleSignOut}>
                 <LogOut />
                 Sign out
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
+              </DropdownMenu.Item>
+            </DropdownMenu.Group>
+          </DropdownMenu.Content>
         </DropdownMenu>
-      </SidebarMenuItem>
-    </SidebarMenu>
+      </Sidebar.MenuItem>
+    </Sidebar.Menu>
   );
 }
+
+export { NavUser }

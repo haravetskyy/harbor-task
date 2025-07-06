@@ -4,7 +4,7 @@ import { NumericFormat, NumericFormatProps } from 'react-number-format';
 import { Button } from './button';
 import { Input } from './input';
 
-export interface NumberInputProps extends Omit<NumericFormatProps, 'value' | 'onValueChange'> {
+interface NumberInputProps extends Omit<NumericFormatProps, 'value' | 'onValueChange'> {
   stepper?: number;
   thousandSeparator?: string;
   placeholder?: string;
@@ -19,7 +19,7 @@ export interface NumberInputProps extends Omit<NumericFormatProps, 'value' | 'on
   decimalScale?: number;
 }
 
-export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
+const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
   (
     {
       stepper,
@@ -140,3 +140,5 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
     );
   },
 );
+
+export { NumberInput, type NumberInputProps }

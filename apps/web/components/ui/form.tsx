@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@/lib';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
 import * as React from 'react';
@@ -12,10 +13,32 @@ import {
   useFormContext,
 } from 'react-hook-form';
 
-import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
+type FormComponent = React.ComponentType<React.ComponentProps<typeof FormProvider>> & {
+  Field: <
+    TFieldValues extends FieldValues = FieldValues,
+    TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  >(props: ControllerProps<TFieldValues, TName>) => React.ReactElement;
+  Item: React.ForwardRefExoticComponent<
+    React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>
+  >;
+  Label: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> & React.RefAttributes<React.ElementRef<typeof LabelPrimitive.Root>>
+  >;
+  Control: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof Slot> & React.RefAttributes<React.ElementRef<typeof Slot>>
+  >;
+  Description: React.ForwardRefExoticComponent<
+    React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>
+  >;
+  Message: React.ForwardRefExoticComponent<
+    React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>
+  >;
+};
 
-const Form = FormProvider;
+const Form = (({ ...props }: React.ComponentProps<typeof FormProvider>) => (
+  <FormProvider {...props} />
+)) as unknown as FormComponent;
+Form.displayName = 'Form';
 
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
@@ -88,7 +111,7 @@ const FormLabel = React.forwardRef<
   const { error, formItemId } = useFormField();
 
   return (
-    <Label
+    <LabelPrimitive.Label
       ref={ref}
       className={cn(error && 'text-red-500 dark:text-red-800', className)}
       htmlFor={formItemId}
@@ -156,13 +179,15 @@ const FormMessage = React.forwardRef<
 });
 FormMessage.displayName = 'FormMessage';
 
+Form.Field = FormField;
+Form.Item = FormItem;
+Form.Label = FormLabel;
+Form.Control = FormControl;
+Form.Description = FormDescription;
+Form.Message = FormMessage;
+
 export {
   Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  useFormField,
+  type FormComponent,
+  useFormField
 };

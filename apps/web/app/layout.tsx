@@ -1,7 +1,7 @@
-import type { Metadata } from 'next';
+import { FilterProvider } from '@/components/contexts/filter-context';
+import { ReactQueryProvider } from '@/components/contexts/react-query-provider';
 import { ThemeProvider } from '@/components/contexts/theme-provider';
-import FilterProvider from '../components/contexts/filter-context';
-import ReactQueryProvider from '../components/contexts/react-query-provider';
+import type { Metadata } from 'next';
 import { Toaster } from '../components/ui/sonner';
 import { TooltipProvider } from '../components/ui/tooltip';
 import './globals.css';

@@ -1,15 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { DialogClose, DialogFooter } from '@/components/ui/dialog';
-import { PopoverContent } from '@/components/ui/popover';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Dialog } from '@/components/ui/dialog';
+import { Select } from '@/components/ui/select';
+import { useAddTask, useProjects, useUser } from '@/hooks';
 import { cn } from '@/lib';
 import {
   addTaskSchema,
@@ -23,42 +17,34 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon, Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useProjects } from '../hooks/use-projects';
-import { useAddTask } from '../hooks/use-tasks';
-import { useUser } from '../hooks/use-user';
 import { Badge } from './ui/badge';
 import { Calendar } from './ui/calendar';
 import {
   Credenza,
-  CredenzaBody,
-  CredenzaContent,
-  CredenzaHeader,
-  CredenzaTitle,
-  CredenzaTrigger,
 } from './ui/credenza';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
+import { Form } from './ui/form';
 import { Input } from './ui/input';
-import { Popover, PopoverTrigger } from './ui/popover';
+import { Popover } from './ui/popover';
 import { Skeleton } from './ui/skeleton';
-import Tiptap from './ui/tiptap';
+import { Tiptap } from './ui/tiptap';
 
-export function TaskModal() {
+const TaskModal = () => {
   return (
     <Credenza>
-      <CredenzaTrigger asChild>
+      <Credenza.Trigger asChild>
         <Button variant="link" className="group mr-0 mt-2 w-min">
           <Plus className="rounded-[50%] transition-all duration-300 group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black" />
           Add task
         </Button>
-      </CredenzaTrigger>
-      <CredenzaContent className="h-min max-h-[90%]">
-        <CredenzaHeader>
-          <CredenzaTitle>Add task</CredenzaTitle>
-        </CredenzaHeader>
-        <CredenzaBody>
+      </Credenza.Trigger>
+      <Credenza.Content className="h-min max-h-[90%]">
+        <Credenza.Header>
+          <Credenza.Title>Add task</Credenza.Title>
+        </Credenza.Header>
+        <Credenza.Body>
           <TaskForm />
-        </CredenzaBody>
-      </CredenzaContent>
+        </Credenza.Body>
+      </Credenza.Content>
     </Credenza>
   );
 }
@@ -98,66 +84,69 @@ const TaskForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
+        <Form.Field
           control={form.control}
           name="title"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel
-                className={cn(
-                  'flex flex-row justify-between',
-                  form.formState.errors.description && 'text-red-500 dark:text-red-800',
-                )}>
-                <div className="flex flex-row gap-1">
-                  Title
-                  <span className="text-red-500 dark:text-red-800">*</span>
+            <Form.Item>
+              <Form.Label>
+                <div className="flex flex-row justify-between">
+                  <div className="flex flex-row gap-1">
+                    Title
+                    <span className="text-red-500 dark:text-red-800">*</span>
+                  </div>
+                  <span>
+                    {field.value.length}/{MAX_TASK_TITLE_LENGTH}
+                  </span>
                 </div>
-                {field.value.length}/{MAX_TASK_TITLE_LENGTH}
-              </FormLabel>
-              <FormControl>
+              </Form.Label>
+              <Form.Control>
                 <Input type="text" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+              </Form.Control>
+              <Form.Message />
+            </Form.Item>
           )}
         />
 
-        <FormField
+        <Form.Field
           control={form.control}
           name="description"
           render={({ field }) => (
-            <FormItem className="flex w-full flex-col justify-center">
-              <FormLabel
+            <Form.Item>
+              <Form.Label
                 className={cn(
-                  'flex flex-row justify-between',
                   form.formState.errors.description && 'text-red-500 dark:text-red-800',
                 )}>
-                <div className="flex flex-row gap-1">
-                  Description
-                  <span className="text-red-500 dark:text-red-800">*</span>
+                <div className="flex flex-row justify-between">
+                  <div className="flex flex-row gap-1">
+                    Description
+                    <span className="text-red-500 dark:text-red-800">*</span>
+                  </div>
+                  <span>
+                    {getPlainTextLengthFromHTML(field.value || '')}/{MAX_TASK_DESCRIPTION_LENGTH}
+                  </span>
                 </div>
-                {getPlainTextLengthFromHTML(field.value || '')}/{MAX_TASK_DESCRIPTION_LENGTH}
-              </FormLabel>
-              <FormControl>
+              </Form.Label>
+              <Form.Control>
                 <Tiptap
                   className="w-[99%] md:w-full"
                   content={field.value || ''}
                   onChange={field.onChange}
                 />
-              </FormControl>
-            </FormItem>
+              </Form.Control>
+            </Form.Item>
           )}
         />
 
-        <FormField
+        <Form.Field
           control={form.control}
           name="deadline"
           render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Deadline</FormLabel>
+            <Form.Item className="flex flex-col">
+              <Form.Label>Deadline</Form.Label>
               <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
+                <Popover.Trigger asChild>
+                  <Form.Control>
                     <Button
                       variant={'outline'}
                       className={cn(
@@ -167,28 +156,28 @@ const TaskForm = () => {
                       {field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                     </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                  </Form.Control>
+                </Popover.Trigger>
+                <Popover.Content className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
                     disabled={date => date < new Date()}
                   />
-                </PopoverContent>
+                </Popover.Content>
               </Popover>
-            </FormItem>
+            </Form.Item>
           )}
         />
 
-        <FormField
+        <Form.Field
           control={form.control}
           name="priority"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Priority</FormLabel>
-              <FormControl>
+            <Form.Item>
+              <Form.Label>Priority</Form.Label>
+              <Form.Control>
                 <Input
                   type="number"
                   min={1}
@@ -201,19 +190,19 @@ const TaskForm = () => {
                     field.onChange(value === '' ? undefined : Number(value));
                   }}
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+              </Form.Control>
+              <Form.Message />
+            </Form.Item>
           )}
         />
 
-        <FormField
+        <Form.Field
           control={form.control}
           name="progress"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Progress</FormLabel>
-              <FormControl>
+            <Form.Item>
+              <Form.Label>Progress</Form.Label>
+              <Form.Control>
                 <Input
                   type="number"
                   min={0}
@@ -226,48 +215,50 @@ const TaskForm = () => {
                     field.onChange(value === '' ? undefined : Number(value));
                   }}
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+              </Form.Control>
+              <Form.Message />
+            </Form.Item>
           )}
         />
 
-        <FormField
+        <Form.Field
           control={form.control}
           name="projectId"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Project</FormLabel>
-              <FormControl>
+            <Form.Item>
+              <Form.Label>Project</Form.Label>
+              <Form.Control>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="No project chosen" />
-                  </SelectTrigger>
-                  <SelectContent>
+                  <Select.Trigger>
+                    <Select.Value placeholder="No project chosen" />
+                  </Select.Trigger>
+                  <Select.Content>
                     {projects.map(project => (
-                      <SelectItem key={project.id} value={project.id}>
+                      <Select.Item key={project.id} value={project.id}>
                         <Badge variant="circle" color={project.color} className="mr-2">
                           {project.emoji}
                         </Badge>
                         {project.name}
-                      </SelectItem>
+                      </Select.Item>
                     ))}
-                  </SelectContent>
+                  </Select.Content>
                 </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+              </Form.Control>
+              <Form.Message />
+            </Form.Item>
           )}
         />
 
-        <DialogFooter>
-          <DialogClose asChild>
+        <Dialog.Footer>
+          <Dialog.Close asChild>
             <Button disabled={!form.formState.isValid} type="submit">
               Save changes
             </Button>
-          </DialogClose>
-        </DialogFooter>
+          </Dialog.Close>
+        </Dialog.Footer>
       </form>
     </Form>
   );
 };
+
+export { TaskModal, TaskForm }

@@ -6,7 +6,54 @@ import { Check, ChevronRight, Circle } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
-const DropdownMenu = DropdownMenuPrimitive.Root;
+type DropdownMenuComponent = React.ComponentType<React.ComponentProps<typeof DropdownMenuPrimitive.Root>> & {
+  Trigger: typeof DropdownMenuPrimitive.Trigger;
+  Group: typeof DropdownMenuPrimitive.Group;
+  Portal: typeof DropdownMenuPrimitive.Portal;
+  Sub: typeof DropdownMenuPrimitive.Sub;
+  RadioGroup: typeof DropdownMenuPrimitive.RadioGroup;
+  SubTrigger: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger> &
+    { inset?: boolean } &
+    React.RefAttributes<HTMLDivElement>
+  >;
+  SubContent: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent> &
+    React.RefAttributes<HTMLDivElement>
+  >;
+  Content: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content> &
+    React.RefAttributes<HTMLDivElement>
+  >;
+  Item: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> &
+    { inset?: boolean } &
+    React.RefAttributes<HTMLDivElement>
+  >;
+  CheckboxItem: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem> &
+    React.RefAttributes<HTMLDivElement>
+  >;
+  RadioItem: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem> &
+    React.RefAttributes<HTMLDivElement>
+  >;
+  Label: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label> &
+    { inset?: boolean } &
+    React.RefAttributes<HTMLDivElement>
+  >;
+  Separator: React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator> &
+    React.RefAttributes<HTMLDivElement>
+  >;
+  Shortcut: React.FC<React.HTMLAttributes<HTMLSpanElement>>;
+};
+
+const DropdownMenu = (({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) => (
+  <DropdownMenuPrimitive.Root {...props} />
+)) as unknown as DropdownMenuComponent;
+DropdownMenu.displayName = 'DropdownMenu';
 
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 
@@ -166,20 +213,23 @@ const DropdownMenuShortcut = ({ className, ...props }: React.HTMLAttributes<HTML
 };
 DropdownMenuShortcut.displayName = 'DropdownMenuShortcut';
 
+// Attach all sub-components to the main component
+DropdownMenu.Trigger = DropdownMenuTrigger;
+DropdownMenu.Group = DropdownMenuGroup;
+DropdownMenu.Portal = DropdownMenuPortal;
+DropdownMenu.Sub = DropdownMenuSub;
+DropdownMenu.RadioGroup = DropdownMenuRadioGroup;
+DropdownMenu.SubTrigger = DropdownMenuSubTrigger;
+DropdownMenu.SubContent = DropdownMenuSubContent;
+DropdownMenu.Content = DropdownMenuContent;
+DropdownMenu.Item = DropdownMenuItem;
+DropdownMenu.CheckboxItem = DropdownMenuCheckboxItem;
+DropdownMenu.RadioItem = DropdownMenuRadioItem;
+DropdownMenu.Label = DropdownMenuLabel;
+DropdownMenu.Separator = DropdownMenuSeparator;
+DropdownMenu.Shortcut = DropdownMenuShortcut;
+
 export {
   DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuCheckboxItem,
-  DropdownMenuRadioItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuGroup,
-  DropdownMenuPortal,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuRadioGroup,
+  type DropdownMenuComponent
 };

@@ -1,20 +1,20 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib';
 import Highlight from '@tiptap/extension-highlight';
 import Placeholder from '@tiptap/extension-placeholder';
 import TextAlign from '@tiptap/extension-text-align';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import MenuBar from './menu-bar';
+import { MenuBar } from './menu-bar';
 
-interface TiptapProps {
+type TiptapProps = {
   content: string;
   onChange: (content: string) => void;
   className?: string;
 }
 
-export default function Tiptap({ content, onChange, className }: TiptapProps) {
+const Tiptap = ({ content, onChange, className }: TiptapProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -59,3 +59,5 @@ export default function Tiptap({ content, onChange, className }: TiptapProps) {
     </div>
   );
 }
+
+export { Tiptap };

@@ -1,21 +1,19 @@
 'use client';
 
-import { useProjects } from '@/hooks/use-projects';
-import { useDeleteTask, useTasks } from '@/hooks/use-tasks';
-import { useUser } from '@/hooks/use-user';
-import { getPriorityColor, getPriorityText, groupTasksByDeadline, formatDate } from '@/lib';
+import { useDeleteTask, useProjects, useTasks, useUser } from '@/hooks';
+import { formatDate, getPriorityColor, getPriorityText, groupTasksByDeadline } from '@/lib';
 import parse from 'html-react-parser';
 import { CalendarClock, Flag, Plus } from 'lucide-react';
 import React from 'react';
 import { useFilter } from './contexts/filter-context';
 import { TaskModal } from './task-modal';
-import TaskWindow from './task-window';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
+import { TaskWindow } from './task-window';
+import { Accordion } from './ui/accordion';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Checkbox } from './ui/checkbox';
 import { Skeleton } from './ui/skeleton';
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import { Tooltip } from './ui/tooltip';
 
 const TaskList = () => {
   const { selectedFilter } = useFilter();
@@ -67,9 +65,9 @@ const TaskList = () => {
 
       <Accordion type="multiple" defaultValue={taskGroups.map(group => group.label)}>
         {taskGroups.map(group => (
-          <AccordionItem key={group.label} value={group.label}>
-            <AccordionTrigger>{group.label}</AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-2">
+          <Accordion.Item key={group.label} value={group.label}>
+            <Accordion.Trigger>{group.label}</Accordion.Trigger>
+            <Accordion.Content className="flex flex-col gap-2">
               {group.tasks.map(task => {
                 const project =
                   projects.find(project => project.id === task.projectId) || undefined;
@@ -115,29 +113,29 @@ const TaskList = () => {
 
                           {project && (
                             <Tooltip>
-                              <TooltipTrigger>
+                              <Tooltip.Trigger>
                                 <Badge variant="circle" color={project.color}>
                                   {project.emoji}
                                 </Badge>
-                              </TooltipTrigger>
+                              </Tooltip.Trigger>
 
-                              <TooltipContent>
+                              <Tooltip.Content>
                                 <p>{project.name}</p>
-                              </TooltipContent>
+                              </Tooltip.Content>
                             </Tooltip>
                           )}
 
                           {task.priority && (
                             <Tooltip>
-                              <TooltipTrigger>
+                              <Tooltip.Trigger>
                                 <Flag
                                   className='w-5' style={{ stroke: getPriorityColor(task.priority), fill: getPriorityColor(task.priority) }}
                                 />
-                              </TooltipTrigger>
+                              </Tooltip.Trigger>
 
-                              <TooltipContent>
+                              <Tooltip.Content>
                                 <p>{getPriorityText(task.priority)}</p>
-                              </TooltipContent>
+                              </Tooltip.Content>
                             </Tooltip>
                           )}
                         </div>
@@ -147,12 +145,12 @@ const TaskList = () => {
                   </TaskWindow>
                 );
               })}
-            </AccordionContent>
-          </AccordionItem>
+            </Accordion.Content>
+          </Accordion.Item>
         ))}
       </Accordion>
     </section>
   );
 };
 
-export default TaskList;
+export { TaskList };

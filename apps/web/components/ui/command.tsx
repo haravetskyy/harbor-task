@@ -1,11 +1,25 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib';
 import { type DialogProps } from '@radix-ui/react-dialog';
 import { Command as CommandPrimitive } from 'cmdk';
 import { Search } from 'lucide-react';
 import * as React from 'react';
-import { Credenza, CredenzaContent, CredenzaTitle } from './credenza';
+import { Credenza } from './credenza';
+
+interface CommandComponent
+  extends React.ForwardRefExoticComponent<
+    React.ComponentPropsWithoutRef<typeof CommandPrimitive> & React.RefAttributes<HTMLElement>
+  > {
+  Dialog: React.FC<DialogProps>;
+  Input: typeof CommandInput;
+  List: typeof CommandList;
+  Empty: typeof CommandEmpty;
+  Group: typeof CommandGroup;
+  Separator: typeof CommandSeparator;
+  Item: typeof CommandItem;
+  Shortcut: typeof CommandShortcut;
+}
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
@@ -19,18 +33,18 @@ const Command = React.forwardRef<
     )}
     {...props}
   />
-));
+)) as CommandComponent;
 Command.displayName = CommandPrimitive.displayName;
 
 const CommandDialog = ({ children, ...props }: DialogProps) => {
   return (
     <Credenza {...props}>
-      <CredenzaTitle className="hidden">Searcher</CredenzaTitle>
-      <CredenzaContent className="h-[100%] overflow-hidden p-0 md:h-auto">
+      <Credenza.Title className="hidden">Searcher</Credenza.Title>
+      <Credenza.Content className="h-[100%] overflow-hidden p-0 md:h-auto">
         <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-neutral-500 dark:[&_[cmdk-group-heading]]:text-neutral-400 [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
           {children}
         </Command>
-      </CredenzaContent>
+      </Credenza.Content>
     </Credenza>
   );
 };
@@ -51,7 +65,6 @@ const CommandInput = React.forwardRef<
     />
   </div>
 ));
-
 CommandInput.displayName = CommandPrimitive.Input.displayName;
 
 const CommandList = React.forwardRef<
@@ -64,7 +77,6 @@ const CommandList = React.forwardRef<
     {...props}
   />
 ));
-
 CommandList.displayName = CommandPrimitive.List.displayName;
 
 const CommandEmpty = React.forwardRef<
@@ -73,7 +85,6 @@ const CommandEmpty = React.forwardRef<
 >((props, ref) => (
   <CommandPrimitive.Empty ref={ref} className="py-6 text-center text-sm" {...props} />
 ));
-
 CommandEmpty.displayName = CommandPrimitive.Empty.displayName;
 
 const CommandGroup = React.forwardRef<
@@ -89,7 +100,6 @@ const CommandGroup = React.forwardRef<
     {...props}
   />
 ));
-
 CommandGroup.displayName = CommandPrimitive.Group.displayName;
 
 const CommandSeparator = React.forwardRef<
@@ -117,7 +127,6 @@ const CommandItem = React.forwardRef<
     {...props}
   />
 ));
-
 CommandItem.displayName = CommandPrimitive.Item.displayName;
 
 const CommandShortcut = ({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) => {
@@ -133,14 +142,15 @@ const CommandShortcut = ({ className, ...props }: React.HTMLAttributes<HTMLSpanE
 };
 CommandShortcut.displayName = 'CommandShortcut';
 
+Command.Dialog = CommandDialog;
+Command.Input = CommandInput;
+Command.List = CommandList;
+Command.Empty = CommandEmpty;
+Command.Group = CommandGroup;
+Command.Separator = CommandSeparator;
+Command.Item = CommandItem;
+Command.Shortcut = CommandShortcut;
+
 export {
-  Command,
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-  CommandShortcut,
+  Command, type CommandComponent
 };

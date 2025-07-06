@@ -1,12 +1,12 @@
 'use client';
 
 import { Button, ButtonProps } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Popover } from '@/components/ui/popover';
 import React from 'react';
 import { HexColorPicker } from 'react-colorful';
 import { Input } from './input';
 
-interface ColorInputProps {
+type ColorInputProps = {
   value: string;
   ref?: React.Ref<HTMLInputElement>;
   onChange: (value: string) => void;
@@ -32,7 +32,7 @@ const ColorInput = ({
   return (
     <Popover onOpenChange={setOpen} open={open}>
       <div className="flex">
-        <PopoverTrigger asChild disabled={disabled} onBlur={onBlur}>
+        <Popover.Trigger asChild disabled={disabled} onBlur={onBlur}>
           <Button
             {...props}
             className="block rounded-r-none border-r-0"
@@ -46,7 +46,7 @@ const ColorInput = ({
             }}
             variant="outline"
           />
-        </PopoverTrigger>
+        </Popover.Trigger>
         <Input
           maxLength={7}
           onFocus={e => {
@@ -60,17 +60,18 @@ const ColorInput = ({
           className="rounded-l-none"
         />
       </div>
-      <PopoverContent className="w-[250px]">
+      <Popover.Content className="w-[250px]">
         <HexColorPicker
           style={{ width: '100%' }}
           className="pb-2"
           color={parsedValue}
           onChange={onChange}
         />
-      </PopoverContent>
+      </Popover.Content>
     </Popover>
   );
 };
+
 ColorInput.displayName = 'ColorInput';
 
-export { ColorInput };
+export { ColorInput, type ColorInputProps };
