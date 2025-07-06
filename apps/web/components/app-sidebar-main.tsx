@@ -24,7 +24,7 @@ const items = [
   },
 ] as const;
 
-const NavMain = () => {
+const AppSidebarMain = () => {
   const { setSelectedFilter } = useFilter();
 
   return (
@@ -52,4 +52,4 @@ const NavMain = () => {
   );
 }
 
-export { NavMain }
+export { AppSidebarMain }

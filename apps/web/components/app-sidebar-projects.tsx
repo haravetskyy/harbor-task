@@ -10,7 +10,7 @@ import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Skeleton } from './ui/skeleton';
 
-const NavProjects = () => {
+const AppSidebarProjects = () => {
   const { isMobile } = useSidebar();
   const { data: user, isLoading: isUserLoading } = useUser();
   const { data: projects = [], isLoading: isProjectsLoading } = useProjects(user?.id);
@@ -100,4 +100,4 @@ const NavProjects = () => {
   );
 }
 
-export { NavProjects }
+export { AppSidebarProjects }

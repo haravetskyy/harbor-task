@@ -1,25 +1,27 @@
 'use client';
 
-import { NavMain } from '@/components/nav-main';
-import { NavProjects } from '@/components/nav-projects';
-import { NavUser } from '@/components/nav-user';
 import { Sidebar } from '@/components/ui/sidebar';
 import * as React from 'react';
+import { AppSidebarMain } from './app-sidebar-main';
+import { AppSidebarProjects } from './app-sidebar-projects';
+import { AppSidebarUser } from './app-sidebar-user';
 
 const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <Sidebar.Header>
-        <NavUser />
+        <AppSidebarUser />
       </Sidebar.Header>
+
       <Sidebar.Content>
-        <NavMain />
-        <NavProjects />
+        <AppSidebarMain />
+
+        <AppSidebarProjects />
       </Sidebar.Content>
-      <Sidebar.Footer></Sidebar.Footer>
+
       <Sidebar.Rail />
     </Sidebar>
   );
 }
 
-export { AppSidebar }
+export { AppSidebar };

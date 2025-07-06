@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { Avatar } from './ui/avatar';
 import { Skeleton } from './ui/skeleton';
 
-const NavUser = () => {
+const AppSidebarUser = () => {
   const { isMobile } = useSidebar();
   const { data: user, isLoading } = useUser();
 
@@ -94,4 +94,4 @@ const NavUser = () => {
   );
 }
 
-export { NavUser }
+export { AppSidebarUser };
