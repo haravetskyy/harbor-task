@@ -1,5 +1,5 @@
-export * from './projects.service'
+export * from './projects'
 
-export * from './tasks.service'
+export * from './tasks'
 
-export * from './user.service'
+export * from './user'
