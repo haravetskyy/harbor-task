@@ -8,7 +8,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { getFlagColor } from '@/lib/get-flag-color';
+import { getPriorityColor } from '@/lib';
 import { Flag, Search } from 'lucide-react';
 import * as React from 'react';
 import { useDebounce } from 'use-debounce';
@@ -102,6 +102,7 @@ export const Searcher = () => {
                   ))}
                 </CommandGroup>
               )}
+
               {tasks.length > 0 && (
                 <CommandGroup heading="Tasks">
                   {tasks.map(task => (
@@ -112,8 +113,8 @@ export const Searcher = () => {
                       <Flag
                         className="w-5"
                         style={{
-                          fill: getFlagColor(task.priority),
-                          stroke: getFlagColor(task.priority),
+                          fill: getPriorityColor(task.priority),
+                          stroke: getPriorityColor(task.priority),
                         }}
                       />
                       {task.title}
@@ -128,6 +129,7 @@ export const Searcher = () => {
 
       {tasks.map(task => {
         const project = projects.find(project => project.id === task.projectId);
+
         return (
           <TaskWindow
             key={task.id}

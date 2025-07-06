@@ -3,8 +3,7 @@
 import { useProjects } from '@/hooks/use-projects';
 import { useDeleteTask, useTasks } from '@/hooks/use-tasks';
 import { useUser } from '@/hooks/use-user';
-import { formatDate } from '@/lib/format-date';
-import { groupTasksByDeadline } from '@/lib/task-grouping';
+import { getPriorityColor, getPriorityText, groupTasksByDeadline, formatDate } from '@/lib';
 import parse from 'html-react-parser';
 import { CalendarClock, Flag, Plus } from 'lucide-react';
 import React from 'react';
@@ -17,7 +16,6 @@ import { Button } from './ui/button';
 import { Checkbox } from './ui/checkbox';
 import { Skeleton } from './ui/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-import { getFlagColor } from '@/lib/get-flag-color';
 
 const TaskList = () => {
   const { selectedFilter } = useFilter();
@@ -133,13 +131,12 @@ const TaskList = () => {
                             <Tooltip>
                               <TooltipTrigger>
                                 <Flag
-                                  className='w-5' style={{ stroke: getFlagColor(task.priority), fill: getFlagColor(task.priority) }}
-
+                                  className='w-5' style={{ stroke: getPriorityColor(task.priority), fill: getPriorityColor(task.priority) }}
                                 />
                               </TooltipTrigger>
 
                               <TooltipContent>
-                                <p>Priority: {task.priority}/4</p>
+                                <p>{getPriorityText(task.priority)}</p>
                               </TooltipContent>
                             </Tooltip>
                           )}

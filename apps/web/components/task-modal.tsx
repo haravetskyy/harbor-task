@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { cn } from '@/lib';
 import {
   addTaskSchema,
   AddTaskValues,
@@ -25,7 +26,6 @@ import { useForm } from 'react-hook-form';
 import { useProjects } from '../hooks/use-projects';
 import { useAddTask } from '../hooks/use-tasks';
 import { useUser } from '../hooks/use-user';
-import { cn } from '../lib/utils';
 import { Badge } from './ui/badge';
 import { Calendar } from './ui/calendar';
 import {

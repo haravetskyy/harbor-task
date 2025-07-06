@@ -1,8 +1,7 @@
 import { useProjects } from '@/hooks/use-projects';
 import { useEditTask } from '@/hooks/use-tasks';
 import { useUser } from '@/hooks/use-user';
-import { getFlagColor } from '@/lib/get-flag-color';
-import { cn } from '@/lib/utils';
+import { cn, getPriorityColor } from '@/lib';
 import { editTaskSchema, EditTaskValues, Project, Task } from '@harbor-task/models';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
@@ -33,21 +32,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Skeleton } from './ui/skeleton';
 import { Textarea } from './ui/textarea';
 import Tiptap from './ui/tiptap';
-
-export const getPriorityText = (priority: number | undefined): string | undefined => {
-  if (!priority) {
-    return;
-  }
-
-  const priorityTexts: Record<number, string> = {
-    1: 'Minor',
-    2: 'Optional',
-    3: 'Important',
-    4: 'Critical',
-  } as const;
-
-  return priorityTexts[priority];
-};
 
 interface TaskWindowProps {
   children?: React.ReactNode;
@@ -274,8 +258,8 @@ const TaskWindow = ({ children, task, project, open, onOpenChange }: TaskWindowP
                             <Flag
                               className="w-4"
                               style={{
-                                fill: getFlagColor(task.priority),
-                                stroke: getFlagColor(task.priority),
+                                fill: getPriorityColor(task.priority),
+                                stroke: getPriorityColor(task.priority),
                               }}
                             />
                           </div>
