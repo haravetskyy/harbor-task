@@ -4,16 +4,16 @@ import { Toaster } from '../components/ui/sonner';
 import { TooltipProvider } from '../components/ui/tooltip';
 import './globals.css';
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: 'Harbor Task',
   description: 'Pet application for task management',
 };
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) => {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
@@ -30,4 +30,7 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export { metadata };
+export default RootLayout;

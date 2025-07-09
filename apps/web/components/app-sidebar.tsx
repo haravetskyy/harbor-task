@@ -1,6 +1,6 @@
 'use client';
 
-import { Sidebar } from '@/components/ui/sidebar';
+import { Sidebar } from '@/components/ui';
 import * as React from 'react';
 import { AppSidebarMain } from './app-sidebar-main';
 import { AppSidebarProjects } from './app-sidebar-projects';
@@ -22,6 +22,6 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
       <Sidebar.Rail />
     </Sidebar>
   );
-}
+};
 
 export { AppSidebar };

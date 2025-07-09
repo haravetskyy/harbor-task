@@ -1,14 +1,10 @@
 'use client';
 
-import { DropdownMenu } from '@/components/ui/dropdown-menu';
-import { Sidebar, useSidebar } from '@/components/ui/sidebar';
+import { Badge, Button, DropdownMenu, Sidebar, Skeleton, useSidebar } from '@/components/ui';
 import { useDeleteProject, useProjects, useUser } from '@/hooks';
 import { useFilter } from '@/providers';
 import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
 import { ProjectModal, useUpdateProjectModal } from './project-modal';
-import { Badge } from './ui/badge';
-import { Button } from './ui/button';
-import { Skeleton } from './ui/skeleton';
 
 const AppSidebarProjects = () => {
   const { isMobile } = useSidebar();

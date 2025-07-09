@@ -1,5 +1,6 @@
 'use client';
 
+import { Accordion, Badge, Button, Checkbox, Skeleton, Tooltip } from '@/components/ui';
 import { useDeleteTask, useProjects, useTasks, useUser } from '@/hooks';
 import { formatDate, getPriorityColor, getPriorityText, groupTasksByDeadline } from '@/lib';
 import { useFilter } from '@/providers';
@@ -8,12 +9,6 @@ import { CalendarClock, Flag, Plus } from 'lucide-react';
 import React from 'react';
 import { TaskModal } from './task-modal';
 import { TaskWindow } from './task-window';
-import { Accordion } from './ui/accordion';
-import { Badge } from './ui/badge';
-import { Button } from './ui/button';
-import { Checkbox } from './ui/checkbox';
-import { Skeleton } from './ui/skeleton';
-import { Tooltip } from './ui/tooltip';
 
 const TaskList = () => {
   const { selectedFilter } = useFilter();

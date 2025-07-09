@@ -1,10 +1,9 @@
 'use client';
 
-import { Collapsible } from '@/components/ui/collapsible';
-import { Sidebar } from '@/components/ui/sidebar';
 import { useFilter } from '@/providers';
 import { Calendar1, CalendarDays, House } from 'lucide-react';
 import { Searcher } from './searcher';
+import { Collapsible, Sidebar } from './ui';
 
 const items = [
   {

@@ -1,6 +1,6 @@
 'use client';
 
-import { Command } from '@/components/ui/command';
+import { Badge, Button, Command } from '@/components/ui';
 import { useProjects, useTasks, useUser } from '@/hooks';
 import { getPriorityColor } from '@/lib';
 import { useFilter } from '@/providers';
@@ -8,8 +8,6 @@ import { Flag, Search } from 'lucide-react';
 import * as React from 'react';
 import { useDebounce } from 'use-debounce';
 import { TaskWindow } from './task-window';
-import { Badge } from './ui/badge';
-import { Button } from './ui/button';
 
 const Searcher = () => {
   const [dialogOpen, setDialogOpen] = React.useState(false);

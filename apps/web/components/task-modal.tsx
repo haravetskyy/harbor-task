@@ -1,8 +1,18 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Dialog } from '@/components/ui/dialog';
-import { Select } from '@/components/ui/select';
+import {
+  Badge,
+  Button,
+  Calendar,
+  Credenza,
+  Dialog,
+  Form,
+  Input,
+  Popover,
+  Select,
+  Skeleton,
+  Tiptap,
+} from '@/components/ui';
 import { useAddTask, useProjects, useUser } from '@/hooks';
 import { cn } from '@/lib';
 import {
@@ -17,16 +27,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon, Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { Badge } from './ui/badge';
-import { Calendar } from './ui/calendar';
-import {
-  Credenza,
-} from './ui/credenza';
-import { Form } from './ui/form';
-import { Input } from './ui/input';
-import { Popover } from './ui/popover';
-import { Skeleton } from './ui/skeleton';
-import { Tiptap } from './ui/tiptap';
 
 const TaskModal = () => {
   return (
@@ -47,7 +47,7 @@ const TaskModal = () => {
       </Credenza.Content>
     </Credenza>
   );
-}
+};
 
 const TaskForm = () => {
   const { data: user, isLoading: isUserLoading } = useUser();
@@ -261,4 +261,4 @@ const TaskForm = () => {
   );
 };
 
-export { TaskModal, TaskForm }
+export { TaskForm, TaskModal };

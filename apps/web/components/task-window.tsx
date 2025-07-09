@@ -1,3 +1,17 @@
+import {
+  Badge,
+  Breadcrumb,
+  Button,
+  Calendar,
+  Credenza,
+  Form,
+  Input,
+  Popover,
+  Select,
+  Skeleton,
+  Textarea,
+  Tiptap,
+} from '@/components/ui';
 import { useEditTask, useProjects, useUser } from '@/hooks';
 import { cn, getPriorityColor } from '@/lib';
 import { editTaskSchema, EditTaskValues, Project, Task } from '@harbor-task/models';
@@ -6,18 +20,6 @@ import { format } from 'date-fns';
 import { CalendarIcon, Flag } from 'lucide-react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Badge } from './ui/badge';
-import { Breadcrumb } from './ui/breadcrumb';
-import { Button } from './ui/button';
-import { Calendar } from './ui/calendar';
-import { Credenza } from './ui/credenza';
-import { Form } from './ui/form';
-import { Input } from './ui/input';
-import { Popover } from './ui/popover';
-import { Select } from './ui/select';
-import { Skeleton } from './ui/skeleton';
-import { Textarea } from './ui/textarea';
-import { Tiptap } from './ui/tiptap';
 
 interface TaskWindowProps {
   children?: React.ReactNode;

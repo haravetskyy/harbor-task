@@ -2,8 +2,7 @@
 
 import { useProjects, useUser } from '@/hooks';
 import { useFilter } from '@/providers';
-import { Breadcrumb } from './ui/breadcrumb';
-import { Skeleton } from './ui/skeleton';
+import { Breadcrumb, Skeleton } from '@/components/ui';
 
 const RecourcePath = () => {
   const { selectedFilter } = useFilter();

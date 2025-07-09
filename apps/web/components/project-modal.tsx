@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { Button, ColorInput, Credenza, Form, Input, Skeleton } from '@/components/ui';
 import { useAddProject, useEditProject, useProjects, useUser } from '@/hooks';
 import { cn } from '@/lib';
 import { EmojiPicker } from '@ferrucc-io/emoji-picker';
@@ -15,11 +15,6 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { ColorInput } from './ui/color-input';
-import { Credenza } from './ui/credenza';
-import { Form } from './ui/form';
-import { Input } from './ui/input';
-import { Skeleton } from './ui/skeleton';
 
 interface ProjectModalState {
   isOpen: boolean;
@@ -93,15 +88,15 @@ const ProjectForm = ({ project, mode }: ProjectFormProps) => {
     defaultValues:
       mode === 'Edit' && project
         ? {
-          name: project.name,
-          emoji: project.emoji,
-          color: project.color,
-        }
+            name: project.name,
+            emoji: project.emoji,
+            color: project.color,
+          }
         : {
-          name: '',
-          emoji: '',
-          color: '#ffffff',
-        },
+            name: '',
+            emoji: '',
+            color: '#ffffff',
+          },
     mode: 'onChange',
   });
 
@@ -210,4 +205,4 @@ const ProjectForm = ({ project, mode }: ProjectFormProps) => {
   );
 };
 
-export { ProjectModal, ProjectForm, useProjectModal, useUpdateProjectModal }
+export { ProjectForm, ProjectModal, useProjectModal, useUpdateProjectModal };

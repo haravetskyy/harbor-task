@@ -1,14 +1,11 @@
 'use client';
 
-import { DropdownMenu } from '@/components/ui/dropdown-menu';
-import { Sidebar, useSidebar, } from '@/components/ui/sidebar';
+import { DropdownMenu, Sidebar, useSidebar, Avatar, Skeleton } from '@/components/ui';
 import { magichutApi } from '@/config';
 import { useUser } from '@/hooks';
 import { getInitials } from '@/lib';
 import { ChevronsUpDown, LogOut, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Avatar } from './ui/avatar';
-import { Skeleton } from './ui/skeleton';
 
 const AppSidebarUser = () => {
   const { isMobile } = useSidebar();
@@ -64,8 +61,9 @@ const AppSidebarUser = () => {
             sideOffset={4}>
             <DropdownMenu.Label className="p-0 font-normal">
               <div
-                className={`${isMobile && 'hidden'
-                  } flex items-center gap-2 px-1 py-1.5 text-left text-sm`}>
+                className={`${
+                  isMobile && 'hidden'
+                } flex items-center gap-2 px-1 py-1.5 text-left text-sm`}>
                 <Avatar className="h-8 w-8 rounded-lg">
                   <Avatar.Image src={user.image} alt={user.name} />
                   <Avatar.Fallback className="rounded-lg">{getInitials(user.name)}</Avatar.Fallback>
@@ -92,6 +90,6 @@ const AppSidebarUser = () => {
       </Sidebar.MenuItem>
     </Sidebar.Menu>
   );
-}
+};
 
 export { AppSidebarUser };
