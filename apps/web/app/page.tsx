@@ -1,7 +1,7 @@
 import { AppSidebar } from '@/components/app-sidebar';
-import { RecourcePath } from '@/components';
+import { RecourcePath } from '@/components/recource-path';
 import { TaskList } from '@/components/tasks';
-import { ThemeToggle } from '@/components';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { Separator, SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui';
 
 const Home = () => {

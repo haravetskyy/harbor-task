@@ -1,6 +1,6 @@
 'use client';
 
-import { Searcher } from '@/components';
+import { Searcher } from '@/components/searcher';
 import { Collapsible, Sidebar } from '@/components/ui';
 import { useFilter } from '@/providers';
 import { Calendar1, CalendarDays, House } from 'lucide-react';
