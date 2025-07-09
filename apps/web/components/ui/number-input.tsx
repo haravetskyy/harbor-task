@@ -1,3 +1,5 @@
+'use client';
+
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { forwardRef, useCallback, useEffect, useState } from 'react';
 import { NumericFormat, NumericFormatProps } from 'react-number-format';
@@ -141,4 +143,5 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
   },
 );
 
-export { NumberInput, type NumberInputProps }
+export { NumberInput, type NumberInputProps };
+

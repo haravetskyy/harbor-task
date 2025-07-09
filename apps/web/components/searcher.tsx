@@ -1,5 +1,6 @@
 'use client';
 
+import { TaskWindow } from '@/components/tasks';
 import { Badge, Button, Command } from '@/components/ui';
 import { useProjects, useTasks, useUser } from '@/hooks';
 import { getPriorityColor } from '@/lib';
@@ -7,7 +8,6 @@ import { useFilter } from '@/providers';
 import { Flag, Search } from 'lucide-react';
 import * as React from 'react';
 import { useDebounce } from 'use-debounce';
-import { TaskWindow } from './task-window';
 
 const Searcher = () => {
   const [dialogOpen, setDialogOpen] = React.useState(false);

@@ -6,7 +6,7 @@ import { useFilter } from '@/providers';
 import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
 import { ProjectModal, useUpdateProjectModal } from './project-modal';
 
-const AppSidebarProjects = () => {
+const ProjectList = () => {
   const { isMobile } = useSidebar();
   const { data: user, isLoading: isUserLoading } = useUser();
   const { data: projects = [], isLoading: isProjectsLoading } = useProjects(user?.id);
@@ -96,4 +96,4 @@ const AppSidebarProjects = () => {
   );
 };
 
-export { AppSidebarProjects };
+export { ProjectList };

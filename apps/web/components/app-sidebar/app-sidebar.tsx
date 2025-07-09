@@ -1,9 +1,9 @@
 'use client';
 
+import { ProjectList } from '@/components/projects';
 import { Sidebar } from '@/components/ui';
 import * as React from 'react';
 import { AppSidebarMain } from './app-sidebar-main';
-import { AppSidebarProjects } from './app-sidebar-projects';
 import { AppSidebarUser } from './app-sidebar-user';
 
 const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
@@ -16,7 +16,7 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
       <Sidebar.Content>
         <AppSidebarMain />
 
-        <AppSidebarProjects />
+        <ProjectList />
       </Sidebar.Content>
 
       <Sidebar.Rail />
