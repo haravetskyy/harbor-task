@@ -1,6 +1,4 @@
-import { FilterProvider } from '@/components/contexts/filter-context';
-import { ReactQueryProvider } from '@/components/contexts/react-query-provider';
-import { ThemeProvider } from '@/components/contexts/theme-provider';
+import { FilterProvider, ReactQueryProvider, ThemeProvider } from '@/providers';
 import type { Metadata } from 'next';
 import { Toaster } from '../components/ui/sonner';
 import { TooltipProvider } from '../components/ui/tooltip';

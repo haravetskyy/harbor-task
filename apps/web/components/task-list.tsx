@@ -2,10 +2,10 @@
 
 import { useDeleteTask, useProjects, useTasks, useUser } from '@/hooks';
 import { formatDate, getPriorityColor, getPriorityText, groupTasksByDeadline } from '@/lib';
+import { useFilter } from '@/providers';
 import parse from 'html-react-parser';
 import { CalendarClock, Flag, Plus } from 'lucide-react';
 import React from 'react';
-import { useFilter } from './contexts/filter-context';
 import { TaskModal } from './task-modal';
 import { TaskWindow } from './task-window';
 import { Accordion } from './ui/accordion';
@@ -76,8 +76,9 @@ const TaskList = () => {
                 return (
                   <TaskWindow task={task} project={project} key={task.id}>
                     <div
-                      className={`border-border bg-sidebar flex w-full items-start gap-2 rounded-xl border border-solid p-4 dark:bg-neutral-900 ${isDeleting && 'animate-slide-fade-left'
-                        }`}>
+                      className={`border-border bg-sidebar flex w-full items-start gap-2 rounded-xl border border-solid p-4 dark:bg-neutral-900 ${
+                        isDeleting && 'animate-slide-fade-left'
+                      }`}>
                       <Checkbox
                         className="mt-1 rounded-[50%]"
                         onClick={e => {
@@ -129,7 +130,11 @@ const TaskList = () => {
                             <Tooltip>
                               <Tooltip.Trigger>
                                 <Flag
-                                  className='w-5' style={{ stroke: getPriorityColor(task.priority), fill: getPriorityColor(task.priority) }}
+                                  className="w-5"
+                                  style={{
+                                    stroke: getPriorityColor(task.priority),
+                                    fill: getPriorityColor(task.priority),
+                                  }}
                                 />
                               </Tooltip.Trigger>
 
@@ -141,7 +146,6 @@ const TaskList = () => {
                         </div>
                       </div>
                     </div>
-
                   </TaskWindow>
                 );
               })}

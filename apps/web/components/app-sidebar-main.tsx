@@ -2,8 +2,8 @@
 
 import { Collapsible } from '@/components/ui/collapsible';
 import { Sidebar } from '@/components/ui/sidebar';
+import { useFilter } from '@/providers';
 import { Calendar1, CalendarDays, House } from 'lucide-react';
-import { useFilter } from './contexts/filter-context';
 import { Searcher } from './searcher';
 
 const items = [
@@ -50,6 +50,6 @@ const AppSidebarMain = () => {
       </Sidebar.Menu>
     </Sidebar.Group>
   );
-}
+};
 
-export { AppSidebarMain }
+export { AppSidebarMain };

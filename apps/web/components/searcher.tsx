@@ -3,10 +3,10 @@
 import { Command } from '@/components/ui/command';
 import { useProjects, useTasks, useUser } from '@/hooks';
 import { getPriorityColor } from '@/lib';
+import { useFilter } from '@/providers';
 import { Flag, Search } from 'lucide-react';
 import * as React from 'react';
 import { useDebounce } from 'use-debounce';
-import { useFilter } from './contexts/filter-context';
 import { TaskWindow } from './task-window';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';

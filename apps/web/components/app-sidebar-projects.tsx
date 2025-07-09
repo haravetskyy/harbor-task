@@ -3,8 +3,8 @@
 import { DropdownMenu } from '@/components/ui/dropdown-menu';
 import { Sidebar, useSidebar } from '@/components/ui/sidebar';
 import { useDeleteProject, useProjects, useUser } from '@/hooks';
+import { useFilter } from '@/providers';
 import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useFilter } from './contexts/filter-context';
 import { ProjectModal, useUpdateProjectModal } from './project-modal';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
@@ -98,6 +98,6 @@ const AppSidebarProjects = () => {
       </Sidebar.Menu>
     </Sidebar.Group>
   );
-}
+};
 
-export { AppSidebarProjects }
+export { AppSidebarProjects };
