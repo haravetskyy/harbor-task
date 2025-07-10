@@ -1,5 +1,5 @@
+import { addTask, deleteTask, editTask, getFilteredTasks, getSearchedTasks } from '@/api';
 import { queryKeys } from '@/config';
-import { addTask, deleteTask, editTask, getFilteredTasks, getSearchedTasks } from '@/services';
 import { AllowedSection } from '@harbor-task/models';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 

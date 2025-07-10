@@ -1,5 +1,5 @@
+import { getUser } from '@/api';
 import { queryKeys } from '@/config';
-import { getUser } from '@/services';
 import { useQuery } from '@tanstack/react-query';
 
 const useUser = () => {

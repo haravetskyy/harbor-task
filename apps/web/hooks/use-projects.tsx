@@ -1,10 +1,12 @@
+import { addProject, deleteProject, editProject, getProjects, getSearchedProjects } from '@/api';
 import { queryKeys } from '@/config';
-import { addProject, deleteProject, editProject, getProjects, getSearchedProjects } from '@/services';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const useProjects = (userId: string | undefined, query?: string) => {
   return useQuery({
-    queryKey: query ? [queryKeys.search, queryKeys.projects, userId, query] : [queryKeys.projects, userId],
+    queryKey: query
+      ? [queryKeys.search, queryKeys.projects, userId, query]
+      : [queryKeys.projects, userId],
     queryFn: () => (query ? getSearchedProjects(userId!, query) : getProjects(userId!)),
     enabled: !!userId && (query ? query.length > 0 : true),
     staleTime: 5 * 60 * 1000,
