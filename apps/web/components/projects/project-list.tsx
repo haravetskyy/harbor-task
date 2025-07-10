@@ -14,27 +14,7 @@ const ProjectList = () => {
   const deleteProjectMutation = useDeleteProject();
   const updateModalState = useUpdateProjectModal();
 
-  if (!user || isUserLoading || isProjectsLoading) {
-    return (
-      <div className="flex flex-col p-2">
-        <div className="flex flex-col gap-0">
-          <Button variant="outline" disabled className="w-full">
-            <Plus />
-            Add project
-          </Button>
-          <Sidebar.GroupLabel>Projects</Sidebar.GroupLabel>
-        </div>
-        <div className="flex w-full flex-col gap-2 p-2">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <div className="flex items-center gap-2" key={index}>
-              <Skeleton className="h-6 w-6 rounded-full" />
-              <Skeleton className="h-3 w-5/6" />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
+  if (!user || isUserLoading || isProjectsLoading) return <ProjectListSkeleton />;
 
   return (
     <Sidebar.Group className="group-data-[collapsible=icon]:hidden">
@@ -95,5 +75,25 @@ const ProjectList = () => {
     </Sidebar.Group>
   );
 };
+
+const ProjectListSkeleton = () => (
+  <div className="flex flex-col p-2">
+    <div className="flex flex-col gap-0">
+      <Button variant="outline" disabled className="w-full">
+        <Plus />
+        Add project
+      </Button>
+      <Sidebar.GroupLabel>Projects</Sidebar.GroupLabel>
+    </div>
+    <div className="flex w-full flex-col gap-2 p-2">
+      {Array.from({ length: 5 }).map((_, index) => (
+        <div className="flex items-center gap-2" key={index}>
+          <Skeleton className="h-6 w-6 rounded-full" />
+          <Skeleton className="h-3 w-5/6" />
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 export { ProjectList };

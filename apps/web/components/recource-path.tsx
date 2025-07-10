@@ -9,15 +9,7 @@ const RecourcePath = () => {
   const { data: user, isLoading: isUserLoading } = useUser();
   const { data: projects } = useProjects(user?.id);
 
-  if (!user || isUserLoading || !projects) {
-    return (
-      <>
-        <Skeleton className="h-4 w-24" />
-        <Breadcrumb.Separator className="hidden md:block" />
-        <Skeleton className="h-4 w-24" />
-      </>
-    );
-  }
+  if (!user || isUserLoading || !projects) return <RecourcePathSkeleton />;
 
   if (selectedFilter.type === 'project') {
     const projectName = projects?.find(project => project.id === selectedFilter.value)?.name;
@@ -47,5 +39,13 @@ const RecourcePath = () => {
     </Breadcrumb>
   );
 };
+
+const RecourcePathSkeleton = () => (
+  <>
+    <Skeleton className="h-4 w-24" />
+    <Breadcrumb.Separator className="hidden md:block" />
+    <Skeleton className="h-4 w-24" />
+  </>
+);
 
 export { RecourcePath };

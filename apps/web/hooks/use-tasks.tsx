@@ -3,9 +3,15 @@ import { addTask, deleteTask, editTask, getFilteredTasks, getSearchedTasks } fro
 import { AllowedSection } from '@harbor-task/models';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-const useTasks = (userId: string | undefined, filterValue?: AllowedSection, query?: string) => {
+const useTasks = (
+  userId: string | undefined,
+  filterValue?: AllowedSection | string,
+  query?: string,
+) => {
   return useQuery({
-    queryKey: query ? [queryKeys.search, queryKeys.tasks, userId, query] : [queryKeys.tasks, userId, filterValue],
+    queryKey: query
+      ? [queryKeys.search, queryKeys.tasks, userId, query]
+      : [queryKeys.tasks, userId, filterValue],
     queryFn: () =>
       query
         ? getSearchedTasks(userId!, query)

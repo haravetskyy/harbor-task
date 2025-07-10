@@ -116,7 +116,7 @@ const sortGroups = (groups: TaskGroup[], monthlyGroups: { [key: string]: Task[] 
   return [...groups, ...monthlyGroupList].filter(group => group.tasks.length > 0);
 };
 
-export const groupTasksByDeadline = (tasks: Task[]): TaskGroup[] => {
+const groupTasksByDeadline = (tasks: Task[]): TaskGroup[] => {
   const groups = createFixedGroups();
   const monthlyGroups: { [key: string]: Task[] } = {};
   const boundaries = getDateBoundaries();
@@ -125,3 +125,5 @@ export const groupTasksByDeadline = (tasks: Task[]): TaskGroup[] => {
 
   return sortGroups(groups, monthlyGroups);
 };
+
+export { groupTasksByDeadline };

@@ -1,6 +1,6 @@
 'use client';
 
-import { DropdownMenu, Sidebar, useSidebar, Avatar, Skeleton } from '@/components/ui';
+import { Avatar, DropdownMenu, Sidebar, Skeleton, useSidebar } from '@/components/ui';
 import { magichutApi } from '@/config';
 import { useUser } from '@/hooks';
 import { getInitials } from '@/lib';
@@ -21,19 +21,7 @@ const AppSidebarUser = () => {
     }
   };
 
-  if (!user || isLoading) {
-    return (
-      <div className="flex gap-2 p-2">
-        <div>
-          <Skeleton className="h-8 w-8 rounded-lg" />
-        </div>
-        <div className="flex w-full flex-col gap-2">
-          <Skeleton className="h-3 w-2/3" />
-          <Skeleton className="h-3 w-11/12" />
-        </div>
-      </div>
-    );
-  }
+  if (!user || isLoading) return <AppSidebarUserSkeleton />;
 
   return (
     <Sidebar.Menu>
@@ -61,9 +49,8 @@ const AppSidebarUser = () => {
             sideOffset={4}>
             <DropdownMenu.Label className="p-0 font-normal">
               <div
-                className={`${
-                  isMobile && 'hidden'
-                } flex items-center gap-2 px-1 py-1.5 text-left text-sm`}>
+                className={`${isMobile && 'hidden'
+                  } flex items-center gap-2 px-1 py-1.5 text-left text-sm`}>
                 <Avatar className="h-8 w-8 rounded-lg">
                   <Avatar.Image src={user.image} alt={user.name} />
                   <Avatar.Fallback className="rounded-lg">{getInitials(user.name)}</Avatar.Fallback>
@@ -91,5 +78,17 @@ const AppSidebarUser = () => {
     </Sidebar.Menu>
   );
 };
+
+const AppSidebarUserSkeleton = () => (
+  <div className="flex gap-2 p-2">
+    <div>
+      <Skeleton className="h-8 w-8 rounded-lg" />
+    </div>
+    <div className="flex w-full flex-col gap-2">
+      <Skeleton className="h-3 w-2/3" />
+      <Skeleton className="h-3 w-11/12" />
+    </div>
+  </div>
+);
 
 export { AppSidebarUser };
