@@ -1,6 +1,6 @@
 'use client';
 
-import { AllowedSection, Filter } from '@harbor-task/models';
+import { AllowedSection, Filter, filterSchema } from '@harbor-task/models';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 
@@ -16,18 +16,25 @@ const FilterContext = React.createContext<FilterContextType | undefined>(undefin
 const FilterProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const initialType = searchParams.get('type') || 'section';
-  const initialValue = searchParams.get('filter') || 'All';
 
-  const [selectedFilter, setSelectedFilterState] = React.useState<Filter>({
-    type: initialType as Filter['type'],
-    value: initialValue,
+  const initialFilter = filterSchema.safeParse({
+    type: searchParams.get('type') || 'section',
+    value: searchParams.get('filter') || 'All',
   });
+
+  const [selectedFilter, setSelectedFilterState] = React.useState<Filter>(
+    initialFilter.success ? initialFilter.data : { type: 'section', value: 'All' },
+  );
 
   React.useEffect(() => {
     const type = searchParams.get('type') || 'section';
     const value = searchParams.get('filter') || 'All';
-    setSelectedFilterState({ type: type as Filter['type'], value });
+    const parsed = filterSchema.safeParse({ type, value });
+    if (parsed.success) {
+      setSelectedFilterState(parsed.data);
+    } else {
+      setSelectedFilterState({ type: 'section', value: 'All' });
+    }
   }, [searchParams]);
 
   const setSelectedFilter = (filter: Filter) => {
